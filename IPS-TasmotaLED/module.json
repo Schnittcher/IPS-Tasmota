@@ -1,0 +1,11 @@
+{
+	"id": "{DD37588F-D75A-4119-AD3D-399E6EA899A9}",
+	"name": "IPS_TasmotaLED",
+	"type": 3,
+	"vendor": "",
+	"aliases": ["IPS_TasmotaLED"],
+	"parentRequirements": ["{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}"],
+	"childRequirements": ["{018EF6B5-AB94-40C6-AA53-46943E824ACF}"],
+	"implemented": ["{018EF6B5-AB94-40C6-AA53-46943E824ACF}"],
+	"prefix": "TasmotaLED"
+}

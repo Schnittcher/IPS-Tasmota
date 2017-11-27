@@ -1,0 +1,17 @@
+{
+    "elements":
+    [
+      { "type": "ValidationTextBox", "name": "Topic", "caption": "Tasmota MQTT Topic" },
+      { "type": "Label", "label": "Parameter Einstellungen" },
+      { "type": "Label", "label": "Parameter Einstellungen" },
+      { "type": "ValidationTextBox", "name": "On", "caption": "Power On" },
+      { "type": "ValidationTextBox", "name": "Off", "caption": "Power Off" },
+      { "type": "ValidationTextBox", "name": "FullTopic", "caption": "Full Topic" },
+
+    { "type": "Label", "label": "Settings" }
+    ],
+    "actions":
+    [
+	  { "type": "Button", "label": "Restart Tasmota Device", "onClick": "TasmotaLED_restart($id);" }
+    ]
+}
