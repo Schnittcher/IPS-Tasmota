@@ -33,5 +33,5 @@ Tasmota_Restart(25537);
 Mit dieser Funktion können einzelne Relais geschaltet werden.
 
 ```php
-Tasmota_setPower(25537, "Tasmota_POWER", "false");  
+Tasmota_setPower(25537, "Tasmota_POWER", false);  
 ```
