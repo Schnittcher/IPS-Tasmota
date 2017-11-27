@@ -6,7 +6,7 @@ Kommuniziert wird über das MQTT Prokotoll, somit muss der Status der Geräte ni
 1. [Voraussetzungen](#1-voraussetzungen)
 2. [Enthaltene Module](#2-enthaltene-module)
 3. [Installation](#3-installation)
-4. [Konfiguration in IP-Symcon](#3-konfiguration-in-ip-Symcon)
+4. [Konfiguration in IP-Symcon](#4-konfiguration-in-ip-symcon)
 
 ## 1. Voraussetzungen
 
