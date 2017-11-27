@@ -19,6 +19,13 @@ Die Übergeordnete Instanz sollte immer der IPS_KS_MQTTClient sein, dieser sollt
 
 ## 2. Funktionen
 
+### Tasmota_restart($InstanceID)
+Mit dieser Funktion kann das Tasmota Gerät neugestartet werden.
+
+```php
+Tasmota_Restart(25537);
+```
+
 ### TasmotaLED_setColorHex($InstanceID, $Color)
 Mit dieser Funktion wird die Farbe für den kompletten Stripe in HEX gesetzt.
 

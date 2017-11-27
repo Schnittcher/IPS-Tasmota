@@ -183,6 +183,14 @@ class IPS_TasmotaLED extends IPSModule {
     $this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));
   }
 
+  public function restart() {
+    $command = "restart";
+    $msg = 1;
+    $BufferJSON = $this->MQTTCommand($command,$msg);
+    $this->SendDebug("restart", $BufferJSON,0);
+    $this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));
+  }
+
   public function setPower($value) {
     $command = "Power";
     $msg = $value;
