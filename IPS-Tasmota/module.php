@@ -159,7 +159,7 @@ class IPS_Tasmota extends IPSModule {
 		}
 	}
 
-  public function setPower(string $Ident,$Value) {
+  public function setPower(string $Ident,bool $Value) {
 	$power = explode("_", $Ident);
 	end($power);
 	$powerTopic = $power[key($power)];
