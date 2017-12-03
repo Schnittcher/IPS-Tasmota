@@ -128,7 +128,7 @@ class IPS_TasmotaLED extends IPSModule {
      return $BufferJSON;
    }
 
-   public function setLED($LED, $color) {
+   public function setLED(int $LED,string $color) {
     $command = "LED".$LED;
     $msg = $color;
   	$BufferJSON = $this->MQTTCommand($command,$color);
@@ -136,14 +136,14 @@ class IPS_TasmotaLED extends IPSModule {
     $this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));
   }
 
-  public function setScheme($schemeID) {
+  public function setScheme(int $schemeID) {
     $command = "Scheme";
     $msg = $schemeID;
     $BufferJSON = $this->MQTTCommand($command,$msg);
     $this->SendDebug("setScheme", $BufferJSON,0);
     $this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));  }
 
-  public function setPixel($count) {
+  public function setPixel(int $count) {
     $command = "Pixels";
     $msg = $count;
     $BufferJSON = $this->MQTTCommand($command,$msg);
@@ -151,7 +151,7 @@ class IPS_TasmotaLED extends IPSModule {
     $this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));
   }
 
-  public function setDimmer($value) {
+  public function setDimmer(int $value) {
     $command = "Dimmer";
     $msg = $value;
     $BufferJSON = $this->MQTTCommand($command,$msg);
@@ -159,7 +159,7 @@ class IPS_TasmotaLED extends IPSModule {
     $this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));
   }
 
-  public function setColorHex($color) {
+  public function setColorHex(string $color) {
     $command = "Color";
     $msg = $color;
     $BufferJSON = $this->MQTTCommand($command,$msg);
@@ -167,15 +167,17 @@ class IPS_TasmotaLED extends IPSModule {
     $this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));
   }
 
-  public function setFade($value) {
+  public function setFade(bool $value) {
     $command = "Fade";
     $msg = $value;
+    if($msg===false){$msg = 'false';}
+    elseif($msg===true){$msg = 'true';}
     $BufferJSON = $this->MQTTCommand($command,$msg);
     $this->SendDebug("setFade", $BufferJSON,0);
     $this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));
   }
 
-  public function setSpeed($value) {
+  public function setSpeed(int $value) {
     $command = "Speed";
     $msg = $value;
     $BufferJSON = $this->MQTTCommand($command,$msg);
@@ -191,7 +193,7 @@ class IPS_TasmotaLED extends IPSModule {
     $this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));
   }
 
-  public function setPower($value) {
+  public function setPower(bool $value) {
     $command = "Power";
     $msg = $value;
     if($msg===false){$msg = 'false';}
