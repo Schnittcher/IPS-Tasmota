@@ -100,12 +100,14 @@ class IPS_Tasmota extends TasmotaService {
        $this->SendDebug("PowerOnState Topic", $Buffer->TOPIC,0);
        $this->SendDebug("PowerOnState MSG", $Buffer->MSG,0);
        $MSG = json_decode($Buffer->MSG);
-       IPS_SetProperty($this->InstanceID, "PowerOnState", $MSG->PowerOnState);
-       if(IPS_HasChanges($this->InstanceID))
-       {
-         IPS_ApplyChanges($this->InstanceID);
+       if ($MSG->PowerOnState == $this->ReadPropertyInteger) {
+         IPS_SetProperty($this->InstanceID, "PowerOnState", $MSG->PowerOnState);
+         if(IPS_HasChanges($this->InstanceID))
+         {
+           IPS_ApplyChanges($this->InstanceID);
+         }
        }
-      }
+     }
 			if (fnmatch("*POWER*", $Buffer->TOPIC)) {
 				$this->SendDebug("Power Topic",$Buffer->TOPIC,0);
 				$this->SendDebug("Power", $Buffer->MSG,0);
