@@ -54,7 +54,11 @@ class IPS_TasmotaLED extends TasmotaService {
   		   $this->SendDebug("PowerOnState Topic", $Buffer->TOPIC,0);
   		   $this->SendDebug("PowerOnState MSG", $Buffer->MSG,0);
          $MSG = json_decode($Buffer->MSG);
-         $this->SendDebug("PowerOnState MSG", $MSG->PowerOnState,0);
+         IPS_SetProperty($this->InstanceID, "PowerOnState", $MSG->PowerOnState);
+         if(IPS_HasChanges($this->InstanceID))
+         {
+           IPS_ApplyChanges($this->InstanceID);
+         }
         }
        if (fnmatch("*Pixels*", $Buffer->MSG)) {
        $this->SendDebug("Pixels Topic", $Buffer->TOPIC,0);
