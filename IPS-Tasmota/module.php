@@ -1,5 +1,7 @@
 <?
-class IPS_Tasmota extends IPSModule {
+require_once(__DIR__ . "/../libs/TasmotaService.php");
+
+class IPS_Tasmota extends TasmotaService {
 
   public function Create() {
       //Never delete this line!
@@ -10,6 +12,7 @@ class IPS_Tasmota extends IPSModule {
       $this->RegisterPropertyString("On","1");
       $this->RegisterPropertyString("Off","0");
       $this->RegisterPropertyString("FullTopic","%prefix%/%topic%");
+      $this->RegisterPropertyInteger("PowerOnState",3);
 
       $variablenID = $this->RegisterVariableFloat("Tasmota_RSSI", "RSSI");
 
@@ -27,6 +30,7 @@ class IPS_Tasmota extends IPSModule {
       parent::ApplyChanges();
       $this->ConnectParent("{EE0D345A-CF31-428A-A613-33CE98E752DD}");
       //Setze Filter fÃ¼r ReceiveData
+      $this->setPowerOnState($this->ReadPropertyInteger("PowerOnState"));
       $topic = $this->ReadPropertyString("Topic");
       $this->SetReceiveDataFilter(".*".$topic.".*");
     }
@@ -163,64 +167,22 @@ class IPS_Tasmota extends IPSModule {
 	$power = explode("_", $Ident);
 	end($power);
 	$powerTopic = $power[key($power)];
-
-  if($Value
-)
   SetValue($this->GetIDForIdent($Ident), $Value);
 
-  $FullTopic = explode("/",$this->ReadPropertyString("FullTopic"));
-  $PrefixIndex = array_search("%prefix%",$FullTopic);
-  $TopicIndex = array_search("%topic%",$FullTopic);
-
-  $SetCommandArr = $FullTopic;
-  $index = count($SetCommandArr);
-
-  $SetCommandArr[$PrefixIndex] = "cmnd";
-  $SetCommandArr[$TopicIndex] = $this->ReadPropertyString("Topic");
-  $SetCommandArr[$index] = $powerTopic;
-
-  $topic = implode("/",$SetCommandArr);
-	$msg = $Value;
-
-	if($msg===false){$msg = 'false';}
-	elseif($msg===true){$msg = 'true';}
-
-	$Buffer["Topic"] = $topic;
-	$Buffer["MSG"] = $msg;
-	$BufferJSON = json_encode($Buffer);
-
-	$this->SendDebug("setStatus", $BufferJSON,0);
+  $command = $powerTopic;
+  $msg = $Value;
+  if($msg===false){$msg = 'false';}
+  elseif($msg===true){$msg = 'true';}
+  $BufferJSON = $this->MQTTCommand($command,$msg);
+  $this->SendDebug("setSpeed", $BufferJSON,0);
   $this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));
 }
 
-    public function RequestAction($Ident, $Value) {
-  		$this->SendDebug("RequestAction Ident", $Ident,0);
-  		$this->SendDebug("RequestAction Value", $Value,0);
-      $variablenID = IPS_GetObjectIDByIdent($Ident,$this->InstanceID);
-      $result = $this->setPower($Ident, $Value);
-    }
-
-	public function restart() {
-		$FullTopic = explode("/",$this->ReadPropertyString("FullTopic"));
-		$PrefixIndex = array_search("%prefix%",$FullTopic);
-		$TopicIndex = array_search("%topic%",$FullTopic);
-
-		$SetCommandArr = $FullTopic;
-		$index = count($SetCommandArr);
-
-
-		$SetCommandArr[$PrefixIndex] = "cmnd";
-		$SetCommandArr[$TopicIndex] = $this->ReadPropertyString("Topic");
-		$SetCommandArr[$index] = "restart";
-
-		$topic = implode("/",$SetCommandArr);
-
-
-		$Buffer["Topic"] = $topic;
-		$Buffer["MSG"] = 1;
-
-		$BufferJSON = json_encode($Buffer);
-		$this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));
-	}
+  public function RequestAction($Ident, $Value) {
+    $this->SendDebug("RequestAction Ident", $Ident,0);
+  	$this->SendDebug("RequestAction Value", $Value,0);
+    $variablenID = IPS_GetObjectIDByIdent($Ident,$this->InstanceID);
+    $result = $this->setPower($Ident, $Value);
+  }
 }
 ?>

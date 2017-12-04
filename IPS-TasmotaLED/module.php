@@ -1,5 +1,7 @@
 <?
-class IPS_TasmotaLED extends IPSModule {
+require_once(__DIR__ . "/../libs/TasmotaService.php");
+
+class IPS_TasmotaLED extends TasmotaService {
 
   public function Create() {
       //Never delete this line!
@@ -10,6 +12,7 @@ class IPS_TasmotaLED extends IPSModule {
       $this->RegisterPropertyString("On","1");
       $this->RegisterPropertyString("Off","0");
       $this->RegisterPropertyString("FullTopic","%prefix%/%topic%");
+      $this->RegisterPropertyInteger("PowerOnState",3);
 
       $this->createVariabenProfiles();
       $this->RegisterVariableBoolean("TasmotaLED_Power", "Power","Switch",0);
@@ -33,6 +36,7 @@ class IPS_TasmotaLED extends IPSModule {
       parent::ApplyChanges();
       $this->ConnectParent("{EE0D345A-CF31-428A-A613-33CE98E752DD}");
       //Setze Filter fÃ¼r ReceiveData
+      $this->setPowerOnState($this->ReadPropertyInteger("PowerOnState"));
       $topic = $this->ReadPropertyString("Topic");
       $this->SetReceiveDataFilter(".*".$topic.".*");
     }
@@ -106,28 +110,6 @@ class IPS_TasmotaLED extends IPSModule {
      }
    }
 
-   private function MQTTCommand($command, $msg) {
-     $FullTopic = explode("/",$this->ReadPropertyString("FullTopic"));
-     $PrefixIndex = array_search("%prefix%",$FullTopic);
-     $TopicIndex = array_search("%topic%",$FullTopic);
-
-     $SetCommandArr = $FullTopic;
-     $index = count($SetCommandArr);
-
-     $SetCommandArr[$PrefixIndex] = "cmnd";
-     $SetCommandArr[$TopicIndex] = $this->ReadPropertyString("Topic");
-     $SetCommandArr[$index] = $command;
-
-     $topic = implode("/",$SetCommandArr);
-     $msg = $msg;
-
-     $Buffer["Topic"] = $topic;
-     $Buffer["MSG"] = $msg;
-     $BufferJSON = json_encode($Buffer);
-
-     return $BufferJSON;
-   }
-
    public function setLED(int $LED,string $color) {
     $command = "LED".$LED;
     $msg = $color;
@@ -182,14 +164,6 @@ class IPS_TasmotaLED extends IPSModule {
     $msg = $value;
     $BufferJSON = $this->MQTTCommand($command,$msg);
     $this->SendDebug("setSpeed", $BufferJSON,0);
-    $this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));
-  }
-
-  public function restart() {
-    $command = "restart";
-    $msg = 1;
-    $BufferJSON = $this->MQTTCommand($command,$msg);
-    $this->SendDebug("restart", $BufferJSON,0);
     $this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));
   }
 
