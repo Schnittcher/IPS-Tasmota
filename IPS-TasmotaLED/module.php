@@ -50,12 +50,18 @@ class IPS_TasmotaLED extends TasmotaService {
         $Buffer = utf8_decode($data->Buffer);
         $Buffer = json_decode($data->Buffer);
 
-        if (fnmatch("*Pixels*", $Buffer->MSG)) {
-  		   $this->SendDebug("Pixels Topic", $Buffer->TOPIC,0);
-  		   $this->SendDebug("Pixels MSG", $Buffer->MSG,0);
+        if (fnmatch("*PowerOnState*", $Buffer->MSG)) {
+  		   $this->SendDebug("PowerOnState Topic", $Buffer->TOPIC,0);
+  		   $this->SendDebug("PowerOnState MSG", $Buffer->MSG,0);
          $MSG = json_decode($Buffer->MSG);
-         SetValue($this->GetIDForIdent("TasmotaLED_Pixels"), $MSG->Pixels);
-       }
+         $this->SendDebug("PowerOnState MSG", $MSG->PowerOnState,0);
+        }
+       if (fnmatch("*Pixels*", $Buffer->MSG)) {
+       $this->SendDebug("Pixels Topic", $Buffer->TOPIC,0);
+       $this->SendDebug("Pixels MSG", $Buffer->MSG,0);
+        $MSG = json_decode($Buffer->MSG);
+        SetValue($this->GetIDForIdent("TasmotaLED_Pixels"), $MSG->Pixels);
+      }
        if (fnmatch("*POWER*", $Buffer->MSG)) {
           $this->SendDebug("Power Topic", $Buffer->TOPIC,0);
           $this->SendDebug("Power MSG", $Buffer->MSG,0);
