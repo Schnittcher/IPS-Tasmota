@@ -7,7 +7,16 @@
       { "type": "ValidationTextBox", "name": "Off", "caption": "Power Off" },
       { "type": "ValidationTextBox", "name": "FullTopic", "caption": "Full Topic" },
 
-    { "type": "Label", "label": "Settings" }
+    { "type": "Label", "label": "Settings" },
+    { "type": "Select", "name": "PowerOnState", "caption": "PowerOnState",
+    "options": [
+        { "label": "Off", "value": 0 },
+        { "label": "On", "value": 1 },
+        { "label": "toggle", "value": 2 },
+        { "label": "default", "value": 3 },
+        { "label": "Turn relay(s) on, disable further relay control", "value": 4 }
+    ]
+}
     ],
     "actions":
     [
