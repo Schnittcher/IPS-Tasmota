@@ -86,7 +86,7 @@ class TasmotaService extends IPSModule {
   }
 
   protected function tasmotaTranslate(string $language, string $value) {
-    $JSONString = file_get_contents(__DIR__"/languages/".$language.".json");
+    $JSONString = file_get_contents(__DIR__."/languages/".$language.".json");
     $translation = json_decode($JSONString, true);
      	if (array_key_exists($value, $translation["translations"][$language])) {
  			return $translation["translations"][$language][$value];
