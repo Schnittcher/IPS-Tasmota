@@ -1,0 +1,13 @@
+{
+	"translations": {
+		"de": {
+			"Wifi": "WLAN",
+			"RESULT": "ERGEBNIS",
+			"STATE": "STATUS",
+			"UPTIME": "LAUFZEIT",
+			"MARGINS": "TOLERANZ",
+			"WARNING": "WARNUNG",
+			"ENERGY": "ENERGIE"
+		}
+	}
+}
