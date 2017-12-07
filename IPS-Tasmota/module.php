@@ -124,7 +124,7 @@ class IPS_Tasmota extends TasmotaService {
         if (fnmatch("*".$this->tasmotaTranslate("de","STATE"), $Buffer->TOPIC)) {
           $myBuffer = json_decode($Buffer->MSG);
           $this->Debug("State MSG", $Buffer->MSG,"State");
-          $this->Debug("State RSSI", $myBuffer->Wifi->RSSI,"State");
+          $this->Debug("State "self::Wifi, $myBuffer->Wifi->RSSI,"State");
           SetValue($this->GetIDForIdent("Tasmota_RSSI"), $myBuffer->{self::Wifi}->RSSI);
         }
         //Sensor Variablen checken
