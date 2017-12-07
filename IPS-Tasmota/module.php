@@ -165,8 +165,8 @@ class IPS_Tasmota extends TasmotaService {
 
       $command = $powerTopic;
       $msg = $Value;
-      if($msg===false){$msg = translate::Powerfalse;}
-      elseif($msg===true){$msg = translate::Powertrue;}
+      if($msg===false){$msg = translate::PowerFalse;}
+      elseif($msg===true){$msg = translate::PowerTrue;}
       $BufferJSON = $this->MQTTCommand($command,$msg);
       $this->SendDebug(__FUNCTION__, $BufferJSON,0);
       $this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));
