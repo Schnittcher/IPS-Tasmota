@@ -31,5 +31,20 @@ public const Powerfactor = "Faktor";
 public const Voltage = "Spannung";
 public const Current = "Strom";
 
+//LED
+public const Color = "Color";
+public const ColorTemperature = "CT";
+public const Dimmer = "Dimmer";
+public const Led = "Led";
+public const LedTable = "LedTable";
+public const Fade = "Fade";
+public const Pixels = "Pixels";
+public const Scheme = "Scheme";
+public const Speed = "Speed";
+public const Wakeup = "Wakeup";
+public const WakeUpDuration = "WakeUpDuration";
+public const Width = "Width";
+
+
 }
 ?>
