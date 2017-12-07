@@ -8,5 +8,8 @@ public const UPTIME = "LAUFZEIT";
 public const MARGINS = "TOLERANZ";
 public const WARNING = "WARNUNG";
 public const ENERGY = "ENERGIE";
+
+public const Temperature = "Temperatur";
+public const Humidity = "Feuchtigkeit";
 }
 ?>

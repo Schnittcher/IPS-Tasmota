@@ -60,11 +60,11 @@ class IPS_Tasmota extends TasmotaService {
         $this->Debug("Rekursion Tasmota ".$ParentKey."_".$key,"$key = $value","Sensoren");
         if (is_int($value) or is_float($value)){
           switch ($key) {
-            case 'Temperature':
+            case translate::Temperature:
               $variablenID = $this->RegisterVariableFloat("Tasmota_".$ParentKey."_".$key, $ParentKey." Temperatur","~Temperature");
               SetValue($this->GetIDForIdent("Tasmota_".$ParentKey."_".$key), $value);
               break;
-					  case 'Humidity':
+					  case translate::Humidity:
               $variablenID = $this->RegisterVariableFloat("Tasmota_".$ParentKey."_".$key, $ParentKey." Feuchte","~Humidity.F");
               SetValue($this->GetIDForIdent("Tasmota_".$ParentKey."_".$key), $value);
               break;
@@ -135,7 +135,7 @@ class IPS_Tasmota extends TasmotaService {
           $this->traverseArray($myBuffer, $myBuffer);
         }
         //POW Variablen
-        if (fnmatch("*ENERGY", $Buffer->TOPIC)) {
+        if (fnmatch("*".translate::ENERGY, $Buffer->TOPIC)) {
           $myBuffer = json_decode($Buffer->MSG);
           $this->Debug("ENERGY MSG", $Buffer->MSG,"Pow");
           $this->RegisterVariableFloat("Tasmota_POWTotal", "Total", "~Electricity");
