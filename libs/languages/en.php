@@ -9,4 +9,18 @@ public const MARGINS = "MARGINS";
 public const WARNING = "WARNING";
 public const ENERGY = "ENERGY";
 }
+
+//Sensor
+public const Temperature = "Temperatur";
+public const Humidity = "Feuchtigkeit";
+
+//Sonoff POW
+public const Total = "Total";
+public const Yesterday = "Yesterday";
+public const Today = "Today";
+public const Period = "Period";
+public const Powerusage = "Power";
+public const Powerfactor = "Factor";
+public const Voltage = "Voltage";
+public const Current = "Current";
 ?>
