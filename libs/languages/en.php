@@ -13,6 +13,10 @@ public const ENERGY = "ENERGY";
 public const Temperature = "Temperatur";
 public const Humidity = "Feuchtigkeit";
 
+//switch
+public const PowerTrue = "true";
+public const PowerFalse = "false";
+
 //Sonoff POW
 public const Total = "Total";
 public const Yesterday = "Yesterday";
