@@ -12,6 +12,7 @@ class IPS_Tasmota extends TasmotaService {
     $this->RegisterPropertyString("Off","0");
     $this->RegisterPropertyString("FullTopic","%prefix%/%topic%");
     $this->RegisterPropertyInteger("PowerOnState",3);
+    $this->RegisterPropertyString("DeviceLanguage","en");
     $this->RegisterVariableFloat("Tasmota_RSSI", "RSSI");
     //Settings
     $this->RegisterPropertyBoolean("Power1Deactivate", false);
@@ -123,7 +124,7 @@ class IPS_Tasmota extends TasmotaService {
           $myBuffer = json_decode($Buffer->MSG);
           $this->Debug("State MSG", $Buffer->MSG,"State");
           $this->Debug("State RSSI", $myBuffer->Wifi->RSSI,"State");
-          SetValue($this->GetIDForIdent("Tasmota_RSSI"), $myBuffer->{$this->tasmotaTranslate("de","Wifi")}->RSSI);
+          SetValue($this->GetIDForIdent("Tasmota_RSSI"), $myBuffer->{self::RSSI}->RSSI);
         }
         //Sensor Variablen checken
         if (fnmatch("*SENSOR", $Buffer->TOPIC)) {

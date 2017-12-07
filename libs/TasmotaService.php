@@ -1,6 +1,8 @@
 <?
 class TasmotaService extends IPSModule {
 
+  const "RSSI" = $this->tasmotaTranslate("de","Wifi");
+
   protected function MQTTCommand($command, $msg) {
     $FullTopic = explode("/",$this->ReadPropertyString("FullTopic"));
     $PrefixIndex = array_search("%prefix%",$FullTopic);
