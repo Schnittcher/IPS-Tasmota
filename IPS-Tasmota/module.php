@@ -25,6 +25,7 @@ class IPS_Tasmota extends TasmotaService {
   public function ApplyChanges() {
     //Never delete this line!
     parent::ApplyChanges();
+    $this->defineConstants($this->ReadPropertyString("DeviceLanguage"));
     $this->ConnectParent("{EE0D345A-CF31-428A-A613-33CE98E752DD}");
     //Setze Filter fÃ¼r ReceiveData
     $this->setPowerOnState($this->ReadPropertyInteger("PowerOnState"));

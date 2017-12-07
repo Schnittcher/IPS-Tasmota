@@ -1,7 +1,19 @@
 <?
 class TasmotaService extends IPSModule {
 
-  const Wifi = $this->tasmotaTranslate("de","Wifi");
+  protected function defineConstants($language) {
+    switch ($language) {
+    	case 'de':
+    		require(__DIR__ . "/language/de.php");
+    		break;
+      case 'en':
+    		require(__DIR__ . "/language/en.php");
+    		break;
+    	default:
+    		require(__DIR__ . "/language/en.php");
+    		break;
+    }
+  }
 
   protected function MQTTCommand($command, $msg) {
     $FullTopic = explode("/",$this->ReadPropertyString("FullTopic"));
