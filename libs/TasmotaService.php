@@ -95,16 +95,5 @@ class TasmotaService extends IPSModule {
     $this->SendDebug("setPowerOnState", $BufferJSON,0);
     $this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));
   }
-
-  protected function tasmotaTranslate(string $language, string $value) {
-    $JSONString = file_get_contents(__DIR__."/languages/".$language.".json");
-    $translation = json_decode($JSONString, true);
-     	if (array_key_exists($value, $translation["translations"][$language])) {
- 			return $translation["translations"][$language][$value];
- 		} else {
- 	    	IPS_LogMessage("Tasmota", $value." konnte nicht übersetzt werden!");
- 			return $value;
- 		}
-   }
 }
 ?>
