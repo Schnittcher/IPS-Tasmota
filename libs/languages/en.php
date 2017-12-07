@@ -8,7 +8,6 @@ public const UPTIME = "UPTIME";
 public const MARGINS = "MARGINS";
 public const WARNING = "WARNING";
 public const ENERGY = "ENERGY";
-}
 
 //Sensor
 public const Temperature = "Temperatur";
@@ -23,4 +22,5 @@ public const Powerusage = "Power";
 public const Powerfactor = "Factor";
 public const Voltage = "Voltage";
 public const Current = "Current";
+}
 ?>
