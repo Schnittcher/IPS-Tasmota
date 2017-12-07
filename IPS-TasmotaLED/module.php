@@ -106,9 +106,9 @@ class IPS_TasmotaLED extends TasmotaService {
          $this->SendDebug("Fade MSG", $Buffer->MSG,0);
          $MSG = json_decode($Buffer->MSG);
          if ($MSG->{translate::Fade} == "ON") {
-           SetValue($this->GetIDForIdent("TasmotaLED_Fade"), translate::PowerTrue);
+           SetValue($this->GetIDForIdent("TasmotaLED_Fade"), true);
          } else {
-           SetValue($this->GetIDForIdent("TasmotaLED_Fade"), translate::PowerFalse);
+           SetValue($this->GetIDForIdent("TasmotaLED_Fade"), false);
          }
        }
        if (fnmatch("*".translate::STATE, $Buffer->TOPIC)) {
