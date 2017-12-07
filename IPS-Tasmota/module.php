@@ -90,14 +90,14 @@ class IPS_Tasmota extends TasmotaService {
 			  // Und Diese dann wieder dekodieren
 			  $Buffer = json_decode($data->Buffer);
         //PowerOnState Vairablen setzen
-        if (fnmatch("*PowerOnState*", $Buffer->MSG)) {
+        if (fnmatch("*".translate::PowerOnState."*", $Buffer->MSG)) {
           $this->SendDebug("PowerOnState Topic", $Buffer->TOPIC,0);
           $this->SendDebug("PowerOnState MSG", $Buffer->MSG,0);
           $MSG = json_decode($Buffer->MSG);
           $this->setPowerOnStateInForm($MSG);
         }
         //Power Vairablen checken
-        if (fnmatch("*POWER*", $Buffer->TOPIC)) {
+        if (fnmatch("*".translate::POWER."*", $Buffer->TOPIC)) {
           $this->SendDebug("Power Topic",$Buffer->TOPIC,0);
           $this->SendDebug("Power", $Buffer->MSG,0);
           $power = explode("/", $Buffer->TOPIC);
@@ -128,7 +128,7 @@ class IPS_Tasmota extends TasmotaService {
           SetValue($this->GetIDForIdent("Tasmota_RSSI"), $myBuffer->{translate::Wifi}->RSSI);
         }
         //Sensor Variablen checken
-        if (fnmatch("*SENSOR", $Buffer->TOPIC)) {
+        if (fnmatch("*".translate::SENSOR, $Buffer->TOPIC)) {
           $this->Debug("Sensor MSG", $Buffer->MSG,"Sensoren");
           $this->Debug("Sensor Topic", $Buffer->TOPIC,"Sensoren");
           $myBuffer = json_decode($Buffer->MSG,true);

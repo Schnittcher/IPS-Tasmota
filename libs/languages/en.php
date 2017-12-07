@@ -13,6 +13,10 @@ public const ENERGY = "ENERGY";
 public const Temperature = "Temperatur";
 public const Humidity = "Feuchtigkeit";
 
+public const SENSOR = "SENSOR";
+public const POWER = "POWER";
+public const PowerOnState = "PowerOnState";
+
 //switch
 public const PowerTrue = "true";
 public const PowerFalse = "false";

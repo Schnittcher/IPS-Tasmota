@@ -9,8 +9,13 @@ public const MARGINS = "TOLERANZ";
 public const WARNING = "WARNUNG";
 public const ENERGY = "ENERGIE";
 
+//Sensor
 public const Temperature = "Temperatur";
 public const Humidity = "Feuchtigkeit";
+
+public const SENSOR = "SENSOR";
+public const POWER = "POWER";
+public const PowerOnState = "PowerOnState";
 
 //switch
 public const PowerTrue = "wahr";
