@@ -146,13 +146,13 @@ class IPS_Tasmota extends TasmotaService {
           $this->RegisterVariableFloat("Tasmota_POWVoltage", "Voltage", "~Volt");
           $this->RegisterVariableFloat("Tasmota_POWCurrent", "Current", "~Ampere");
 
-          SetValue($this->GetIDForIdent("Tasmota_POWPower"), $myBuffer->Power);
-          SetValue($this->GetIDForIdent("Tasmota_POWTotal"), $myBuffer->Total);
-          SetValue($this->GetIDForIdent("Tasmota_POWToday"), $myBuffer->Today);
-          SetValue($this->GetIDForIdent("Tasmota_POWYesterday"), $myBuffer->Yesterday);
-          SetValue($this->GetIDForIdent("Tasmota_POWCurrent"), $myBuffer->Current);
-          SetValue($this->GetIDForIdent("Tasmota_POWVoltage"), $myBuffer->Voltage);
-          SetValue($this->GetIDForIdent("Tasmota_POWFactor"), $myBuffer->Factor);
+          SetValue($this->GetIDForIdent("Tasmota_POWPower"), $myBuffer->{translate::Power});
+          SetValue($this->GetIDForIdent("Tasmota_POWTotal"), $myBuffer->{trnaslate::Total});
+          SetValue($this->GetIDForIdent("Tasmota_POWToday"), $myBuffer->{translate::Today});
+          SetValue($this->GetIDForIdent("Tasmota_POWYesterday"), $myBuffer->{translate::Yesterday});
+          SetValue($this->GetIDForIdent("Tasmota_POWCurrent"), $myBuffer->{translate::Current});
+          SetValue($this->GetIDForIdent("Tasmota_POWVoltage"), $myBuffer->{translate::Voltage});
+          SetValue($this->GetIDForIdent("Tasmota_POWFactor"), $myBuffer->{translate::Factor});
         }
       }
     }
