@@ -1,7 +1,7 @@
 <?
 class TasmotaService extends IPSModule {
 
-  protected function defineConstants($language) {
+  protected function defineLanguage($language) {
     switch ($language) {
     	case 'de':
     		require(__DIR__ . "/languages/de.php");

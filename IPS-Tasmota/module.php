@@ -25,7 +25,7 @@ class IPS_Tasmota extends TasmotaService {
   public function ApplyChanges() {
     //Never delete this line!
     parent::ApplyChanges();
-    $this->defineConstants($this->ReadPropertyString("DeviceLanguage"));
+    $this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
     $this->ConnectParent("{EE0D345A-CF31-428A-A613-33CE98E752DD}");
     //Setze Filter fÃ¼r ReceiveData
     $this->setPowerOnState($this->ReadPropertyInteger("PowerOnState"));
@@ -124,8 +124,8 @@ class IPS_Tasmota extends TasmotaService {
         if (fnmatch("*".$this->tasmotaTranslate("de","STATE"), $Buffer->TOPIC)) {
           $myBuffer = json_decode($Buffer->MSG);
           $this->Debug("State MSG", $Buffer->MSG,"State");
-          $this->Debug("State ".self::Wifi, $myBuffer->Wifi->RSSI,"State");
-          SetValue($this->GetIDForIdent("Tasmota_RSSI"), $myBuffer->{self::Wifi}->RSSI);
+          $this->Debug("State ".translate::Wifi, $myBuffer->Wifi->RSSI,"State");
+          SetValue($this->GetIDForIdent("Tasmota_RSSI"), $myBuffer->{translate::Wifi}->RSSI);
         }
         //Sensor Variablen checken
         if (fnmatch("*SENSOR", $Buffer->TOPIC)) {
