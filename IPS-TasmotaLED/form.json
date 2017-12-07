@@ -1,6 +1,12 @@
 {
     "elements":
     [
+      { "type": "Select", "name": "DeviceLanguage", "caption": "Device Language",
+        "options": [
+            { "label": "English", "value": "en" },
+            { "label": "German", "value": "de" }
+        ]
+      },
       { "type": "ValidationTextBox", "name": "Topic", "caption": "Tasmota MQTT Topic" },
       { "type": "Label", "label": "Parameter Einstellungen" },
       { "type": "ValidationTextBox", "name": "On", "caption": "Power On" },
