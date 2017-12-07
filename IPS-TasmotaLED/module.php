@@ -80,7 +80,7 @@ class IPS_TasmotaLED extends TasmotaService {
          $this->SendDebug("Speed Topic", $Buffer->TOPIC,0);
          $this->SendDebug("Speed MSG", $Buffer->MSG,0);
          $MSG = json_decode($Buffer->MSG);
-         SetValue($this->GetIDForIdent("TasmotaLED_Speed"), $MSG->{translate:Spped});
+         SetValue($this->GetIDForIdent("TasmotaLED_Speed"), $MSG->{translate::Spped});
        }
        if (fnmatch("*".translate::Scheme."*", $Buffer->MSG)) {
          $this->SendDebug("Scheme Topic", $Buffer->TOPIC,0);
