@@ -4,13 +4,13 @@ class TasmotaService extends IPSModule {
   protected function defineConstants($language) {
     switch ($language) {
     	case 'de':
-    		require(__DIR__ . "/language/de.php");
+    		require(__DIR__ . "/../language/de.php");
     		break;
       case 'en':
-    		require(__DIR__ . "/language/en.php");
+    		require(__DIR__ . "/../language/en.php");
     		break;
     	default:
-    		require(__DIR__ . "/language/en.php");
+    		require(__DIR__ . "/../language/en.php");
     		break;
     }
   }
