@@ -157,6 +157,7 @@ class IPS_Tasmota extends TasmotaService {
       }
     }
     public function setPower(string $Ident,bool $Value) {
+      $this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
       $power = explode("_", $Ident);
       end($power);
       $powerTopic = $power[key($power)];
