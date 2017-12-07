@@ -184,6 +184,7 @@ class IPS_TasmotaLED extends TasmotaService {
   }
 
   public function setPower(bool $value) {
+    $this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
     $command = "Power";
     $msg = $value;
     if($msg===false){$msg = translate::PowerFalse;}
