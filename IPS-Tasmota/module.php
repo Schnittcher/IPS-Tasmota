@@ -147,7 +147,7 @@ class IPS_Tasmota extends TasmotaService {
           $this->RegisterVariableFloat("Tasmota_POWCurrent", "Current", "~Ampere");
 
           SetValue($this->GetIDForIdent("Tasmota_POWPower"), $myBuffer->{translate::Power});
-          SetValue($this->GetIDForIdent("Tasmota_POWTotal"), $myBuffer->{trnaslate::Total});
+          SetValue($this->GetIDForIdent("Tasmota_POWTotal"), $myBuffer->{translate::Total});
           SetValue($this->GetIDForIdent("Tasmota_POWToday"), $myBuffer->{translate::Today});
           SetValue($this->GetIDForIdent("Tasmota_POWYesterday"), $myBuffer->{translate::Yesterday});
           SetValue($this->GetIDForIdent("Tasmota_POWCurrent"), $myBuffer->{translate::Current});
