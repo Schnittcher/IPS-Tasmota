@@ -119,6 +119,7 @@ class IPS_TasmotaLED extends TasmotaService {
    }
 
    public function setLED(int $LED,string $color) {
+     $this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
      $command = translate::LED.$LED;
      $msg = $color;
      $BufferJSON = $this->MQTTCommand($command,$color);
@@ -127,6 +128,7 @@ class IPS_TasmotaLED extends TasmotaService {
    }
 
    public function setScheme(int $schemeID) {
+     $this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
      $command = translate::Scheme;
      $msg = $schemeID;
      $BufferJSON = $this->MQTTCommand($command,$msg);
@@ -135,6 +137,7 @@ class IPS_TasmotaLED extends TasmotaService {
    }
 
    public function setPixel(int $count) {
+     $this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
      $command = translate::Pixels;
      $msg = $count;
      $BufferJSON = $this->MQTTCommand($command,$msg);
@@ -143,6 +146,7 @@ class IPS_TasmotaLED extends TasmotaService {
   }
 
   public function setDimmer(int $value) {
+    $this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
     $command = translate::Dimmer;
     $msg = $value;
     $BufferJSON = $this->MQTTCommand($command,$msg);
@@ -151,6 +155,7 @@ class IPS_TasmotaLED extends TasmotaService {
   }
 
   public function setColorHex(string $color) {
+    $this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
     $command = translate::Color;
     $msg = $color;
     $BufferJSON = $this->MQTTCommand($command,$msg);
@@ -159,6 +164,7 @@ class IPS_TasmotaLED extends TasmotaService {
   }
 
   public function setFade(bool $value) {
+    $this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
     $command = translate::Fade;
     $msg = $value;
     if($msg===false){$msg = translate::PowerFalse;}
@@ -169,6 +175,7 @@ class IPS_TasmotaLED extends TasmotaService {
   }
 
   public function setSpeed(int $value) {
+    $this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
     $command = translate::Speed;
     $msg = $value;
     $BufferJSON = $this->MQTTCommand($command,$msg);
