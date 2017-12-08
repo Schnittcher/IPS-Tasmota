@@ -10,8 +10,8 @@ class translate {
   const ENERGY = "ENERGY";
 
   //Sensor
-  const Temperature = "Temperatur";
-  const Humidity = "Feuchtigkeit";
+  const Temperature = "Temperature";
+  const Humidity = "Humidity";
 
   const SENSOR = "SENSOR";
   const POWER = "POWER";
