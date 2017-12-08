@@ -1,48 +1,48 @@
 <?
 
 class translate {
-public const Wifi = "Wifi";
-public const RESULT = "RESULT";
-public const STATE = "STATE";
-public const UPTIME = "UPTIME";
-public const MARGINS = "MARGINS";
-public const WARNING = "WARNING";
-public const ENERGY = "ENERGY";
+  const Wifi = "Wifi";
+  const RESULT = "RESULT";
+  const STATE = "STATE";
+  const UPTIME = "UPTIME";
+  const MARGINS = "MARGINS";
+  const WARNING = "WARNING";
+  const ENERGY = "ENERGY";
 
-//Sensor
-public const Temperature = "Temperatur";
-public const Humidity = "Feuchtigkeit";
+  //Sensor
+  const Temperature = "Temperatur";
+  const Humidity = "Feuchtigkeit";
 
-public const SENSOR = "SENSOR";
-public const POWER = "POWER";
-public const PowerOnState = "PowerOnState";
+  const SENSOR = "SENSOR";
+  const POWER = "POWER";
+  const PowerOnState = "PowerOnState";
 
-//switch
-public const PowerTrue = "true";
-public const PowerFalse = "false";
+  //switch
+  const PowerTrue = "true";
+  const PowerFalse = "false";
 
-//Sonoff POW
-public const Total = "Total";
-public const Yesterday = "Yesterday";
-public const Today = "Today";
-public const Period = "Period";
-public const Powerusage = "Power";
-public const Powerfactor = "Factor";
-public const Voltage = "Voltage";
-public const Current = "Current";
+  //Sonoff POW
+  const Total = "Total";
+  const Yesterday = "Yesterday";
+  const Today = "Today";
+  const Period = "Period";
+  const Powerusage = "Power";
+  const Powerfactor = "Factor";
+  const Voltage = "Voltage";
+  const Current = "Current";
 
-public const Color = "Color";
-public const ColorTemperature = "CT";
-public const Dimmer = "Dimmer";
-public const Led = "Led";
-public const LedTable = "LedTable";
-public const Fade = "Fade";
-public const Pixels = "Pixels";
-public const Scheme = "Scheme";
-public const Speed = "Speed";
-public const Wakeup = "Wakeup";
-public const WakeUpDuration = "WakeUpDuration";
-public const Width = "Width";
+  const Color = "Color";
+  const ColorTemperature = "CT";
+  const Dimmer = "Dimmer";
+  const Led = "Led";
+  const LedTable = "LedTable";
+  const Fade = "Fade";
+  const Pixels = "Pixels";
+  const Scheme = "Scheme";
+  const Speed = "Speed";
+  const Wakeup = "Wakeup";
+  const WakeUpDuration = "WakeUpDuration";
+  const Width = "Width";
 
 }
 ?>
