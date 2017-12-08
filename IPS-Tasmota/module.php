@@ -59,6 +59,8 @@ class IPS_Tasmota extends TasmotaService {
         $ParentKey = $this->find_parent($GesamtArray,$value);
         $this->Debug("Rekursion Tasmota ".$ParentKey."_".$key,"$key = $value","Sensoren");
         if (is_int($value) or is_float($value)){
+          $ParentKey = str_replace("-", "_", $ParentKey);
+          $key = str_replace("-", "_", $key);
           switch ($key) {
             case translate::Temperature:
               $variablenID = $this->RegisterVariableFloat("Tasmota_".$ParentKey."_".$key, $ParentKey." Temperatur","~Temperature");
