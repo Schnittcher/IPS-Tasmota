@@ -14,7 +14,7 @@
       { "type": "ValidationTextBox", "name": "FullTopic", "caption": "Full Topic" },
 
     { "type": "Label", "label": "Settings" },
-    { "type": "CheckBox", "name": "Power1Deactivate", "caption": "Power1 deaktivieren" },
+    { "type": "CheckBox", "name": "Power1Deactivate", "caption": "Multi Switch" },
     { "type": "Select", "name": "PowerOnState", "caption": "PowerOnState",
     "options": [
         { "label": "Off", "value": 0 },
