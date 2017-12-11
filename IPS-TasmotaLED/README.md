@@ -72,11 +72,11 @@ TasmotaLED_setPixel(25537, 58);
 
 Beispiel:
 
-### TasmotaLED_setPower($InstanceID, $Value)
+### TasmotaLED_setPower($InstanceID, $Power, $Value)
 Mit dieser Funktion kann der Stripe ein- bzw. ausgeschaltet werden.
 
 ```php
-TasmotaLED_setPower(25537, true);
+TasmotaLED_setPower(25537, 0, true); //Power Variable
 ```
 
 Beispiel:
