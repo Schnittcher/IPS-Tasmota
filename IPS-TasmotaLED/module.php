@@ -186,8 +186,8 @@ class IPS_TasmotaLED extends TasmotaService {
   public function RequestAction($Ident, $Value) {
     switch ($Ident) {
       case 'TasmotaLED_Power':
-        if (strlen($Ident) <> 13) {
-          $power = substr($Ident,13);
+        if (strlen($Ident) <> 16) {
+          $power = substr($Ident,16);
         } else {
           $power = 0;
         }
