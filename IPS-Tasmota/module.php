@@ -161,7 +161,11 @@ class IPS_Tasmota extends TasmotaService {
     public function RequestAction($Ident, $Value) {
       $this->SendDebug(__FUNCTION__." Ident", $Ident,0);
       $this->SendDebug(__FUNCTION__." Value", $Value,0);
-      $power = substr($Ident,13);
+      if (strlen($Ident) <> 13) {
+        $power = substr($Ident,13);
+      } else {
+        $power = 0;
+      }
       $result = $this->setPower($power, $Value);
     }
   }
