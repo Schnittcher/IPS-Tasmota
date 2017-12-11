@@ -120,7 +120,7 @@ class IPS_TasmotaLED extends TasmotaService {
 
    public function setLED(int $LED,string $color) {
      $this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
-     $command = translate::LED.$LED;
+     $command = translate::Led.$LED;
      $msg = $color;
      $BufferJSON = $this->MQTTCommand($command,$color);
      $this->SendDebug("setLED", $BufferJSON,0);
