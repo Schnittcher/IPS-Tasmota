@@ -95,5 +95,23 @@ class TasmotaService extends IPSModule {
     $this->SendDebug("setPowerOnState", $BufferJSON,0);
     $this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));
   }
+
+    public function setPower(int $power,bool $Value) {
+      $this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
+      if ($power <> 0) {
+        $PowerIdent = "Tasmota_POWER".strval($power);
+        $powerTopic = "POWER".strval($power);
+      } else {
+        $PowerIdent = "Tasmota_POWER";
+        $powerTopic = "POWER";
+      }
+      $command = $powerTopic;
+      $msg = $Value;
+      if($msg===false){$msg = translate::PowerFalse;}
+      elseif($msg===true){$msg = translate::PowerTrue;}
+      $BufferJSON = $this->MQTTCommand($command,$msg);
+      $this->SendDebug(__FUNCTION__, $BufferJSON,0);
+      $this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));
+    }
 }
 ?>

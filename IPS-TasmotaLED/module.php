@@ -183,21 +183,11 @@ class IPS_TasmotaLED extends TasmotaService {
     $this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));
   }
 
-  public function setPower(bool $value) {
-    $this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
-    $command = "Power";
-    $msg = $value;
-    if($msg===false){$msg = translate::PowerFalse;}
-    elseif($msg===true){$msg = translate::PowerTrue;}
-    $BufferJSON = $this->MQTTCommand($command,$msg);
-    $this->SendDebug("setPower", $BufferJSON,0);
-    $this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));
-  }
-
   public function RequestAction($Ident, $Value) {
     switch ($Ident) {
       case 'TasmotaLED_Power':
-        $this->setPower($Value);
+        $power = substr($Ident,13);
+        $result = $this->setPower($power, $Value);
         break;
       case 'TasmotaLED_Speed':
         $this->setSpeed($Value);

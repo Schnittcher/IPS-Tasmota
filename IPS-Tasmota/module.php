@@ -158,26 +158,11 @@ class IPS_Tasmota extends TasmotaService {
         }
       }
     }
-    public function setPower(string $Ident,bool $Value) {
-      $this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
-      $power = explode("_", $Ident);
-      end($power);
-      $powerTopic = $power[key($power)];
-      SetValue($this->GetIDForIdent($Ident), $Value);
-
-      $command = $powerTopic;
-      $msg = $Value;
-      if($msg===false){$msg = translate::PowerFalse;}
-      elseif($msg===true){$msg = translate::PowerTrue;}
-      $BufferJSON = $this->MQTTCommand($command,$msg);
-      $this->SendDebug(__FUNCTION__, $BufferJSON,0);
-      $this->SendDataToParent(json_encode(Array("DataID" => "{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "Action" => "Publish", "Buffer" => $BufferJSON)));
-    }
-
     public function RequestAction($Ident, $Value) {
       $this->SendDebug(__FUNCTION__." Ident", $Ident,0);
       $this->SendDebug(__FUNCTION__." Value", $Value,0);
-      $result = $this->setPower($Ident, $Value);
+      $power = substr($Ident,13);
+      $result = $this->setPower($power, $Value);
     }
   }
 ?>
