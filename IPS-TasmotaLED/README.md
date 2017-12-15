@@ -99,7 +99,7 @@ Beispiel:
 TasmotaLED_setSpeed(25537, 5);
 ```
 
-### sendMQTTCommand
+### TasmotaLED_sendMQTTCommand($command, $msg)
 Mit dieser Funktion kann jedes MQTT Command abgeschickt werden.
 
 Beispiel:
