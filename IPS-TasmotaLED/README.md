@@ -98,3 +98,11 @@ Beispiel:
 ```php
 TasmotaLED_setSpeed(25537, 5);
 ```
+
+### sendMQTTCommand
+Mit dieser Funktion kann jedes MQTT Command abgeschickt werden.
+
+Beispiel:
+```php
+TasmotaLED_sendMQTTCommand("POWER "ON");
+```
