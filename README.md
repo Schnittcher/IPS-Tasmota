@@ -31,6 +31,8 @@ IPS-KS-MQTT Client:
 https://github.com/Schnittcher/IPS-KS-MQTT.git
 ```
 
+In den Einstellungen muss der Modul Typ auf Forward gesetzt werden.
+
 IPS-Tasmota:
 ```
 https://github.com/Schnittcher/IPS-Tasmota.git
