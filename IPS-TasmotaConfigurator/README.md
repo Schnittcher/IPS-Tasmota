@@ -6,7 +6,7 @@ Mit dem IPS-Tasmota Konfigurator können Tasmota Geräte im Netzwerk gefunden we
 
 ## 1. Konfiguration
 
-![Konfigurator](../imgs/configurator.jpg)  
+![Konfigurator](../imgs/configurator.jpeg)  
 
 In den Konfigurator Instanzen den Tasmota Configurator suchen und hinzufügen.
 Mit dem Button **Netzwerk durchsuchen** werden alle Tasmota Geräte im Netzwerk gesucht.
