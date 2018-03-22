@@ -138,7 +138,7 @@ class IPS_Tasmota extends TasmotaService {
             SetValue($this->GetIDForIdent("Tasmota_RSSI"), $myBuffer->Wifi->RSSI);
           }
           //Sensor Variablen checken
-          if (fnmatch("*SENSOR", trim($Buffer->TOPIC)) {
+          if (fnmatch("*SENSOR", trim($Buffer->TOPIC))) {
             $this->Debug("Sensor MSG", $Buffer->MSG,"Sensoren");
             $this->Debug("Sensor Topic", $Buffer->TOPIC,"Sensoren");
             $myBuffer = json_decode($Buffer->MSG,true);
@@ -146,7 +146,7 @@ class IPS_Tasmota extends TasmotaService {
           }
         }
         //POW Variablen
-        if (fnmatch("*ENERGY*", trim($Buffer->TOPIC)) {
+        if (fnmatch("*ENERGY*", trim($Buffer->TOPIC))) {
           $myBuffer = json_decode($Buffer->MSG);
           if (property_exists($myBuffer,"ENERGY")) {
             $this->Debug("ENERGY MSG", $Buffer->MSG,"Pow");
