@@ -40,9 +40,9 @@ class TasmotaService extends IPSModule {
 		}
 	}
 
-  protected function setPowerOnStateInForm($MSG) {
-    if ($MSG->PowerOnState <> $this->ReadPropertyInteger("PowerOnState")) {
-      IPS_SetProperty($this->InstanceID, "PowerOnState", $MSG->PowerOnState);
+  protected function setPowerOnStateInForm($value) {
+    if ($value <> $this->ReadPropertyInteger("PowerOnState")) {
+      IPS_SetProperty($this->InstanceID, "PowerOnState", $value);
       if(IPS_HasChanges($this->InstanceID))
       {
         IPS_ApplyChanges($this->InstanceID);
