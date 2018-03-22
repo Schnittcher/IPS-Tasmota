@@ -104,42 +104,44 @@ class IPS_Tasmota extends TasmotaService {
 
         }
         //Power Vairablen checken
-        if (fnmatch("*POWER*", $Buffer->TOPIC)) {
-          $this->SendDebug("Power Topic",$Buffer->TOPIC,0);
-          $this->SendDebug("Power", $Buffer->MSG,0);
-          $power = explode("/", $Buffer->TOPIC);
-          end($power);
-          $lastKey = key($power);
-          $tmpPower = "POWER1";
-          if ($this->ReadPropertyBoolean("Power1Deactivate") == true) {
-            $tmpPower = "POWER";
-          }
-          if ($power[$lastKey] <> $tmpPower) {
-            $this->RegisterVariableBoolean("Tasmota_".$power[$lastKey], $power[$lastKey],"~Switch");
-            $this->EnableAction("Tasmota_".$power[$lastKey]);
-            switch ($Buffer->MSG) {
-              case $off:
-                SetValue($this->GetIDForIdent("Tasmota_".$power[$lastKey]), 0);
+        if (property_exists($Buffer,"TOPIC")) {
+          if (fnmatch("*POWER*", $Buffer->TOPIC)) {
+            $this->SendDebug("Power Topic",$Buffer->TOPIC,0);
+            $this->SendDebug("Power", $Buffer->MSG,0);
+            $power = explode("/", $Buffer->TOPIC);
+            end($power);
+            $lastKey = key($power);
+            $tmpPower = "POWER1";
+            if ($this->ReadPropertyBoolean("Power1Deactivate") == true) {
+              $tmpPower = "POWER";
+            }
+            if ($power[$lastKey] <> $tmpPower) {
+              $this->RegisterVariableBoolean("Tasmota_".$power[$lastKey], $power[$lastKey],"~Switch");
+              $this->EnableAction("Tasmota_".$power[$lastKey]);
+              switch ($Buffer->MSG) {
+                case $off:
+                  SetValue($this->GetIDForIdent("Tasmota_".$power[$lastKey]), 0);
+                  break;
+                case $on:
+                SetValue($this->GetIDForIdent("Tasmota_".$power[$lastKey]), 1);
                 break;
-              case $on:
-              SetValue($this->GetIDForIdent("Tasmota_".$power[$lastKey]), 1);
-              break;
+              }
             }
           }
-        }
-        //State checken
-        if (fnmatch("*STATE", $Buffer->TOPIC)) {
-          $myBuffer = json_decode($Buffer->MSG);
-          $this->Debug("State MSG", $Buffer->MSG,"State");
-          $this->Debug("State Wifi", $myBuffer->Wifi->RSSI,"State");
-          SetValue($this->GetIDForIdent("Tasmota_RSSI"), $myBuffer->Wifi->RSSI);
-        }
-        //Sensor Variablen checken
-        if (fnmatch("*SENSOR", $Buffer->TOPIC)) {
-          $this->Debug("Sensor MSG", $Buffer->MSG,"Sensoren");
-          $this->Debug("Sensor Topic", $Buffer->TOPIC,"Sensoren");
-          $myBuffer = json_decode($Buffer->MSG,true);
-          $this->traverseArray($myBuffer, $myBuffer);
+          //State checken
+          if (fnmatch("*STATE", $Buffer->TOPIC)) {
+            $myBuffer = json_decode($Buffer->MSG);
+            $this->Debug("State MSG", $Buffer->MSG,"State");
+            $this->Debug("State Wifi", $myBuffer->Wifi->RSSI,"State");
+            SetValue($this->GetIDForIdent("Tasmota_RSSI"), $myBuffer->Wifi->RSSI);
+          }
+          //Sensor Variablen checken
+          if (fnmatch("*SENSOR", $Buffer->TOPIC)) {
+            $this->Debug("Sensor MSG", $Buffer->MSG,"Sensoren");
+            $this->Debug("Sensor Topic", $Buffer->TOPIC,"Sensoren");
+            $myBuffer = json_decode($Buffer->MSG,true);
+            $this->traverseArray($myBuffer, $myBuffer);
+          }
         }
         //POW Variablen
         if (fnmatch("*ENERGY*", $Buffer->MSG)) {
