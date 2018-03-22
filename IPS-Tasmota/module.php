@@ -105,7 +105,7 @@ class IPS_Tasmota extends TasmotaService {
         }
         //Power Vairablen checken
         if (property_exists($Buffer,"TOPIC")) {
-          if (@fnmatch("*POWER*", $Buffer->TOPIC)) {
+          if (fnmatch("*POWER*", $Buffer->TOPIC)) {
             $this->SendDebug("Power Topic",$Buffer->TOPIC,0);
             $this->SendDebug("Power", $Buffer->MSG,0);
             $power = explode("/", $Buffer->TOPIC);
@@ -129,14 +129,14 @@ class IPS_Tasmota extends TasmotaService {
             }
           }
           //State checken
-          if (@fnmatch("*STATE", $Buffer->TOPIC)) {
+          if (fnmatch("*STATE", $Buffer->TOPIC)) {
             $myBuffer = json_decode($Buffer->MSG);
             $this->Debug("State MSG", $Buffer->MSG,"State");
             $this->Debug("State Wifi", $myBuffer->Wifi->RSSI,"State");
             SetValue($this->GetIDForIdent("Tasmota_RSSI"), $myBuffer->Wifi->RSSI);
           }
           //Sensor Variablen checken
-          if (@fnmatch("*SENSOR", $Buffer->TOPIC)) {
+          if (fnmatch("*SENSOR", $Buffer->TOPIC)) {
             $this->Debug("Sensor MSG", $Buffer->MSG,"Sensoren");
             $this->Debug("Sensor Topic", $Buffer->TOPIC,"Sensoren");
             $myBuffer = json_decode($Buffer->MSG,true);
@@ -144,7 +144,7 @@ class IPS_Tasmota extends TasmotaService {
           }
         }
         //POW Variablen
-        if (@fnmatch("*ENERGY*", $Buffer->MSG)) {
+        if (fnmatch("*ENERGY*", $Buffer->MSG)) {
           $myBuffer = json_decode($Buffer->MSG);
           if (property_exists($myBuffer,"ENERGY")) {
             $this->Debug("ENERGY MSG", $Buffer->MSG,"Pow");
