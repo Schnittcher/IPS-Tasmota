@@ -89,7 +89,7 @@ class IPS_Tasmota extends TasmotaService {
           $data = json_decode($JSONString);
           // Buffer decodieren und in eine Variable schreiben
           $Buffer = json_decode($data->Buffer);
-          IPS_LogMessage("JSON Error?",json_last_error());
+          if ($Buffer->TOPIC <> "") {
           $this->SendDebug("Topic", $Buffer->TOPIC,0);
 			  $off = $this->ReadPropertyString("Off");
 			  $on = $this->ReadPropertyString("On");
@@ -167,6 +167,7 @@ class IPS_Tasmota extends TasmotaService {
             SetValue($this->GetIDForIdent("Tasmota_POWFactor"), $myBuffer->ENERGY->Factor);
           }
         }
+          }
       }
     }
     public function RequestAction($Ident, $Value) {
