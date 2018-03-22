@@ -105,6 +105,7 @@ class IPS_Tasmota extends TasmotaService {
         }
         //Power Vairablen checken
         if (property_exists($Buffer,"TOPIC")) {
+          IPS_LogMessage("test",$Buffer->Topic);
           if (fnmatch("*POWER*", $Buffer->TOPIC)) {
             $this->SendDebug("Power Topic",$Buffer->TOPIC,0);
             $this->SendDebug("Power", $Buffer->MSG,0);
