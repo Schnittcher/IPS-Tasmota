@@ -12,7 +12,7 @@ class IPS_Tasmota extends TasmotaService {
     $this->RegisterPropertyString("Off","0");
     $this->RegisterPropertyString("FullTopic","%prefix%/%topic%");
     $this->RegisterPropertyInteger("PowerOnState",3);
-    $this->RegisterPropertyString("DeviceLanguage","en");
+    //$this->RegisterPropertyString("DeviceLanguage","en");
     $this->RegisterVariableFloat("Tasmota_RSSI", "RSSI");
     //Settings
     $this->RegisterPropertyBoolean("Power1Deactivate", false);
@@ -62,17 +62,19 @@ class IPS_Tasmota extends TasmotaService {
           $ParentKey = str_replace("-", "_", $ParentKey);
           $key = str_replace("-", "_", $key);
           switch ($key) {
-            case translate::Temperature:
+            case "Temperature":
               $variablenID = $this->RegisterVariableFloat("Tasmota_".$ParentKey."_".$key, $ParentKey." Temperatur","~Temperature");
               SetValue($this->GetIDForIdent("Tasmota_".$ParentKey."_".$key), $value);
               break;
-					  case translate::Humidity:
+            case "Humidity":
               $variablenID = $this->RegisterVariableFloat("Tasmota_".$ParentKey."_".$key, $ParentKey." Feuchte","~Humidity.F");
               SetValue($this->GetIDForIdent("Tasmota_".$ParentKey."_".$key), $value);
               break;
             default:
-              $variablenID = $this->RegisterVariableFloat("Tasmota_".$ParentKey."_".$key, $ParentKey." ".$key);
-              SetValue($this->GetIDForIdent("Tasmota_".$ParentKey."_".$key), $value);
+              if ($ParentKey <> "ENERGY") {
+                  $variablenID = $this->RegisterVariableFloat("Tasmota_".$ParentKey."_".$key, $ParentKey." ".$key);
+                  SetValue($this->GetIDForIdent("Tasmota_".$ParentKey."_".$key), $value);
+              }
             }
           }
         }
@@ -80,26 +82,29 @@ class IPS_Tasmota extends TasmotaService {
     }
 
     public function ReceiveData($JSONString) {
-      $this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
+    $this->SendDebug("JSON",$JSONString,0);
+      //$this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
       if (!empty($this->ReadPropertyString("Topic"))) {
         $this->SendDebug("ReceiveData JSON", $JSONString,0);
-			  $data = json_decode($JSONString);
+          $data = json_decode($JSONString);
+          // Buffer decodieren und in eine Variable schreiben
+          $Buffer = json_decode($data->Buffer);
+          $this->SendDebug("Topic", $Buffer->TOPIC,0);
 			  $off = $this->ReadPropertyString("Off");
 			  $on = $this->ReadPropertyString("On");
 
-			  // Buffer decodieren und in eine Variable schreiben
-			  $Buffer = utf8_decode($data->Buffer);
-			  // Und Diese dann wieder dekodieren
-			  $Buffer = json_decode($data->Buffer);
         //PowerOnState Vairablen setzen
-        if (fnmatch("*".translate::PowerOnState."*", $Buffer->MSG)) {
+        if (fnmatch("*PowerOnState*", $Buffer->MSG)) {
           $this->SendDebug("PowerOnState Topic", $Buffer->TOPIC,0);
           $this->SendDebug("PowerOnState MSG", $Buffer->MSG,0);
           $MSG = json_decode($Buffer->MSG);
-          $this->setPowerOnStateInForm($MSG);
+          if (property_exists($MSG,"PowerOnState")) {
+              $this->setPowerOnStateInForm($MSG->PowerOnState);
+          }
+
         }
         //Power Vairablen checken
-        if (fnmatch("*".translate::POWER."*", $Buffer->TOPIC)) {
+        if (fnmatch("*POWER*", $Buffer->TOPIC)) {
           $this->SendDebug("Power Topic",$Buffer->TOPIC,0);
           $this->SendDebug("Power", $Buffer->MSG,0);
           $power = explode("/", $Buffer->TOPIC);
@@ -123,38 +128,40 @@ class IPS_Tasmota extends TasmotaService {
           }
         }
         //State checken
-        if (fnmatch("*".translate::STATE, $Buffer->TOPIC)) {
+        if (fnmatch("*STATE", $Buffer->TOPIC)) {
           $myBuffer = json_decode($Buffer->MSG);
           $this->Debug("State MSG", $Buffer->MSG,"State");
-          $this->Debug("State ".translate::Wifi, $myBuffer->{translate::Wifi}->RSSI,"State");
-          SetValue($this->GetIDForIdent("Tasmota_RSSI"), $myBuffer->{translate::Wifi}->RSSI);
+          $this->Debug("State Wifi", $myBuffer->Wifi->RSSI,"State");
+          SetValue($this->GetIDForIdent("Tasmota_RSSI"), $myBuffer->Wifi->RSSI);
         }
         //Sensor Variablen checken
-        if (fnmatch("*".translate::SENSOR, $Buffer->TOPIC)) {
+        if (fnmatch("*SENSOR", $Buffer->TOPIC)) {
           $this->Debug("Sensor MSG", $Buffer->MSG,"Sensoren");
           $this->Debug("Sensor Topic", $Buffer->TOPIC,"Sensoren");
           $myBuffer = json_decode($Buffer->MSG,true);
           $this->traverseArray($myBuffer, $myBuffer);
         }
         //POW Variablen
-        if (fnmatch("*".translate::ENERGY, $Buffer->TOPIC)) {
+        if (fnmatch("*ENERGY*", $Buffer->MSG)) {
           $myBuffer = json_decode($Buffer->MSG);
-          $this->Debug("ENERGY MSG", $Buffer->MSG,"Pow");
-          $this->RegisterVariableFloat("Tasmota_POWTotal", "Total", "~Electricity");
-          $this->RegisterVariableFloat("Tasmota_POWYesterday", "Yesterday", "~Electricity");
-          $this->RegisterVariableFloat("Tasmota_POWToday", "Today", "~Electricity");
-          $this->RegisterVariableFloat("Tasmota_POWPower", "Power", "~Watt.3680");
-          $this->RegisterVariableFloat("Tasmota_POWFactor", "Factor");
-          $this->RegisterVariableFloat("Tasmota_POWVoltage", "Voltage", "~Volt");
-          $this->RegisterVariableFloat("Tasmota_POWCurrent", "Current", "~Ampere");
+          if (property_exists($myBuffer,"ENERGY")) {
+            $this->Debug("ENERGY MSG", $Buffer->MSG,"Pow");
+            $this->RegisterVariableFloat("Tasmota_POWTotal", "Total", "~Electricity");
+            $this->RegisterVariableFloat("Tasmota_POWYesterday", "Yesterday", "~Electricity");
+            $this->RegisterVariableFloat("Tasmota_POWToday", "Today", "~Electricity");
+            $this->RegisterVariableFloat("Tasmota_POWPower", "Power", "~Watt.3680");
+            $this->RegisterVariableFloat("Tasmota_POWFactor", "Factor");
+            $this->RegisterVariableFloat("Tasmota_POWVoltage", "Voltage", "~Volt");
+            $this->RegisterVariableFloat("Tasmota_POWCurrent", "Current", "~Ampere");
 
-          SetValue($this->GetIDForIdent("Tasmota_POWPower"), $myBuffer->{translate::Powerusage});
-          SetValue($this->GetIDForIdent("Tasmota_POWTotal"), $myBuffer->{translate::Total});
-          SetValue($this->GetIDForIdent("Tasmota_POWToday"), $myBuffer->{translate::Today});
-          SetValue($this->GetIDForIdent("Tasmota_POWYesterday"), $myBuffer->{translate::Yesterday});
-          SetValue($this->GetIDForIdent("Tasmota_POWCurrent"), $myBuffer->{translate::Current});
-          SetValue($this->GetIDForIdent("Tasmota_POWVoltage"), $myBuffer->{translate::Voltage});
-          SetValue($this->GetIDForIdent("Tasmota_POWFactor"), $myBuffer->{translate::Powerfactor});
+            SetValue($this->GetIDForIdent("Tasmota_POWPower"), $myBuffer->ENERGY->Power);
+            SetValue($this->GetIDForIdent("Tasmota_POWTotal"), $myBuffer->ENERGY->Total);
+            SetValue($this->GetIDForIdent("Tasmota_POWToday"), $myBuffer->ENERGY->Today);
+            SetValue($this->GetIDForIdent("Tasmota_POWYesterday"), $myBuffer->ENERGY->Yesterday);
+            SetValue($this->GetIDForIdent("Tasmota_POWCurrent"), $myBuffer->ENERGY->Current);
+            SetValue($this->GetIDForIdent("Tasmota_POWVoltage"), $myBuffer->ENERGY->Voltage);
+            SetValue($this->GetIDForIdent("Tasmota_POWFactor"), $myBuffer->ENERGY->Factor);
+          }
         }
       }
     }
