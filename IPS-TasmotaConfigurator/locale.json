@@ -1,0 +1,16 @@
+{
+  "translations": {
+    "de": {
+      "Rescan network": "Netzwerk durchsuchen",
+      "IMPORTANT: You must close this page an reopen it to see the changes.": "WICHTIG: Diese Seite muss neu geöffnet werden um Änderungen anzuzeigen.",
+      "No tasmota xevice selected!": "Kein Tasmota Gerät markiert!",
+      "Error on create instance.": "Fehler beim erzeugen der Instanz.",
+      "Create instance": "Instanz erzeugen",
+      "Type": "Typ",
+      "InstanceID": "InstanzID",
+      "Device Type": "Geräte Typ",
+      "unknown": "Unbekannt",
+      "Please close this form, and reopen it!": "Bitte diese Seite schließen und neu öffnen!"
+    }
+  }
+}
