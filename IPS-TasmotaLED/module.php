@@ -82,17 +82,17 @@ class IPS_TasmotaLED extends TasmotaService
             }
             switch ($Buffer->TOPIC) {
             case 'stat/' . $this->ReadPropertyString('Topic') . '/RESULT':
-/**                if (property_exists($MSG, 'POWER')) {
-                    $this->SendDebug('Receive Result: Power ', $MSG->POWER, 0);
-                    switch ($MSG->POWER) {
-                        case $this->ReadPropertyString('On'):
-                            SetValue($this->GetIDForIdent('TasmotaLED_Power'), true);
-                            break;
-                        case $this->ReadPropertyString('Off'):
-                            SetValue($this->GetIDForIdent('TasmotaLED_Power'), false);
-                            break;
-                    }
-                } **/
+                /**                if (property_exists($MSG, 'POWER')) {
+                 * $this->SendDebug('Receive Result: Power ', $MSG->POWER, 0);
+                 * switch ($MSG->POWER) {
+                 * case $this->ReadPropertyString('On'):
+                 * SetValue($this->GetIDForIdent('TasmotaLED_Power'), true);
+                 * break;
+                 * case $this->ReadPropertyString('Off'):
+                 * SetValue($this->GetIDForIdent('TasmotaLED_Power'), false);
+                 * break;
+                 * }.
+                 * } **/
                 if (property_exists($MSG, 'PowerOnState')) {
                     $this->SendDebug('Receive Result: PowerOnState', $MSG->PowerOnState, 0);
                     $this->setPowerOnStateInForm($MSG->PowerOnState);
@@ -282,7 +282,7 @@ class IPS_TasmotaLED extends TasmotaService
     public function RequestAction($Ident, $Value)
     {
         //Power Variablen
-        if (fnmatch('TasmotaLED_POWER*',$Ident)) {
+        if (fnmatch('TasmotaLED_POWER*', $Ident)) {
             if (strlen($Ident) != 16) {
                 $power = substr($Ident, 16);
             } else {
@@ -290,8 +290,8 @@ class IPS_TasmotaLED extends TasmotaService
             }
             $this->setPower($power, $Value);
         }
-      switch ($Ident) {
- /**     case 'TasmotaLED_Power':
+        switch ($Ident) {
+ /*     case 'TasmotaLED_Power':
         if (strlen($Ident) != 16) {
             $power = substr($Ident, 16);
         } else {
