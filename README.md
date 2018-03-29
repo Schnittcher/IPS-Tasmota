@@ -1,8 +1,3 @@
-<a href="https://www.symcon.de"><img src="https://img.shields.io/badge/IP--Symcon-0.0-blue.svg?style=flat-square"/></a>
-<a href="https://www.symcon.de"><img src="https://img.shields.io/badge/IP--Symcon-0.0-blue.svg?style=flat-square"/></a>
-<a href="https://styleci.io/repos/112193317"><img src="https://styleci.io/repos/112193317/shield?branch=master" alt="StyleCI"></a>
-<br />
-
 # IPS-Tasmota
 Mit diesem Modul ist es möglich geflashte ESPs kinderleicht in IPS zu integrieren.
 Kommuniziert wird über das MQTT Prokotoll, somit muss der Status der Geräte nicht gepollt werden
