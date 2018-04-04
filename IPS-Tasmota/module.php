@@ -18,7 +18,7 @@ class IPS_Tasmota extends TasmotaService
         $this->RegisterPropertyInteger('PowerOnState', 3);
         //$this->RegisterPropertyString("DeviceLanguage","en");
         $this->RegisterVariableFloat('Tasmota_RSSI', 'RSSI');
-        $this->RegisterVariableBoolean('Tasmota_DeviceStatus', 'Status', "Tasmota.DeviceStatus");
+        $this->RegisterVariableBoolean('Tasmota_DeviceStatus', 'Status', 'Tasmota.DeviceStatus');
         //Settings
         $this->RegisterPropertyBoolean('Power1Deactivate', false);
         //Debug Optionen
@@ -144,7 +144,7 @@ class IPS_Tasmota extends TasmotaService
                 }
                 if (fnmatch('*LWT', $Buffer->TOPIC)) {
                     $this->Debug('State MSG', $Buffer->MSG, 'State');
-                    if ($Buffer->MSG == "online") {
+                    if ($Buffer->MSG == 'online') {
                         SetValue($this->GetIDForIdent('Tasmota_DeviceStatus'), true);
                     } else {
                         SetValue($this->GetIDForIdent('Tasmota_DeviceStatus'), false);
@@ -198,9 +198,9 @@ class IPS_Tasmota extends TasmotaService
     private function createVariablenProfiles()
     {
         //Online / Offline Profile
-        $this->RegisterProfileBooleanEx("Tasmota.DeviceStatus", "Network", "", "", Array(
-            Array(false, "Offline",  "", 0xFF0000),
-            Array(true, "Online",  "", 0x00FF00)
+        $this->RegisterProfileBooleanEx('Tasmota.DeviceStatus', 'Network', '', '', array(
+            array(false, 'Offline',  '', 0xFF0000),
+            array(true, 'Online',  '', 0x00FF00)
         ));
     }
 }
