@@ -9,6 +9,7 @@ class IPS_Tasmota extends TasmotaService
         //Never delete this line!
         parent::Create();
         $this->ConnectParent('{EE0D345A-CF31-428A-A613-33CE98E752DD}');
+        $this->createVariablenProfiles();
         //Anzahl die in der Konfirgurationsform angezeigt wird - Hier Standard auf 1
         $this->RegisterPropertyString('Topic', '');
         $this->RegisterPropertyString('On', '1');
@@ -17,6 +18,7 @@ class IPS_Tasmota extends TasmotaService
         $this->RegisterPropertyInteger('PowerOnState', 3);
         //$this->RegisterPropertyString("DeviceLanguage","en");
         $this->RegisterVariableFloat('Tasmota_RSSI', 'RSSI');
+        $this->RegisterVariableBoolean('Tasmota_DeviceStatus', 'Status', "Tasmota.DeviceStatus");
         //Settings
         $this->RegisterPropertyBoolean('Power1Deactivate', false);
         //Debug Optionen
@@ -140,6 +142,14 @@ class IPS_Tasmota extends TasmotaService
                     $this->Debug('State Wifi', $myBuffer->Wifi->RSSI, 'State');
                     SetValue($this->GetIDForIdent('Tasmota_RSSI'), $myBuffer->Wifi->RSSI);
                 }
+                if (fnmatch('*LWT', $Buffer->TOPIC)) {
+                    $this->Debug('State MSG', $Buffer->MSG, 'State');
+                    if ($Buffer->MSG == "online") {
+                        SetValue($this->GetIDForIdent('Tasmota_DeviceStatus'), true);
+                    } else {
+                        SetValue($this->GetIDForIdent('Tasmota_DeviceStatus'), false);
+                    }
+                }
                 //Sensor Variablen checken
                 if (fnmatch('*SENSOR', $Buffer->TOPIC)) {
                     $this->Debug('Sensor MSG', $Buffer->MSG, 'Sensoren');
@@ -183,5 +193,14 @@ class IPS_Tasmota extends TasmotaService
             $power = 0;
         }
         $result = $this->setPower($power, $Value);
+    }
+
+    private function createVariablenProfiles()
+    {
+        //Online / Offline Profile
+        $this->RegisterProfileBooleanEx("Tasmota.DeviceStatus", "Network", "", "", Array(
+            Array(false, "Offline",  "", 0xFF0000),
+            Array(true, "Online",  "", 0x00FF00)
+        ));
     }
 }

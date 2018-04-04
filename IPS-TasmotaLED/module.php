@@ -27,6 +27,7 @@ class IPS_TasmotaLED extends TasmotaService
         $this->RegisterVariableInteger('TasmotaLED_Speed', 'Speed', 'TasmotaLED.Speed', 5);
         $this->RegisterVariableInteger('TasmotaLED_Pixels', 'Pixels', '', 6);
         $this->RegisterVariableInteger('TasmotaLED_RSSI', 'RSSI', 'TasmotaLED.RSSI', 7);
+        $this->RegisterVariableBoolean('TasmotaLED_DeviceStatus', 'Status', "TasmotaLED.DeviceStatus",8);
         $this->EnableAction('TasmotaLED_Power');
         $this->EnableAction('TasmotaLED_Speed');
         $this->EnableAction('TasmotaLED_Fade');
@@ -78,6 +79,14 @@ class IPS_TasmotaLED extends TasmotaService
                             SetValue($this->GetIDForIdent('TasmotaLED_' . $power[$lastKey]), 1);
                             break;
                     }
+                }
+            }
+            if (fnmatch('*LWT', $Buffer->TOPIC)) {
+                $this->Debug('State MSG', $Buffer->MSG, 'State');
+                if ($Buffer->MSG == "online") {
+                    SetValue($this->GetIDForIdent('TasmotaLED_DeviceStatus'), true);
+                } else {
+                    SetValue($this->GetIDForIdent('TasmotaLED_DeviceStatus'), false);
                 }
             }
             switch ($Buffer->TOPIC) {
@@ -341,5 +350,10 @@ class IPS_TasmotaLED extends TasmotaService
                                         array(11, 'Rainbow', '', -1),
                                         array(12, 'Fire', '', -1)
                                     ));
+        //Online / Offline Profile
+        $this->RegisterProfileBooleanEx("TasmotaLED.DeviceStatus", "Network", "", "", Array(
+            Array(false, "Offline",  "", 0xFF0000),
+            Array(true, "Online",  "", 0x00FF00)
+        ));
     }
 }
