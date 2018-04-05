@@ -83,7 +83,7 @@ class IPS_TasmotaLED extends TasmotaService
             }
             if (fnmatch('*LWT', $Buffer->TOPIC)) {
                 $this->Debug('State MSG', $Buffer->MSG, 'State');
-                if ($Buffer->MSG == 'online') {
+                if (strtolower($Buffer->MSG) == 'online') {
                     SetValue($this->GetIDForIdent('TasmotaLED_DeviceStatus'), true);
                 } else {
                     SetValue($this->GetIDForIdent('TasmotaLED_DeviceStatus'), false);

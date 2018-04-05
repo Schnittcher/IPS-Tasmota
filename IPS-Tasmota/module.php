@@ -144,7 +144,7 @@ class IPS_Tasmota extends TasmotaService
                 }
                 if (fnmatch('*LWT', $Buffer->TOPIC)) {
                     $this->Debug('State MSG', $Buffer->MSG, 'State');
-                    if ($Buffer->MSG == 'online') {
+                    if (strtolower($Buffer->MSG) == 'online') {
                         SetValue($this->GetIDForIdent('Tasmota_DeviceStatus'), true);
                     } else {
                         SetValue($this->GetIDForIdent('Tasmota_DeviceStatus'), false);
