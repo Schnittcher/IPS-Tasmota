@@ -12,8 +12,8 @@ class IPS_Tasmota extends TasmotaService
         $this->createVariablenProfiles();
         //Anzahl die in der Konfirgurationsform angezeigt wird - Hier Standard auf 1
         $this->RegisterPropertyString('Topic', '');
-        $this->RegisterPropertyString('On', '1');
-        $this->RegisterPropertyString('Off', '0');
+        $this->RegisterPropertyString('On', 'ON');
+        $this->RegisterPropertyString('Off', 'OFF');
         $this->RegisterPropertyString('FullTopic', '%prefix%/%topic%');
         $this->RegisterPropertyInteger('PowerOnState', 3);
         //$this->RegisterPropertyString("DeviceLanguage","en");
