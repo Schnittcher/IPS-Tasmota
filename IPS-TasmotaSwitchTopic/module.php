@@ -33,19 +33,19 @@ class IPS_TasmotaSwitchTopic extends TasmotaService
             $Buffer = json_decode($data->Buffer);
             $MSG = json_decode($Buffer->MSG);
             $this->SendDebug('Topic', $Buffer->TOPIC, 0);
+            $this->SendDebug('MSG', $Buffer->MSG, 0);
             $SwitchTopic = explode("/", $Buffer->TOPIC);
             switch ($Buffer->TOPIC) {
-            case 'cmnd/' . $SwitchTopic[1] . '/POWER1':
-                if (property_exists($MSG, 'PowerOnState')) {
-                    $this->SendDebug('Receive SwitchTopic ($SwitchTopic[1]) Result : ', $MSG, 0);
-                   $variablenID = $this->RegisterVariableBoolean("Tasmota_".$SwitchTopic[1], "SwtichTopic ".$SwitchTopic[1]);
-                   if ($MSG == "ON") {
-                       SetValue($this->GetIDForIdent("Tasmota_".$SwitchTopic[1]), true);
-                   } else {
-                       SetValue($this->GetIDForIdent("Tasmota_" . $SwitchTopic[1]), false);
-                   }
-                }
-                break;
+                case 'cmnd/' . $SwitchTopic[1] . '/POWER1':
+                    $this->SendDebug('Receive SwitchTopic'.$SwitchTopic[1].' Result : ', $Buffer->MSG, 0);
+                    $SwitchTopic = str_replace ( "-" , "_",$SwitchTopic[1]);
+                    $variablenID = $this->RegisterVariableBoolean("Tasmota_".$SwitchTopic, "SwtichTopic ".$SwitchTopic);
+                    if ($Buffer->MSG == "ON") {
+                        SetValue($this->GetIDForIdent("Tasmota_".$SwitchTopic), true);
+                    } else {
+                        SetValue($this->GetIDForIdent("Tasmota_" .$SwitchTopic), false);
+                    }
+                    break;
             }
         }
     }
