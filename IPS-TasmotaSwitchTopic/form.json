@@ -1,0 +1,6 @@
+{
+    "elements":
+    [
+      { "type": "ValidationTextBox", "name": "SwitchTopicPräfix", "caption": "Switch Topic Präfix" }
+    ]
+}
