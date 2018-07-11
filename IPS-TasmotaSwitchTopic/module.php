@@ -34,16 +34,16 @@ class IPS_TasmotaSwitchTopic extends TasmotaService
             $MSG = json_decode($Buffer->MSG);
             $this->SendDebug('Topic', $Buffer->TOPIC, 0);
             $this->SendDebug('MSG', $Buffer->MSG, 0);
-            $SwitchTopic = explode("/", $Buffer->TOPIC);
+            $SwitchTopic = explode('/', $Buffer->TOPIC);
             switch ($Buffer->TOPIC) {
                 case 'cmnd/' . $SwitchTopic[1] . '/POWER1':
-                    $this->SendDebug('Receive SwitchTopic'.$SwitchTopic[1].' Result : ', $Buffer->MSG, 0);
-                    $SwitchTopic = str_replace ( "-" , "_",$SwitchTopic[1]);
-                    $variablenID = $this->RegisterVariableBoolean("Tasmota_".$SwitchTopic, "SwtichTopic ".$SwitchTopic);
-                    if ($Buffer->MSG == "ON") {
-                        SetValue($this->GetIDForIdent("Tasmota_".$SwitchTopic), true);
+                    $this->SendDebug('Receive SwitchTopic' . $SwitchTopic[1] . ' Result : ', $Buffer->MSG, 0);
+                    $SwitchTopic = str_replace('-', '_', $SwitchTopic[1]);
+                    $variablenID = $this->RegisterVariableBoolean('Tasmota_' . $SwitchTopic, 'SwtichTopic ' . $SwitchTopic);
+                    if ($Buffer->MSG == 'ON') {
+                        SetValue($this->GetIDForIdent('Tasmota_' . $SwitchTopic), true);
                     } else {
-                        SetValue($this->GetIDForIdent("Tasmota_" .$SwitchTopic), false);
+                        SetValue($this->GetIDForIdent('Tasmota_' . $SwitchTopic), false);
                     }
                     break;
             }
