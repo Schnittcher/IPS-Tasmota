@@ -58,7 +58,8 @@ class IPS_TasmotaLED extends TasmotaService
             $Buffer = json_decode($data->Buffer);
             $MSG = json_decode($Buffer->MSG);
             $this->SendDebug('Topic', $Buffer->TOPIC, 0);
-            if (fnmatch('*POWER*', $Buffer->TOPIC)) {
+            /**
+             * if (fnmatch('*POWER*', $Buffer->TOPIC)) {
                 $this->SendDebug('Power Topic', $Buffer->TOPIC, 0);
                 $this->SendDebug('Power', $Buffer->MSG, 0);
                 $power = explode('/', $Buffer->TOPIC);
@@ -81,6 +82,7 @@ class IPS_TasmotaLED extends TasmotaService
                     }
                 }
             }
+             **/
             if (fnmatch('*LWT', $Buffer->TOPIC)) {
                 $this->Debug('State MSG', $Buffer->MSG, 'State');
                 if (strtolower($Buffer->MSG) == 'online') {
@@ -102,6 +104,42 @@ class IPS_TasmotaLED extends TasmotaService
                  * break;
                  * }.
                  * } **/
+
+                if ($this->ReadPropertyBoolean('Power1Deactivate') == false) {
+
+                    if (property_exists($MSG, 'POWER')) {
+                        $this->RegisterVariableBoolean('TasmotaLED_POWER','POWER','~Switch');
+                        $this->EnableAction('TasmotaLED_POWER');
+                        $this->SendDebug('Receive Result: POWER', $MSG->POWER, 0);
+                        switch ($MSG->POWER) {
+                            case $this->ReadPropertyString('Off'):
+                                SetValue($this->GetIDForIdent('TasmotaLED_POWER'), 0);
+                                break;
+                            case $this->ReadPropertyString('On'):
+                                SetValue($this->GetIDForIdent('TasmotaLED_POWER'), 1);
+                                break;
+                        }
+                    }
+                } else {
+                    //Es kann bei einem MultiSwitch 4 Power Variablen geben
+                    for ($i =1; $i <= 4; $i++) {
+                        if (property_exists($MSG, 'POWER'.$i)) {
+                            $this->SendDebug('Receive Result: POWER'.$i, $MSG->{"POWER".$i}, 0);
+                            $this->RegisterVariableBoolean('TasmotaLED_POWER' . $i, "POWER".$i, '~Switch');
+                            $this->EnableAction('TasmotaLED_POWER' .$i);
+                            $this->SendDebug('Receive Result: POWER'.$i, $MSG->{"POWER".$i}, 0);
+                            switch ($MSG->{"POWER".$i}) {
+                                case $this->ReadPropertyString('Off'):
+                                    SetValue($this->GetIDForIdent('TasmotaLED_POWER'.$i), 0);
+                                    break;
+                                case $this->ReadPropertyString('On'):
+                                    SetValue($this->GetIDForIdent('TasmotaLED_POWER'.$i), 1);
+                                    break;
+                            }
+                        }
+                    }
+                }
+
                 if (property_exists($MSG, 'PowerOnState')) {
                     $this->SendDebug('Receive Result: PowerOnState', $MSG->PowerOnState, 0);
                     $this->setPowerOnStateInForm($MSG->PowerOnState);
