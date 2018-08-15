@@ -12,6 +12,7 @@ Kommuniziert wird über das MQTT Prokotoll, somit muss der Status der Geräte ni
 2. [Enthaltene Module](#2-enthaltene-module)
 3. [Installation](#3-installation)
 4. [Konfiguration in IP-Symcon](#4-konfiguration-in-ip-symcon)
+5. [Spenden](#5-spenden)
 
 ## 1. Voraussetzungen
 
@@ -43,3 +44,9 @@ https://github.com/Schnittcher/IPS-Tasmota.git
 
 ## 4. Konfiguration in IP-Symcon
 Bitte den einzelnen Modulen entnehme.
+
+## 5. Spenden
+
+Dieses Modul ist für die nicht kommzerielle Nutzung kostenlos, freiweillige Unterstützungen für den Autor werden hier akzeptiert:  
+
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EK4JRP87XLSHW" target="_blank"><img src="https://www.paypalobjects.com/de_DE/DE/i/btn/btn_donate_LG.gif" border="0" /></a>
