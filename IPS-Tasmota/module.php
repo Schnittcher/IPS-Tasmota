@@ -38,56 +38,6 @@ class IPS_Tasmota extends TasmotaService
         $this->SetReceiveDataFilter('.*' . $topic . '.*');
     }
 
-    private function find_parent($array, $needle, $parent = null)
-    {
-        foreach ($array as $key => $value) {
-            if (is_array($value)) {
-                $pass = $parent;
-                if (is_string($key)) {
-                    $pass = $key;
-                }
-                $found = $this->find_parent($value, $needle, $pass);
-                if ($found !== false) {
-                    return $found;
-                }
-            } elseif ($value === $needle) {
-                return $parent;
-            }
-        }
-        return false;
-    }
-
-    private function traverseArray($array, $GesamtArray)
-    {
-        foreach ($array as $key=> $value) {
-            if (is_array($value)) {
-                $this->traverseArray($value, $GesamtArray);
-            } else {
-                $ParentKey = $this->find_parent($GesamtArray, $value);
-                $this->Debug('Rekursion Tasmota ' . $ParentKey . '_' . $key, "$key = $value", 'Sensoren');
-                if (is_int($value) or is_float($value)) {
-                    $ParentKey = str_replace('-', '_', $ParentKey);
-                    $key = str_replace('-', '_', $key);
-                    switch ($key) {
-            case 'Temperature':
-              $variablenID = $this->RegisterVariableFloat('Tasmota_' . $ParentKey . '_' . $key, $ParentKey . ' Temperatur', '~Temperature');
-              SetValue($this->GetIDForIdent('Tasmota_' . $ParentKey . '_' . $key), $value);
-              break;
-            case 'Humidity':
-              $variablenID = $this->RegisterVariableFloat('Tasmota_' . $ParentKey . '_' . $key, $ParentKey . ' Feuchte', '~Humidity.F');
-              SetValue($this->GetIDForIdent('Tasmota_' . $ParentKey . '_' . $key), $value);
-              break;
-            default:
-              if ($ParentKey != 'ENERGY') {
-                  $variablenID = $this->RegisterVariableFloat('Tasmota_' . $ParentKey . '_' . $key, $ParentKey . ' ' . $key);
-                  SetValue($this->GetIDForIdent('Tasmota_' . $ParentKey . '_' . $key), $value);
-              }
-            }
-                }
-            }
-        }
-    }
-
     public function ReceiveData($JSONString)
     {
         $this->SendDebug('JSON', $JSONString, 0);

@@ -167,4 +167,55 @@ class TasmotaService extends IPSModule
         $this->SendDebug(__FUNCTION__, $BufferJSON, 0);
         $this->SendDataToParent(json_encode(array('DataID' => '{018EF6B5-AB94-40C6-AA53-46943E824ACF}', 'Action' => 'Publish', 'Buffer' => $BufferJSON)));
     }
+
+    //Für Sensoren
+    protected function find_parent($array, $needle, $parent = null)
+    {
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $pass = $parent;
+                if (is_string($key)) {
+                    $pass = $key;
+                }
+                $found = $this->find_parent($value, $needle, $pass);
+                if ($found !== false) {
+                    return $found;
+                }
+            } elseif ($value === $needle) {
+                return $parent;
+            }
+        }
+        return false;
+    }
+
+    protected function traverseArray($array, $GesamtArray)
+    {
+        foreach ($array as $key=> $value) {
+            if (is_array($value)) {
+                $this->traverseArray($value, $GesamtArray);
+            } else {
+                $ParentKey = $this->find_parent($GesamtArray, $value);
+                $this->SendDebug('Rekursion Tasmota ' . $ParentKey . '_' . $key, "$key = $value", 0);
+                if (is_int($value) or is_float($value)) {
+                    $ParentKey = str_replace('-', '_', $ParentKey);
+                    $key = str_replace('-', '_', $key);
+                    switch ($key) {
+                        case 'Temperature':
+                            $variablenID = $this->RegisterVariableFloat('Tasmota_' . $ParentKey . '_' . $key, $ParentKey . ' Temperatur', '~Temperature');
+                            SetValue($this->GetIDForIdent('Tasmota_' . $ParentKey . '_' . $key), $value);
+                            break;
+                        case 'Humidity':
+                            $variablenID = $this->RegisterVariableFloat('Tasmota_' . $ParentKey . '_' . $key, $ParentKey . ' Feuchte', '~Humidity.F');
+                            SetValue($this->GetIDForIdent('Tasmota_' . $ParentKey . '_' . $key), $value);
+                            break;
+                        default:
+                            if ($ParentKey != 'ENERGY') {
+                                $variablenID = $this->RegisterVariableFloat('Tasmota_' . $ParentKey . '_' . $key, $ParentKey . ' ' . $key);
+                                SetValue($this->GetIDForIdent('Tasmota_' . $ParentKey . '_' . $key), $value);
+                            }
+                    }
+                }
+            }
+        }
+    }
 }

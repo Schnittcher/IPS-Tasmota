@@ -17,6 +17,7 @@ class IPS_TasmotaLED extends TasmotaService
         $this->RegisterPropertyInteger('PowerOnState', 3);
         //$this->RegisterPropertyString("DeviceLanguage","en");
         $this->RegisterPropertyBoolean('Power1Deactivate', false);
+        $this->RegisterPropertyBoolean('Sensoren', true);
 
         $this->createVariabenProfiles();
         $this->RegisterVariableBoolean('TasmotaLED_Power', 'Power', 'Switch', 0);
@@ -171,81 +172,17 @@ class IPS_TasmotaLED extends TasmotaService
                     }
                 }
                 break;
+            case 'tele/' . $this->ReadPropertyString('Topic') . '/SENSOR':
+                $myBuffer = json_decode($Buffer->MSG, true);
+                $this->traverseArray($myBuffer, $myBuffer);
+                break;
             case 'tele/' . $this->ReadPropertyString('Topic') . '/STATE':
                 if (property_exists($MSG, 'Wifi')) {
                     $this->SendDebug('Receive Sate: Wifi RSSI', $MSG->Wifi->RSSI, 0);
                     SetValue($this->GetIDForIdent('TasmotaLED_RSSI'), $MSG->Wifi->RSSI);
                 }
 
-        }
-
-            /* if (fnmatch("*".translate::PowerOnState."*", $Buffer->MSG)) {
-                $this->SendDebug("PowerOnState Topic", $Buffer->TOPIC,0);
-                $this->SendDebug("PowerOnState MSG", $Buffer->MSG,0);
-              $MSG = json_decode($Buffer->MSG);
-              $this->setPowerOnStateInForm($MSG);
             }
-            **/
-       /**if (fnmatch("*".translate::Pixels."*", $Buffer->MSG)) {
-         $this->SendDebug("Pixels Topic", $Buffer->TOPIC,0);
-         $this->SendDebug("Pixels MSG", $Buffer->MSG,0);
-         $MSG = json_decode($Buffer->MSG);
-         SetValue($this->GetIDForIdent("TasmotaLED_Pixels"), $MSG->{translate::Pixels});
-       }
-       if (fnmatch("*".translate::POWER."*", $Buffer->MSG)) {
-         $this->SendDebug("Power Topic", $Buffer->TOPIC,0);
-         $this->SendDebug("Power MSG", $Buffer->MSG,0);
-         $MSG = json_decode($Buffer->MSG);
-         switch ($MSG->{translate::POWER}) {
-           case $this->ReadPropertyString("On"):
-           SetValue($this->GetIDForIdent("TasmotaLED_Power"), true);
-           break;
-           case $this->ReadPropertyString("Off"):
-           SetValue($this->GetIDForIdent("TasmotaLED_Power"), false);
-           break;
-         }
-       }
-       if (fnmatch("*".translate::Speed."*", $Buffer->MSG)) {
-         $this->SendDebug("Speed Topic", $Buffer->TOPIC,0);
-         $this->SendDebug("Speed MSG", $Buffer->MSG,0);
-         $MSG = json_decode($Buffer->MSG);
-         SetValue($this->GetIDForIdent("TasmotaLED_Speed"), $MSG->{translate::Speed});
-       }
-       if (fnmatch("*".translate::Scheme."*", $Buffer->MSG)) {
-         $this->SendDebug("Scheme Topic", $Buffer->TOPIC,0);
-         $this->SendDebug("Scheme MSG", $Buffer->MSG,0);
-         $MSG = json_decode($Buffer->MSG);
-         SetValue($this->GetIDForIdent("TasmotaLED_Scheme"), $MSG->{translate::Scheme});
-       }
-       if (fnmatch("*".translate::Dimmer."*", $Buffer->MSG)) {
-         $this->SendDebug("Dimmer Topic", $Buffer->TOPIC,0);
-         $this->SendDebug("Dimmer MSG", $Buffer->MSG,0);
-         $MSG = json_decode($Buffer->MSG);
-         SetValue($this->GetIDForIdent("TasmotaLED_Dimmer"), $MSG->{translate::Dimmer});
-       }
-       if (fnmatch("*".translate::Color."*", $Buffer->MSG)) {
-         $this->SendDebug("Color Topic", $Buffer->TOPIC,0);
-         $this->SendDebug("Color MSG", $Buffer->MSG,0);
-         $MSG = json_decode($Buffer->MSG);
-         SetValue($this->GetIDForIdent("TasmotaLED_Color"), hexdec(($MSG->{translate::Color})));
-       }
-       if (fnmatch("*".translate::Fade."*", $Buffer->MSG)) {
-         $this->SendDebug("Fade Topic", $Buffer->TOPIC,0);
-         $this->SendDebug("Fade MSG", $Buffer->MSG,0);
-         $MSG = json_decode($Buffer->MSG);
-         if (property_exists($MSG,"Fade")) {
-             if ($MSG->{translate::Fade} == "ON") {
-               SetValue($this->GetIDForIdent("TasmotaLED_Fade"), true);
-             } else {
-               SetValue($this->GetIDForIdent("TasmotaLED_Fade"), false);
-             }
-           }
-        }
-
-       if (fnmatch("*".translate::STATE, $Buffer->TOPIC)) {
-         $myBuffer = json_decode($Buffer->MSG);
-         SetValue($this->GetIDForIdent("TasmotaLED_RSSI"), $myBuffer->{translate::Wifi}->RSSI);
-       }**/
         }
     }
 
