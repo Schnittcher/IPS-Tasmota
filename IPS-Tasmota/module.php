@@ -16,7 +16,6 @@ class IPS_Tasmota extends TasmotaService
         $this->RegisterPropertyString('Off', 'OFF');
         $this->RegisterPropertyString('FullTopic', '%prefix%/%topic%');
         $this->RegisterPropertyInteger('PowerOnState', 3);
-        //$this->RegisterPropertyString("DeviceLanguage","en");
         $this->RegisterVariableFloat('Tasmota_RSSI', 'RSSI');
         $this->RegisterVariableBoolean('Tasmota_DeviceStatus', 'Status', 'Tasmota.DeviceStatus');
         //Settings
@@ -41,7 +40,6 @@ class IPS_Tasmota extends TasmotaService
     public function ReceiveData($JSONString)
     {
         $this->SendDebug('JSON', $JSONString, 0);
-        //$this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
         if (!empty($this->ReadPropertyString('Topic'))) {
             $this->SendDebug('ReceiveData JSON', $JSONString, 0);
             $data = json_decode($JSONString);

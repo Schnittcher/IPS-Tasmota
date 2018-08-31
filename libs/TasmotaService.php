@@ -2,18 +2,6 @@
 
 class TasmotaService extends IPSModule
 {
-    protected function defineLanguage($language)
-    {
-        switch ($language) {
-      case 'de':
-        require_once __DIR__ . '/languages/de.php';
-        break;
-      default:
-        require_once __DIR__ . '/languages/en.php';
-        break;
-    }
-    }
-
     protected function MQTTCommand($command, $msg)
     {
         $FullTopic = explode('/', $this->ReadPropertyString('FullTopic'));

@@ -40,7 +40,7 @@ class IPS_TasmotaLED extends TasmotaService
         //Never delete this line!
         parent::ApplyChanges();
         $this->ConnectParent('{EE0D345A-CF31-428A-A613-33CE98E752DD}');
-        //Setze Filter fÃ¼r ReceiveData
+        //Setze Filter für ReceiveData
         $this->setPowerOnState($this->ReadPropertyInteger('PowerOnState'));
         $topic = $this->ReadPropertyString('Topic');
         $this->SetReceiveDataFilter('.*' . $topic . '.*');
@@ -48,7 +48,6 @@ class IPS_TasmotaLED extends TasmotaService
 
     public function ReceiveData($JSONString)
     {
-        //$this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
         if (!empty($this->ReadPropertyString('Topic'))) {
             $this->SendDebug('ReceiveData JSON', $JSONString, 0);
             $data = json_decode($JSONString);
@@ -57,31 +56,6 @@ class IPS_TasmotaLED extends TasmotaService
             $Buffer = json_decode($data->Buffer);
             $MSG = json_decode($Buffer->MSG);
             $this->SendDebug('Topic', $Buffer->TOPIC, 0);
-            /**
-             * if (fnmatch('*POWER*', $Buffer->TOPIC)) {
-             * $this->SendDebug('Power Topic', $Buffer->TOPIC, 0);
-             * $this->SendDebug('Power', $Buffer->MSG, 0);
-             * $power = explode('/', $Buffer->TOPIC);
-             * end($power);
-             * $lastKey = key($power);
-             * $tmpPower = 'POWER1';
-             * if ($this->ReadPropertyBoolean('Power1Deactivate') == true) {
-             * $tmpPower = 'POWER';
-             * }
-             * if ($power[$lastKey] != $tmpPower) {
-             * $this->RegisterVariableBoolean('TasmotaLED_' . $power[$lastKey], $power[$lastKey], '~Switch');
-             * $this->EnableAction('TasmotaLED_' . $power[$lastKey]);
-             * switch ($Buffer->MSG) {
-             * case $this->ReadPropertyString('Off'):
-             * SetValue($this->GetIDForIdent('TasmotaLED_' . $power[$lastKey]), 0);
-             * break;
-             * case $this->ReadPropertyString('On'):
-             * SetValue($this->GetIDForIdent('TasmotaLED_' . $power[$lastKey]), 1);
-             * break;
-             * }
-             * }
-             * }.
-             **/
             if (fnmatch('*LWT', $Buffer->TOPIC)) {
                 $this->Debug('State MSG', $Buffer->MSG, 'State');
                 if (strtolower($Buffer->MSG) == 'online') {
@@ -92,17 +66,6 @@ class IPS_TasmotaLED extends TasmotaService
             }
             switch ($Buffer->TOPIC) {
             case 'stat/' . $this->ReadPropertyString('Topic') . '/RESULT':
-                /**                if (property_exists($MSG, 'POWER')) {
-                 * $this->SendDebug('Receive Result: Power ', $MSG->POWER, 0);
-                 * switch ($MSG->POWER) {
-                 * case $this->ReadPropertyString('On'):
-                 * SetValue($this->GetIDForIdent('TasmotaLED_Power'), true);
-                 * break;
-                 * case $this->ReadPropertyString('Off'):
-                 * SetValue($this->GetIDForIdent('TasmotaLED_Power'), false);
-                 * break;
-                 * }.
-                 * } **/
                 if ($this->ReadPropertyBoolean('Power1Deactivate') == false) {
                     if (property_exists($MSG, 'POWER')) {
                         $this->RegisterVariableBoolean('TasmotaLED_POWER', 'POWER', '~Switch');
@@ -188,7 +151,6 @@ class IPS_TasmotaLED extends TasmotaService
 
     public function setLED(int $LED, string $color)
     {
-        //$this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
         $command = 'Led' . $LED;
         $msg = $color;
         $BufferJSON = $this->MQTTCommand($command, $msg);
@@ -198,7 +160,6 @@ class IPS_TasmotaLED extends TasmotaService
 
     public function setScheme(int $schemeID)
     {
-        //$this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
         $command = 'Scheme';
         $msg = $schemeID;
         $BufferJSON = $this->MQTTCommand($command, $msg);
@@ -208,7 +169,6 @@ class IPS_TasmotaLED extends TasmotaService
 
     public function setPixel(int $count)
     {
-        //$this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
         $command = 'Pixels';
         $msg = $count;
         $BufferJSON = $this->MQTTCommand($command, $msg);
@@ -218,7 +178,6 @@ class IPS_TasmotaLED extends TasmotaService
 
     public function setDimmer(int $value)
     {
-        //$this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
         $command = 'Dimmer';
         $msg = $value;
         $BufferJSON = $this->MQTTCommand($command, $msg);
@@ -228,7 +187,6 @@ class IPS_TasmotaLED extends TasmotaService
 
     public function setColorHex(string $color)
     {
-        //$this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
         $command = 'Color';
         $msg = $color;
         $BufferJSON = $this->MQTTCommand($command, $msg);
@@ -238,7 +196,6 @@ class IPS_TasmotaLED extends TasmotaService
 
     public function setFade(bool $value)
     {
-        //$this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
         $command = 'Fade';
         $msg = $value;
         if ($msg === false) {
@@ -253,7 +210,6 @@ class IPS_TasmotaLED extends TasmotaService
 
     public function setSpeed(int $value)
     {
-        //$this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
         $command = 'Speed';
         $msg = $value;
         $BufferJSON = $this->MQTTCommand($command, $msg);
@@ -273,14 +229,6 @@ class IPS_TasmotaLED extends TasmotaService
             $this->setPower($power, $Value);
         }
         switch ($Ident) {
- /*     case 'TasmotaLED_Power':
-        if (strlen($Ident) != 16) {
-            $power = substr($Ident, 16);
-        } else {
-            $power = 0;
-        }
-        $result = $this->setPower($power, $Value);
-        break; **/
       case 'TasmotaLED_Speed':
         $this->setSpeed($Value);
         break;
