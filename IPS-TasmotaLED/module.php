@@ -28,7 +28,6 @@ class IPS_TasmotaLED extends TasmotaService
         $this->RegisterVariableInteger('TasmotaLED_Pixels', 'Pixels', '', 6);
         $this->RegisterVariableInteger('TasmotaLED_RSSI', 'RSSI', 'TasmotaLED.RSSI', 7);
         $this->RegisterVariableBoolean('TasmotaLED_DeviceStatus', 'Status', 'TasmotaLED.DeviceStatus', 8);
-        $this->EnableAction('TasmotaLED_Power');
         $this->EnableAction('TasmotaLED_Speed');
         $this->EnableAction('TasmotaLED_Fade');
         $this->EnableAction('TasmotaLED_Scheme');
