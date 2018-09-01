@@ -122,8 +122,8 @@ class IPS_TasmotaLED extends TasmotaService
                 }
                 if (property_exists($MSG, 'Color')) {
                     $this->SendDebug('Receive Result: Color', $MSG->Color, 0);
-                    $rgb = explode(",", $MSG->Color);
-                    $color = sprintf("#%02x%02x%02x", $rgb[0], $rgb[1], $rgb[2]);
+                    $rgb = explode(',', $MSG->Color);
+                    $color = sprintf('#%02x%02x%02x', $rgb[0], $rgb[1], $rgb[2]);
                     SetValue($this->GetIDForIdent('TasmotaLED_Color'), hexdec(($color)));
                 }
                 if (property_exists($MSG, 'Fade')) {
@@ -242,7 +242,7 @@ class IPS_TasmotaLED extends TasmotaService
           $rgb = $Value;
            $r = (($rgb >> 16) & 0xFF);
           $g = (($rgb >> 8) & 0xFF);
-          $b = ($rgb  & 0xFF);
+          $b = ($rgb & 0xFF);
           $this->setColorHex("$r,$g,$b");
         break;
       case 'TasmotaLED_Dimmer':
