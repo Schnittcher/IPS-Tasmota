@@ -19,7 +19,7 @@
       "add": false,
       "delete": false,
       "sort": {
-        "column": "Index",
+        "column": "TasmotaTopic",
         "direction": "ascending"
       },
       "columns": [{
