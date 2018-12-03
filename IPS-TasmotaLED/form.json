@@ -8,6 +8,7 @@
       { "type": "ValidationTextBox", "name": "FullTopic", "caption": "Full Topic" },
 
     { "type": "Label", "label": "Settings" },
+    { "type": "CheckBox", "name": "MessageRetain", "caption": "Message Retain" },
     { "type": "Select", "name": "PowerOnState", "caption": "PowerOnState",
     "options": [
         { "label": "Off", "value": 0 },

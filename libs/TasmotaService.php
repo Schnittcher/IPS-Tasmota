@@ -2,7 +2,7 @@
 
 class TasmotaService extends IPSModule
 {
-    protected function MQTTCommand($command, $msg)
+    protected function MQTTCommand($command, $msg, $retain)
     {
         $FullTopic = explode('/', $this->ReadPropertyString('FullTopic'));
         $PrefixIndex = array_search('%prefix%', $FullTopic);
@@ -20,6 +20,7 @@ class TasmotaService extends IPSModule
 
         $Buffer['Topic'] = $topic;
         $Buffer['MSG'] = $msg;
+        $Buffer['Retain'] = $retain;
         $BufferJSON = json_encode($Buffer);
 
         return $BufferJSON;
@@ -151,7 +152,13 @@ class TasmotaService extends IPSModule
         } elseif ($msg === true) {
             $msg = 'ON';
         }
-        $BufferJSON = $this->MQTTCommand($command, $msg);
+        $retain = $this->ReadPropertyBoolean('MessageRetain');
+        if ($retain) {
+            $retain = 1;
+        } else {
+            $retain = 0;
+        }
+        $BufferJSON = $this->MQTTCommand($command, $msg, $retain);
         $this->SendDebug(__FUNCTION__, $BufferJSON, 0);
         $this->SendDataToParent(json_encode(array('DataID' => '{018EF6B5-AB94-40C6-AA53-46943E824ACF}', 'Action' => 'Publish', 'Buffer' => $BufferJSON)));
     }

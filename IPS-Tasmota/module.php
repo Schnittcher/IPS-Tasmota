@@ -16,6 +16,7 @@ class IPS_Tasmota extends TasmotaService
         $this->RegisterPropertyString('Off', 'OFF');
         $this->RegisterPropertyString('FullTopic', '%prefix%/%topic%');
         $this->RegisterPropertyInteger('PowerOnState', 3);
+        $this->RegisterPropertyBoolean('MessageRetain', false);
         $this->RegisterVariableFloat('Tasmota_RSSI', 'RSSI');
         $this->RegisterVariableBoolean('Tasmota_DeviceStatus', 'Status', 'Tasmota.DeviceStatus');
         //Settings

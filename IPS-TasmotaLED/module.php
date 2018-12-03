@@ -14,6 +14,7 @@ class IPS_TasmotaLED extends TasmotaService
         $this->RegisterPropertyString('On', 'ON');
         $this->RegisterPropertyString('Off', 'OFF');
         $this->RegisterPropertyString('FullTopic', '%prefix%/%topic%');
+        $this->RegisterPropertyBoolean('MessageRetain', false);
         $this->RegisterPropertyInteger('PowerOnState', 3);
         //$this->RegisterPropertyString("DeviceLanguage","en");
         $this->RegisterPropertyBoolean('Power1Deactivate', false);

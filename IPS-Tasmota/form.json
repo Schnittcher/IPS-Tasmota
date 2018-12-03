@@ -9,6 +9,7 @@
 
     { "type": "Label", "label": "Settings" },
     { "type": "CheckBox", "name": "Power1Deactivate", "caption": "Multi Switch" },
+    { "type": "CheckBox", "name": "MessageRetain", "caption": "Message Retain" },
     { "type": "Select", "name": "PowerOnState", "caption": "PowerOnState",
     "options": [
         { "label": "Off", "value": 0 },
