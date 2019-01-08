@@ -129,7 +129,7 @@ class IPS_TasmotaLED extends TasmotaService
                 }
                 if (property_exists($MSG, 'Fade')) {
                     $this->SendDebug('Receive Result: Fade', $MSG->Fade, 0);
-                    if ($MSG->Fade == 'ON') {
+                    if (strtoupper($MSG->Fade) == 'ON') {
                         SetValue($this->GetIDForIdent('TasmotaLED_Fade'), true);
                     } else {
                         SetValue($this->GetIDForIdent('TasmotaLED_Fade'), false);
