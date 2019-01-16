@@ -2,8 +2,15 @@
 
 class TasmotaService extends IPSModule
 {
-    protected function MQTTCommand($command, $msg, $retain)
+    protected function MQTTCommand($command, $msg, $retain = 0)
     {
+        $retain = $this->ReadPropertyBoolean('MessageRetain');
+        if ($retain) {
+            $retain = 1;
+        } else {
+            $retain = 0;
+        }
+
         $FullTopic = explode('/', $this->ReadPropertyString('FullTopic'));
         $PrefixIndex = array_search('%prefix%', $FullTopic);
         $TopicIndex = array_search('%topic%', $FullTopic);
