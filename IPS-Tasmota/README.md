@@ -43,10 +43,10 @@ Tasmota_setPower(25537, 2, false);  //Power Variable 2
 Tasmota_setPower(25537, 3, false);  //Power Variable 3
 Tasmota_setPower(25537, 4, false);  //Power Variable 4
 ```
-### Tasmota_sendMQTTCommand($command, $msg)
+### Tasmota_sendMQTTCommand($InstanceID, $command, $msg)
 Mit dieser Funktion kann jedes MQTT Command abgeschickt werden.
 
 Beispiel:
 ```php
-Tasmota_sendMQTTCommand("POWER "ON");
+Tasmota_sendMQTTCommand(25537, "POWER "ON");
 ```
