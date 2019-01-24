@@ -29,6 +29,7 @@ class TasmotaService extends IPSModule
         $Buffer['MSG'] = $msg;
         $Buffer['Retain'] = $retain;
         $BufferJSON = json_encode($Buffer);
+        $BufferJSON = utf8_encode($BufferJSON);
 
         return $BufferJSON;
     }

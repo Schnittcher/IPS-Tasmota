@@ -43,7 +43,7 @@ class IPS_Tasmota extends TasmotaService
         $this->SendDebug('JSON', $JSONString, 0);
         if (!empty($this->ReadPropertyString('Topic'))) {
             $this->SendDebug('ReceiveData JSON', $JSONString, 0);
-            $data = json_decode($JSONString);
+            $data = json_decode(utf8_decode($JSONString));
             // Buffer decodieren und in eine Variable schreiben
             $Buffer = json_decode($data->Buffer);
             $this->SendDebug('Topic', $Buffer->TOPIC, 0);
