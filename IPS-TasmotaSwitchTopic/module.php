@@ -27,7 +27,7 @@ class IPS_TasmotaSwitchTopic extends TasmotaService
     {
         if (!empty($this->ReadPropertyString('SwitchTopicPräfix'))) {
             $this->SendDebug('ReceiveData JSON', $JSONString, 0);
-            $data = json_decode(utf8_decode($JSONString));
+            $data = json_decode($JSONString);
 
             // Buffer decodieren und in eine Variable schreiben
             $Buffer = json_decode($data->Buffer);
