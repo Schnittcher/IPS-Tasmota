@@ -145,6 +145,7 @@ class IPS_TasmotaConfigurator extends TasmotaService
         $this->DevicesTopics = array();
         $Buffer['Topic'] = '#';
         $Buffer['MSG'] = '';
+        $Buffer['Retain'] = 0;
         $BufferJSON = json_encode($Buffer);
         $this->SendDebug('setPowerOnState', $BufferJSON, 0);
         $this->SendDataToParent(json_encode(array('DataID' => '{018EF6B5-AB94-40C6-AA53-46943E824ACF}', 'Action' => 'Publish', 'Buffer' => $BufferJSON)));
