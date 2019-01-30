@@ -150,7 +150,7 @@ class TasmotaService extends IPSModule
         $result = false;
         for ($x = 0; $x < 500; $x++) {
             if ($this->BufferResponse != '') {
-                $this->SendDebug('sendMQTTCommand Response', $this->BufferResponse,0);
+                $this->SendDebug('sendMQTTCommand Response', $this->BufferResponse, 0);
                 $result = $this->BufferResponse;
                 break;
             }
@@ -259,7 +259,8 @@ class TasmotaService extends IPSModule
         }
     }
 
-    protected function getSystemVariables($myBuffer) {
+    protected function getSystemVariables($myBuffer)
+    {
         $this->RegisterVariableString('Tasmota_Uptime', 'Uptime');
         SetValue($this->GetIDForIdent('Tasmota_Uptime'), $myBuffer->Uptime);
 

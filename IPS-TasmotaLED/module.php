@@ -69,7 +69,7 @@ class IPS_TasmotaLED extends TasmotaService
                 }
             }
             if (fnmatch('*RESULT', $Buffer->TOPIC)) {
-                $this->SendDebug('Result', $Buffer->MSG,0);
+                $this->SendDebug('Result', $Buffer->MSG, 0);
                 $this->BufferResponse = $Buffer->MSG;
             }
             switch ($Buffer->TOPIC) {
