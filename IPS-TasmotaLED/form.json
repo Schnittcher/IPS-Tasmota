@@ -18,6 +18,7 @@
         { "label": "Turn relay(s) on, disable further relay control", "value": 4 }
     ]
 },
+      { "type": "CheckBox", "name": "SystemVariables", "caption": "System Variables" },
       { "type": "CheckBox", "name": "Power1Deactivate", "caption": "Multi Switch" }
     ],
     "actions":

@@ -8,6 +8,7 @@
       { "type": "ValidationTextBox", "name": "FullTopic", "caption": "Full Topic" },
 
     { "type": "Label", "label": "Settings" },
+    { "type": "CheckBox", "name": "SystemVariables", "caption": "System Variables" },
     { "type": "CheckBox", "name": "Power1Deactivate", "caption": "Multi Switch" },
     { "type": "CheckBox", "name": "MessageRetain", "caption": "Message Retain" },
     { "type": "Select", "name": "PowerOnState", "caption": "PowerOnState",

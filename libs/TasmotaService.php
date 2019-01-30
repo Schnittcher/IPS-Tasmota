@@ -247,4 +247,30 @@ class TasmotaService extends IPSModule
             }
         }
     }
+
+    protected function getSystemVariables($myBuffer) {
+        $this->RegisterVariableString('Tasmota_Uptime', 'Uptime');
+        SetValue($this->GetIDForIdent('Tasmota_Uptime'), $myBuffer->Uptime);
+
+        $this->RegisterVariableString('Tasmota_SleepMode', 'SleepMode');
+        SetValue($this->GetIDForIdent('Tasmota_SleepMode'), $myBuffer->SleepMode);
+
+        $this->RegisterVariableFloat('Tasmota_Vcc', 'Vcc');
+        SetValue($this->GetIDForIdent('Tasmota_Vcc'), $myBuffer->Vcc);
+
+        $this->RegisterVariableInteger('Tasmota_Sleep', 'Sleep');
+        SetValue($this->GetIDForIdent('Tasmota_Sleep'), $myBuffer->Sleep);
+
+        $this->RegisterVariableInteger('Tasmota_LoadAvg', 'LoadAvg');
+        SetValue($this->GetIDForIdent('Tasmota_LoadAvg'), $myBuffer->LoadAvg);
+
+        $this->RegisterVariableString('Tasmota_Wifi_SSId', 'SSId');
+        SetValue($this->GetIDForIdent('Tasmota_Wifi_SSId'), $myBuffer->Wifi->SSId);
+
+        $this->RegisterVariableString('Tasmota_Wifi_BSSId', 'BSSId');
+        SetValue($this->GetIDForIdent('Tasmota_Wifi_BSSId'), $myBuffer->Wifi->BSSId);
+
+        $this->RegisterVariableInteger('Tasmota_Wifi_Channel', 'Channel');
+        SetValue($this->GetIDForIdent('Tasmota_Wifi_Channel'), $myBuffer->Wifi->Channel);
+    }
 }

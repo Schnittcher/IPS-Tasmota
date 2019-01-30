@@ -17,6 +17,7 @@ class IPS_TasmotaLED extends TasmotaService
         $this->RegisterPropertyBoolean('MessageRetain', false);
         $this->RegisterPropertyInteger('PowerOnState', 3);
         //$this->RegisterPropertyString("DeviceLanguage","en");
+        $this->RegisterPropertyBoolean('SystemVariables', false);
         $this->RegisterPropertyBoolean('Power1Deactivate', false);
         $this->RegisterPropertyBoolean('Sensoren', true);
 
@@ -141,6 +142,10 @@ class IPS_TasmotaLED extends TasmotaService
                 $this->traverseArray($myBuffer, $myBuffer);
                 break;
             case 'tele/' . $this->ReadPropertyString('Topic') . '/STATE':
+                if ($this->ReadPropertyBoolean('SystemVariables')) {
+                    $myBuffer = json_decode($Buffer->MSG);
+                    $this->getSystemVariables($myBuffer);
+                }
                 if (property_exists($MSG, 'Wifi')) {
                     $this->SendDebug('Receive Sate: Wifi RSSI', $MSG->Wifi->RSSI, 0);
                     SetValue($this->GetIDForIdent('TasmotaLED_RSSI'), $MSG->Wifi->RSSI);

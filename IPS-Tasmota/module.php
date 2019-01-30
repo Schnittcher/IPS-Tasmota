@@ -20,6 +20,7 @@ class IPS_Tasmota extends TasmotaService
         $this->RegisterVariableFloat('Tasmota_RSSI', 'RSSI');
         $this->RegisterVariableBoolean('Tasmota_DeviceStatus', 'Status', 'Tasmota.DeviceStatus');
         //Settings
+        $this->RegisterPropertyBoolean('SystemVariables', false);
         $this->RegisterPropertyBoolean('Power1Deactivate', false);
         //Debug Optionen
         $this->RegisterPropertyBoolean('Sensoren', false);
@@ -89,6 +90,11 @@ class IPS_Tasmota extends TasmotaService
                     $myBuffer = json_decode($Buffer->MSG);
                     $this->Debug('State MSG', $Buffer->MSG, 'State');
                     $this->Debug('State Wifi', $myBuffer->Wifi->RSSI, 'State');
+
+                    if ($this->ReadPropertyBoolean('SystemVariables')) {
+                        $this->getSystemVariables($myBuffer);
+                    }
+
                     SetValue($this->GetIDForIdent('Tasmota_RSSI'), $myBuffer->Wifi->RSSI);
                 }
                 if (fnmatch('*LWT', $Buffer->TOPIC)) {
