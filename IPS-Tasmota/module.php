@@ -1,13 +1,17 @@
 <?php
 
 require_once __DIR__ . '/../libs/TasmotaService.php';
+require_once __DIR__ . '/../libs/helper.php';
 
 class IPS_Tasmota extends TasmotaService
 {
+    use BufferHelper;
+
     public function Create()
     {
         //Never delete this line!
         parent::Create();
+        $this->BufferResponse = '';
         $this->ConnectParent('{EE0D345A-CF31-428A-A613-33CE98E752DD}');
         $this->createVariablenProfiles();
         //Anzahl die in der Konfirgurationsform angezeigt wird - Hier Standard auf 1
@@ -32,6 +36,7 @@ class IPS_Tasmota extends TasmotaService
     {
         //Never delete this line!
         parent::ApplyChanges();
+        $this->BufferResponse = '';
         $this->ConnectParent('{EE0D345A-CF31-428A-A613-33CE98E752DD}');
         //Setze Filter fÃ¼r ReceiveData
         $this->setPowerOnState($this->ReadPropertyInteger('PowerOnState'));
@@ -96,6 +101,10 @@ class IPS_Tasmota extends TasmotaService
                     }
 
                     SetValue($this->GetIDForIdent('Tasmota_RSSI'), $myBuffer->Wifi->RSSI);
+                }
+                if (fnmatch('*RESULT', $Buffer->TOPIC)) {
+                    $this->SendDebug('Result', $Buffer->MSG,0);
+                    $this->BufferResponse = $Buffer->MSG;
                 }
                 if (fnmatch('*LWT', $Buffer->TOPIC)) {
                     $this->Debug('State MSG', $Buffer->MSG, 'State');
