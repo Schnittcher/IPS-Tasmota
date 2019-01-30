@@ -13,6 +13,7 @@ trait BufferHelper
     {
         return unserialize($this->GetBuffer($name));
     }
+
     /**
      * Wert einer Eigenschaft in den InstanceBuffer schreiben.
      *

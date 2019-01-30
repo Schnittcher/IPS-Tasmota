@@ -103,7 +103,7 @@ class IPS_Tasmota extends TasmotaService
                     SetValue($this->GetIDForIdent('Tasmota_RSSI'), $myBuffer->Wifi->RSSI);
                 }
                 if (fnmatch('*RESULT', $Buffer->TOPIC)) {
-                    $this->SendDebug('Result', $Buffer->MSG,0);
+                    $this->SendDebug('Result', $Buffer->MSG, 0);
                     $this->BufferResponse = $Buffer->MSG;
                 }
                 if (fnmatch('*LWT', $Buffer->TOPIC)) {
