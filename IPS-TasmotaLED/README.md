@@ -14,6 +14,7 @@ Tasmota MQTT Topic | Name des Tasmota Gerätes, ist in den MQTT Einstellungen in
 Power On| 1 oder ON - Je nachdem wie das Tasmota Gerät geflasht wurde
 Power Off| 0 oder OFF - Je nachdem wie das Tasmota Gerät geflasht wurde
 Full Topic| Full Topic des Tasmota Gerätes, ist in den MQTT Einstellungen der Tasmota Firmware zu finden
+System Variables| aktivieren, wenn die System Variablen vom Tasmota als Variablen in IP-Symocn angelegt werden sollen
 
 Die Übergeordnete Instanz sollte immer der IPS_KS_MQTTClient sein, dieser sollte normalerweise direkt gesetzt werden, wenn das Modul angelegt wird.
 
@@ -101,6 +102,7 @@ TasmotaLED_setSpeed(25537, 5);
 
 ### TasmotaLED_sendMQTTCommand($command, $msg)
 Mit dieser Funktion kann jedes MQTT Command abgeschickt werden.
+Als Rückgabewert wird JSON geliefert.
 
 Beispiel:
 ```php

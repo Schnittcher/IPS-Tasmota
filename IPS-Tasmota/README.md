@@ -15,6 +15,7 @@ Power On| 1 oder ON - Je nachdem wie das Tasmota Gerät geflasht wurde
 Power Off| 0 oder OFF - Je nachdem wie das Tasmota Gerät geflasht wurde
 Full Topic| Full Topic des Tasmota Gerätes, ist in den MQTT Einstellungen der Tasmota Firmware zu finden
 Multi Switch| aktivieren, wenn mehr als ein Swtich an dem Gerät verfügbar ist
+System Variables| aktivieren, wenn die System Variablen vom Tasmota als Variablen in IP-Symocn angelegt werden sollen
 
 Wenn die einzelnen Haken des Debug Modus aktiviert werden, sind im Debug Fenster weitere Meldungen zu finden.
 
@@ -45,6 +46,7 @@ Tasmota_setPower(25537, 4, false);  //Power Variable 4
 ```
 ### Tasmota_sendMQTTCommand($InstanceID, $command, $msg)
 Mit dieser Funktion kann jedes MQTT Command abgeschickt werden.
+Als Rückgabewert wird JSON geliefert.
 
 Beispiel:
 ```php
