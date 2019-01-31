@@ -40,7 +40,8 @@ class TasmotaService extends IPSModule
         }
     }
 
-    protected function FilterFullTopicReceiveData() {
+    protected function FilterFullTopicReceiveData()
+    {
         $FullTopic = explode('/', $this->ReadPropertyString('FullTopic'));
         $PrefixIndex = array_search('%prefix%', $FullTopic);
         $TopicIndex = array_search('%topic%', $FullTopic);
