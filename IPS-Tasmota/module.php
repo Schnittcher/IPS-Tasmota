@@ -40,7 +40,11 @@ class IPS_Tasmota extends TasmotaService
         $this->ConnectParent('{EE0D345A-CF31-428A-A613-33CE98E752DD}');
         //Setze Filter fÃ¼r ReceiveData
         $this->setPowerOnState($this->ReadPropertyInteger('PowerOnState'));
-        $topic = $this->ReadPropertyString('Topic');
+
+        $this->SendDebug(__FUNCTION__.' FullTopic',$this->ReadPropertyString('FullTopic'),0);
+        $topic = $this->FilterFullTopicReceiveData();
+        $this->SendDebug(__FUNCTION__.' Filter FullTopic',$topic,0);
+
         $this->SetReceiveDataFilter('.*' . $topic . '.*');
     }
 

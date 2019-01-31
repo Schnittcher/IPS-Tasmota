@@ -40,6 +40,20 @@ class TasmotaService extends IPSModule
         }
     }
 
+    protected function FilterFullTopicReceiveData() {
+        $FullTopic = explode('/', $this->ReadPropertyString('FullTopic'));
+        $PrefixIndex = array_search('%prefix%', $FullTopic);
+        $TopicIndex = array_search('%topic%', $FullTopic);
+
+        $SetCommandArr = $FullTopic;
+
+        unset($SetCommandArr[$PrefixIndex]);
+        $SetCommandArr[$TopicIndex] = $this->ReadPropertyString('Topic');
+        $topic = implode('/', $SetCommandArr);
+
+        return $topic;
+    }
+
     protected function setPowerOnStateInForm($value)
     {
         if ($value != $this->ReadPropertyInteger('PowerOnState')) {
