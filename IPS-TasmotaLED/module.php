@@ -47,10 +47,10 @@ class IPS_TasmotaLED extends TasmotaService
         //Setze Filter für ReceiveData
         $this->setPowerOnState($this->ReadPropertyInteger('PowerOnState'));
 
-        $this->SendDebug(__FUNCTION__.' FullTopic',$this->ReadPropertyString('FullTopic'),0);
+        $this->SendDebug(__FUNCTION__ . ' FullTopic', $this->ReadPropertyString('FullTopic'), 0);
         $topic = $this->FilterFullTopicReceiveData();
-        $this->SendDebug(__FUNCTION__.' Filter FullTopic',$topic,0);
-        
+        $this->SendDebug(__FUNCTION__ . ' Filter FullTopic', $topic, 0);
+
         $this->SetReceiveDataFilter('.*' . $topic . '.*');
     }
 
