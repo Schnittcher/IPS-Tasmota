@@ -9,7 +9,7 @@ class IPS_TasmotaLED extends TasmotaService
         //Never delete this line!
         parent::Create();
         $this->BufferResponse = '';
-        $this->ConnectParent('{EE0D345A-CF31-428A-A613-33CE98E752DD}');
+        $this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
         //Anzahl die in der Konfirgurationsform angezeigt wird - Hier Standard auf 1
         $this->RegisterPropertyString('Topic', '');
         $this->RegisterPropertyString('On', 'ON');
@@ -43,7 +43,7 @@ class IPS_TasmotaLED extends TasmotaService
         //Never delete this line!
         parent::ApplyChanges();
         $this->BufferResponse = '';
-        $this->ConnectParent('{EE0D345A-CF31-428A-A613-33CE98E752DD}');
+        $this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
         //Setze Filter für ReceiveData
         $this->setPowerOnState($this->ReadPropertyInteger('PowerOnState'));
 
@@ -61,29 +61,29 @@ class IPS_TasmotaLED extends TasmotaService
             $data = json_decode($JSONString);
 
             // Buffer decodieren und in eine Variable schreiben
-            $Buffer = json_decode($data->Buffer);
-            $MSG = json_decode($Buffer->MSG);
-            $this->SendDebug('Topic', $Buffer->TOPIC, 0);
-            if (fnmatch('*LWT', $Buffer->TOPIC)) {
-                $this->Debug('State MSG', $Buffer->MSG, 'State');
-                if (strtolower($Buffer->MSG) == 'online') {
+            $Buffer = $data;
+            $Payload = json_decode($Buffer->Payload);
+            $this->SendDebug('Topic', $Buffer->Topic, 0);
+            if (fnmatch('*LWT', $Buffer->Topic)) {
+                $this->Debug('State Payload', $Buffer->Payload, 'State');
+                if (strtolower($Buffer->Payload) == 'online') {
                     SetValue($this->GetIDForIdent('TasmotaLED_DeviceStatus'), true);
                 } else {
                     SetValue($this->GetIDForIdent('TasmotaLED_DeviceStatus'), false);
                 }
             }
-            if (fnmatch('*RESULT', $Buffer->TOPIC)) {
-                $this->SendDebug('Result', $Buffer->MSG, 0);
-                $this->BufferResponse = $Buffer->MSG;
+            if (fnmatch('*RESULT', $Buffer->Topic)) {
+                $this->SendDebug('Result', $Buffer->Payload, 0);
+                $this->BufferResponse = $Buffer->Payload;
             }
-            switch ($Buffer->TOPIC) {
+            switch ($Buffer->Topic) {
             case 'stat/' . $this->ReadPropertyString('Topic') . '/RESULT':
                 if ($this->ReadPropertyBoolean('Power1Deactivate') == false) {
-                    if (property_exists($MSG, 'POWER')) {
+                    if (property_exists($Payload, 'POWER')) {
                         $this->RegisterVariableBoolean('TasmotaLED_POWER', 'POWER', '~Switch');
                         $this->EnableAction('TasmotaLED_POWER');
-                        $this->SendDebug('Receive Result: POWER', $MSG->POWER, 0);
-                        switch ($MSG->POWER) {
+                        $this->SendDebug('Receive Result: POWER', $Payload->POWER, 0);
+                        switch ($Payload->POWER) {
                             case $this->ReadPropertyString('Off'):
                                 SetValue($this->GetIDForIdent('TasmotaLED_POWER'), 0);
                                 break;
@@ -95,12 +95,12 @@ class IPS_TasmotaLED extends TasmotaService
                 } else {
                     //Es kann bei einem MultiSwitch 4 Power Variablen geben
                     for ($i = 1; $i <= 4; $i++) {
-                        if (property_exists($MSG, 'POWER' . $i)) {
-                            $this->SendDebug('Receive Result: POWER' . $i, $MSG->{'POWER' . $i}, 0);
+                        if (property_exists($Payload, 'POWER' . $i)) {
+                            $this->SendDebug('Receive Result: POWER' . $i, $Payload->{'POWER' . $i}, 0);
                             $this->RegisterVariableBoolean('TasmotaLED_POWER' . $i, 'POWER' . $i, '~Switch');
                             $this->EnableAction('TasmotaLED_POWER' . $i);
-                            $this->SendDebug('Receive Result: POWER' . $i, $MSG->{'POWER' . $i}, 0);
-                            switch ($MSG->{'POWER' . $i}) {
+                            $this->SendDebug('Receive Result: POWER' . $i, $Payload->{'POWER' . $i}, 0);
+                            switch ($Payload->{'POWER' . $i}) {
                                 case $this->ReadPropertyString('Off'):
                                     SetValue($this->GetIDForIdent('TasmotaLED_POWER' . $i), 0);
                                     break;
@@ -112,35 +112,35 @@ class IPS_TasmotaLED extends TasmotaService
                     }
                 }
 
-                if (property_exists($MSG, 'PowerOnState')) {
-                    $this->SendDebug('Receive Result: PowerOnState', $MSG->PowerOnState, 0);
-                    $this->setPowerOnStateInForm($MSG->PowerOnState);
+                if (property_exists($Payload, 'PowerOnState')) {
+                    $this->SendDebug('Receive Result: PowerOnState', $Payload->PowerOnState, 0);
+                    $this->setPowerOnStateInForm($Payload->PowerOnState);
                 }
-                if (property_exists($MSG, 'Pixels')) {
-                    $this->SendDebug('Receive Result: Pixels', $MSG->Pixels, 0);
-                    SetValue($this->GetIDForIdent('TasmotaLED_Pixels'), $MSG->Pixels);
+                if (property_exists($Payload, 'Pixels')) {
+                    $this->SendDebug('Receive Result: Pixels', $Payload->Pixels, 0);
+                    SetValue($this->GetIDForIdent('TasmotaLED_Pixels'), $Payload->Pixels);
                 }
-                if (property_exists($MSG, 'Speed')) {
-                    $this->SendDebug('Receive Result: Speed', $MSG->Speed, 0);
-                    SetValue($this->GetIDForIdent('TasmotaLED_Speed'), $MSG->Speed);
+                if (property_exists($Payload, 'Speed')) {
+                    $this->SendDebug('Receive Result: Speed', $Payload->Speed, 0);
+                    SetValue($this->GetIDForIdent('TasmotaLED_Speed'), $Payload->Speed);
                 }
-                if (property_exists($MSG, 'Scheme')) {
-                    $this->SendDebug('Receive Result: Scheme', $MSG->Scheme, 0);
-                    SetValue($this->GetIDForIdent('TasmotaLED_Scheme'), $MSG->Scheme);
+                if (property_exists($Payload, 'Scheme')) {
+                    $this->SendDebug('Receive Result: Scheme', $Payload->Scheme, 0);
+                    SetValue($this->GetIDForIdent('TasmotaLED_Scheme'), $Payload->Scheme);
                 }
-                if (property_exists($MSG, 'Dimmer')) {
-                    $this->SendDebug('Receive Result: Dimmer', $MSG->Dimmer, 0);
-                    SetValue($this->GetIDForIdent('TasmotaLED_Dimmer'), $MSG->Dimmer);
+                if (property_exists($Payload, 'Dimmer')) {
+                    $this->SendDebug('Receive Result: Dimmer', $Payload->Dimmer, 0);
+                    SetValue($this->GetIDForIdent('TasmotaLED_Dimmer'), $Payload->Dimmer);
                 }
-                if (property_exists($MSG, 'Color')) {
-                    $this->SendDebug('Receive Result: Color', $MSG->Color, 0);
-                    $rgb = explode(',', $MSG->Color);
+                if (property_exists($Payload, 'Color')) {
+                    $this->SendDebug('Receive Result: Color', $Payload->Color, 0);
+                    $rgb = explode(',', $Payload->Color);
                     $color = sprintf('#%02x%02x%02x', $rgb[0], $rgb[1], $rgb[2]);
                     SetValue($this->GetIDForIdent('TasmotaLED_Color'), hexdec(($color)));
                 }
-                if (property_exists($MSG, 'Fade')) {
-                    $this->SendDebug('Receive Result: Fade', $MSG->Fade, 0);
-                    if (strtoupper($MSG->Fade) == 'ON') {
+                if (property_exists($Payload, 'Fade')) {
+                    $this->SendDebug('Receive Result: Fade', $Payload->Fade, 0);
+                    if (strtoupper($Payload->Fade) == 'ON') {
                         SetValue($this->GetIDForIdent('TasmotaLED_Fade'), true);
                     } else {
                         SetValue($this->GetIDForIdent('TasmotaLED_Fade'), false);
@@ -148,17 +148,17 @@ class IPS_TasmotaLED extends TasmotaService
                 }
                 break;
             case 'tele/' . $this->ReadPropertyString('Topic') . '/SENSOR':
-                $myBuffer = json_decode($Buffer->MSG, true);
+                $myBuffer = json_decode($Buffer->Payload, true);
                 $this->traverseArray($myBuffer, $myBuffer);
                 break;
             case 'tele/' . $this->ReadPropertyString('Topic') . '/STATE':
                 if ($this->ReadPropertyBoolean('SystemVariables')) {
-                    $myBuffer = json_decode($Buffer->MSG);
+                    $myBuffer = json_decode($Buffer->Payload);
                     $this->getSystemVariables($myBuffer);
                 }
-                if (property_exists($MSG, 'Wifi')) {
-                    $this->SendDebug('Receive Sate: Wifi RSSI', $MSG->Wifi->RSSI, 0);
-                    SetValue($this->GetIDForIdent('TasmotaLED_RSSI'), $MSG->Wifi->RSSI);
+                if (property_exists($Payload, 'Wifi')) {
+                    $this->SendDebug('Receive Sate: Wifi RSSI', $Payload->Wifi->RSSI, 0);
+                    SetValue($this->GetIDForIdent('TasmotaLED_RSSI'), $Payload->Wifi->RSSI);
                 }
 
             }
@@ -169,45 +169,45 @@ class IPS_TasmotaLED extends TasmotaService
     {
         $command = 'Led' . $LED;
         $msg = $color;
-        $BufferJSON = $this->MQTTCommand($command, $msg);
-        $this->SendDebug('setLED', $BufferJSON, 0);
-        $this->SendDataToParent(json_encode(array('DataID' => '{018EF6B5-AB94-40C6-AA53-46943E824ACF}', 'Action' => 'Publish', 'Buffer' => $BufferJSON)));
+        $DataJSON = $this->MQTTCommand($command, $msg);
+        $this->SendDebug('setLED', $DataJSON, 0);
+        $this->SendDataToParent($DataJSON);
     }
 
     public function setScheme(int $schemeID)
     {
         $command = 'Scheme';
-        $msg = $schemeID;
-        $BufferJSON = $this->MQTTCommand($command, $msg);
-        $this->SendDebug('setScheme', $BufferJSON, 0);
-        $this->SendDataToParent(json_encode(array('DataID' => '{018EF6B5-AB94-40C6-AA53-46943E824ACF}', 'Action' => 'Publish', 'Buffer' => $BufferJSON)));
+        $msg = strval($schemeID);
+        $DataJSON = $this->MQTTCommand($command, $msg);
+        $this->SendDebug('setScheme', $DataJSON, 0);
+        $this->SendDataToParent($DataJSON);
     }
 
     public function setPixel(int $count)
     {
         $command = 'Pixels';
-        $msg = $count;
-        $BufferJSON = $this->MQTTCommand($command, $msg);
-        $this->SendDebug('setPixel', $BufferJSON, 0);
-        $this->SendDataToParent(json_encode(array('DataID' => '{018EF6B5-AB94-40C6-AA53-46943E824ACF}', 'Action' => 'Publish', 'Buffer' => $BufferJSON)));
+        $msg = strval($count);
+        $DataJSON = $this->MQTTCommand($command, $msg);
+        $this->SendDebug('setPixel', $DataJSON, 0);
+        $this->SendDataToParent($DataJSON);
     }
 
     public function setDimmer(int $value)
     {
         $command = 'Dimmer';
-        $msg = $value;
-        $BufferJSON = $this->MQTTCommand($command, $msg);
-        $this->SendDebug('setDimmer', $BufferJSON, 0);
-        $this->SendDataToParent(json_encode(array('DataID' => '{018EF6B5-AB94-40C6-AA53-46943E824ACF}', 'Action' => 'Publish', 'Buffer' => $BufferJSON)));
+        $msg = strval($value);
+        $DataJSON = $this->MQTTCommand($command, $msg);
+        $this->SendDebug('setDimmer', $DataJSON, 0);
+        $this->SendDataToParent($DataJSON);
     }
 
     public function setColorHex(string $color)
     {
         $command = 'Color';
         $msg = $color;
-        $BufferJSON = $this->MQTTCommand($command, $msg);
-        $this->SendDebug('setColorHex', $BufferJSON, 0);
-        $this->SendDataToParent(json_encode(array('DataID' => '{018EF6B5-AB94-40C6-AA53-46943E824ACF}', 'Action' => 'Publish', 'Buffer' => $BufferJSON)));
+        $DataJSON = $this->MQTTCommand($command, $msg);
+        $this->SendDebug('setColorHex', $DataJSON, 0);
+        $this->SendDataToParent($DataJSON);
     }
 
     public function setFade(bool $value)
@@ -219,18 +219,18 @@ class IPS_TasmotaLED extends TasmotaService
         } elseif ($msg === true) {
             $msg = 'ON';
         }
-        $BufferJSON = $this->MQTTCommand($command, $msg);
-        $this->SendDebug('setFade', $BufferJSON, 0);
-        $this->SendDataToParent(json_encode(array('DataID' => '{018EF6B5-AB94-40C6-AA53-46943E824ACF}', 'Action' => 'Publish', 'Buffer' => $BufferJSON)));
+        $DataJSON = $this->MQTTCommand($command, $msg);
+        $this->SendDebug('setFade', $DataJSON, 0);
+        $this->SendDataToParent($DataJSON);
     }
 
     public function setSpeed(int $value)
     {
         $command = 'Speed';
-        $msg = $value;
-        $BufferJSON = $this->MQTTCommand($command, $msg);
-        $this->SendDebug('setSpeed', $BufferJSON, 0);
-        $this->SendDataToParent(json_encode(array('DataID' => '{018EF6B5-AB94-40C6-AA53-46943E824ACF}', 'Action' => 'Publish', 'Buffer' => $BufferJSON)));
+        $msg = strval($value);
+        $DataJSON = $this->MQTTCommand($command, $msg);
+        $this->SendDebug('setSpeed', $DataJSON, 0);
+        $this->SendDataToParent($DataJSON);
     }
 
     public function RequestAction($Ident, $Value)

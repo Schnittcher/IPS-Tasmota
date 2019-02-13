@@ -11,6 +11,8 @@ class TasmotaService extends IPSModule
             $retain = 0;
         }
 
+        $retain = 0; // Solange der IPS MQTT Server noch kein Retain kann
+
         $FullTopic = explode('/', $this->ReadPropertyString('FullTopic'));
         $PrefixIndex = array_search('%prefix%', $FullTopic);
         $TopicIndex = array_search('%topic%', $FullTopic);
@@ -23,14 +25,17 @@ class TasmotaService extends IPSModule
         $SetCommandArr[$index] = $command;
 
         $topic = implode('/', $SetCommandArr);
-        $msg = $msg;
 
-        $Buffer['Topic'] = $topic;
-        $Buffer['MSG'] = $msg;
-        $Buffer['Retain'] = $retain;
-        $BufferJSON = json_encode($Buffer);
+        $Data['DataID'] = '{043EA491-0325-4ADD-8FC2-A30C8EEB4D3F}';
+        $Data['PacketType'] = 3;
+        $Data['QualityOfService'] = 0;
+        $Data['Retain'] = false;
+        $Data['Topic'] = $topic;
+        $Data['Payload'] = $msg;
 
-        return $BufferJSON;
+        $DataJSON = json_encode($Data, JSON_UNESCAPED_SLASHES);
+
+        return $DataJSON;
     }
 
     protected function Debug($Meldungsname, $Daten, $Category)
@@ -144,9 +149,9 @@ class TasmotaService extends IPSModule
             $retain = 0;
         }
 
-        $BufferJSON = $this->MQTTCommand($command, $msg, $retain);
+        $DataJSON = $this->MQTTCommand($command, $msg, $retain);
         $this->SendDebug('restart', $BufferJSON, 0);
-        $this->SendDataToParent(json_encode(array('DataID' => '{018EF6B5-AB94-40C6-AA53-46943E824ACF}', 'Action' => 'Publish', 'Buffer' => $BufferJSON)));
+        $this->SendDataToParent($DataJSON);
     }
 
     public function sendMQTTCommand(string $command, string $msg)
@@ -158,10 +163,10 @@ class TasmotaService extends IPSModule
             $retain = 0;
         }
 
-        $BufferJSON = $this->MQTTCommand($command, $msg, $retain);
+        $DataJSON = $this->MQTTCommand($command, $msg, $retain);
         $this->SendDebug('sendMQTTCommand', $BufferJSON, 0);
         $this->BufferResponse = '';
-        $this->SendDataToParent(json_encode(array('DataID' => '{018EF6B5-AB94-40C6-AA53-46943E824ACF}', 'Action' => 'Publish', 'Buffer' => $BufferJSON)));
+        $this->SendDataToParent($DataJSON);
         $result = false;
         for ($x = 0; $x < 500; $x++) {
             if ($this->BufferResponse != '') {
@@ -177,7 +182,7 @@ class TasmotaService extends IPSModule
     public function setPowerOnState(int $value)
     {
         $command = 'PowerOnState';
-        $msg = $value;
+        $msg = strval($value);
 
         $retain = $this->ReadPropertyBoolean('MessageRetain');
         if ($retain) {
@@ -186,9 +191,9 @@ class TasmotaService extends IPSModule
             $retain = 0;
         }
 
-        $BufferJSON = $this->MQTTCommand($command, $msg, $retain);
-        $this->SendDebug('setPowerOnState', $BufferJSON, 0);
-        $this->SendDataToParent(json_encode(array('DataID' => '{018EF6B5-AB94-40C6-AA53-46943E824ACF}', 'Action' => 'Publish', 'Buffer' => $BufferJSON)));
+        $DataJSON = $this->MQTTCommand($command, $msg, $retain);
+        $this->SendDebug('setPowerOnState', $DataJSON, 0);
+        $this->SendDataToParent($DataJSON);
     }
 
     public function setPower(int $power, bool $Value)
@@ -214,9 +219,9 @@ class TasmotaService extends IPSModule
         } else {
             $retain = 0;
         }
-        $BufferJSON = $this->MQTTCommand($command, $msg, $retain);
-        $this->SendDebug(__FUNCTION__, $BufferJSON, 0);
-        $this->SendDataToParent(json_encode(array('DataID' => '{018EF6B5-AB94-40C6-AA53-46943E824ACF}', 'Action' => 'Publish', 'Buffer' => $BufferJSON)));
+        $DataJSON = $this->MQTTCommand($command, $msg, $retain);
+        $this->SendDebug(__FUNCTION__, $DataJSON, 0);
+        $this->SendDataToParent($DataJSON);
     }
 
     //Für Sensoren

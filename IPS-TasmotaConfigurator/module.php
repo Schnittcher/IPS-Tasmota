@@ -9,7 +9,7 @@ class IPS_TasmotaConfigurator extends TasmotaService
     {
         //Never delete this line!
         parent::Create();
-        $this->ConnectParent('{EE0D345A-CF31-428A-A613-33CE98E752DD}');
+        $this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
         $this->RegisterPropertyString('FullTopic', '%prefix%/%topic%');
         $this->DevicesTopics = array();
     }
@@ -128,9 +128,9 @@ class IPS_TasmotaConfigurator extends TasmotaService
         $data = json_decode($JSONString);
         // Buffer decodieren und in eine Variable schreiben
         //$Buffer = utf8_decode($data->Buffer);
-        $Buffer = json_decode($data->Buffer);
-        $this->SendDebug('ReceiveData JSON', $Buffer->TOPIC, 0);
-        $TopicArr = explode('/', $Buffer->TOPIC);
+        $Buffer = $data;
+        $this->SendDebug('ReceiveData JSON', $Buffer->Topic, 0);
+        $TopicArr = explode('/', $Buffer->Topic);
         $FullTopic = explode('/', $this->ReadPropertyString('FullTopic'));
         $PrefixIndex = array_search('%prefix%', $FullTopic);
         $TopicIndex = array_search('%topic%', $FullTopic);
@@ -143,12 +143,14 @@ class IPS_TasmotaConfigurator extends TasmotaService
     public function ScanTasmotaNetwork()
     {
         $this->DevicesTopics = array();
-        $Buffer['Topic'] = '#';
-        $Buffer['MSG'] = '';
-        $Buffer['Retain'] = 0;
-        $BufferJSON = json_encode($Buffer);
-        $this->SendDebug('setPowerOnState', $BufferJSON, 0);
-        $this->SendDataToParent(json_encode(array('DataID' => '{018EF6B5-AB94-40C6-AA53-46943E824ACF}', 'Action' => 'Publish', 'Buffer' => $BufferJSON)));
-        //echo $this->Translate("Please close this form, and reopen it!");
+        $Data['DataID'] = '{043EA491-0325-4ADD-8FC2-A30C8EEB4D3F}';
+        $Data['PacketType'] = 3;
+        $Data['QualityOfService'] = 0;
+        $Data['Retain'] = false;
+        $Data['Topic'] = '#';
+        $Data['Payload'] = '';
+        $DataJSON = json_encode($Data);
+        $this->SendDebug(__FUNCTION__, $BufferJSON, 0);
+        $this->SendDataToParent($DataJSON);
     }
 }

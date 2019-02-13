@@ -12,7 +12,7 @@ class IPS_Tasmota extends TasmotaService
         //Never delete this line!
         parent::Create();
         $this->BufferResponse = '';
-        $this->ConnectParent('{EE0D345A-CF31-428A-A613-33CE98E752DD}');
+        $this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
         $this->createVariablenProfiles();
         //Anzahl die in der Konfirgurationsform angezeigt wird - Hier Standard auf 1
         $this->RegisterPropertyString('Topic', '');
@@ -37,7 +37,7 @@ class IPS_Tasmota extends TasmotaService
         //Never delete this line!
         parent::ApplyChanges();
         $this->BufferResponse = '';
-        $this->ConnectParent('{EE0D345A-CF31-428A-A613-33CE98E752DD}');
+        $this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
         //Setze Filter fÃ¼r ReceiveData
         $this->setPowerOnState($this->ReadPropertyInteger('PowerOnState'));
 
@@ -55,26 +55,26 @@ class IPS_Tasmota extends TasmotaService
             $this->SendDebug('ReceiveData JSON', $JSONString, 0);
             $data = json_decode($JSONString);
             // Buffer decodieren und in eine Variable schreiben
-            $Buffer = json_decode($data->Buffer);
-            $this->SendDebug('Topic', $Buffer->TOPIC, 0);
+            $Buffer = $data;
+            $this->SendDebug('Topic', $Buffer->Topic, 0);
             $off = $this->ReadPropertyString('Off');
             $on = $this->ReadPropertyString('On');
 
             //PowerOnState Vairablen setzen
-            if (fnmatch('*PowerOnState*', $Buffer->MSG)) {
-                $this->SendDebug('PowerOnState Topic', $Buffer->TOPIC, 0);
-                $this->SendDebug('PowerOnState MSG', $Buffer->MSG, 0);
-                $MSG = json_decode($Buffer->MSG);
-                if (property_exists($MSG, 'PowerOnState')) {
-                    $this->setPowerOnStateInForm($MSG->PowerOnState);
+            if (fnmatch('*PowerOnState*', $Buffer->Payload)) {
+                $this->SendDebug('PowerOnState Topic', $Buffer->Topic, 0);
+                $this->SendDebug('PowerOnState Payload', $Buffer->Payload, 0);
+                $Payload = json_decode($Buffer->Payload);
+                if (property_exists($Payload, 'PowerOnState')) {
+                    $this->setPowerOnStateInForm($Payload->PowerOnState);
                 }
             }
             //Power Vairablen checken
-            if (property_exists($Buffer, 'TOPIC')) {
-                if (fnmatch('*POWER*', $Buffer->TOPIC)) {
-                    $this->SendDebug('Power Topic', $Buffer->TOPIC, 0);
-                    $this->SendDebug('Power', $Buffer->MSG, 0);
-                    $power = explode('/', $Buffer->TOPIC);
+            if (property_exists($Buffer, 'Topic')) {
+                if (fnmatch('*POWER*', $Buffer->Topic)) {
+                    $this->SendDebug('Power Topic', $Buffer->Topic, 0);
+                    $this->SendDebug('Power', $Buffer->Payload, 0);
+                    $power = explode('/', $Buffer->Topic);
                     end($power);
                     $lastKey = key($power);
                     $tmpPower = 'POWER1';
@@ -84,7 +84,7 @@ class IPS_Tasmota extends TasmotaService
                     if ($power[$lastKey] != $tmpPower) {
                         $this->RegisterVariableBoolean('Tasmota_' . $power[$lastKey], $power[$lastKey], '~Switch');
                         $this->EnableAction('Tasmota_' . $power[$lastKey]);
-                        switch ($Buffer->MSG) {
+                        switch ($Buffer->Payload) {
                 case $off:
                   SetValue($this->GetIDForIdent('Tasmota_' . $power[$lastKey]), 0);
                   break;
@@ -95,9 +95,9 @@ class IPS_Tasmota extends TasmotaService
                     }
                 }
                 //State checken
-                if (fnmatch('*STATE', $Buffer->TOPIC)) {
-                    $myBuffer = json_decode($Buffer->MSG);
-                    $this->Debug('State MSG', $Buffer->MSG, 'State');
+                if (fnmatch('*STATE', $Buffer->Topic)) {
+                    $myBuffer = json_decode($Buffer->Payload);
+                    $this->Debug('State Payload', $Buffer->Payload, 'State');
                     $this->Debug('State Wifi', $myBuffer->Wifi->RSSI, 'State');
 
                     if ($this->ReadPropertyBoolean('SystemVariables')) {
@@ -106,31 +106,31 @@ class IPS_Tasmota extends TasmotaService
 
                     SetValue($this->GetIDForIdent('Tasmota_RSSI'), $myBuffer->Wifi->RSSI);
                 }
-                if (fnmatch('*RESULT', $Buffer->TOPIC)) {
-                    $this->SendDebug('Result', $Buffer->MSG, 0);
-                    $this->BufferResponse = $Buffer->MSG;
+                if (fnmatch('*RESULT', $Buffer->Topic)) {
+                    $this->SendDebug('Result', $Buffer->Payload, 0);
+                    $this->BufferResponse = $Buffer->Payload;
                 }
-                if (fnmatch('*LWT', $Buffer->TOPIC)) {
-                    $this->Debug('State MSG', $Buffer->MSG, 'State');
-                    if (strtolower($Buffer->MSG) == 'online') {
+                if (fnmatch('*LWT', $Buffer->Topic)) {
+                    $this->Debug('State Payload', $Buffer->Payload, 'State');
+                    if (strtolower($Buffer->Payload) == 'online') {
                         SetValue($this->GetIDForIdent('Tasmota_DeviceStatus'), true);
                     } else {
                         SetValue($this->GetIDForIdent('Tasmota_DeviceStatus'), false);
                     }
                 }
                 //Sensor Variablen checken
-                if (fnmatch('*SENSOR', $Buffer->TOPIC)) {
-                    $this->Debug('Sensor MSG', $Buffer->MSG, 'Sensoren');
-                    $this->Debug('Sensor Topic', $Buffer->TOPIC, 'Sensoren');
-                    $myBuffer = json_decode($Buffer->MSG, true);
+                if (fnmatch('*SENSOR', $Buffer->Topic)) {
+                    $this->Debug('Sensor Payload', $Buffer->Payload, 'Sensoren');
+                    $this->Debug('Sensor Topic', $Buffer->Topic, 'Sensoren');
+                    $myBuffer = json_decode($Buffer->Payload, true);
                     $this->traverseArray($myBuffer, $myBuffer);
                 }
             }
             //POW Variablen
-            if (fnmatch('*ENERGY*', $Buffer->MSG)) {
-                $myBuffer = json_decode($Buffer->MSG);
+            if (fnmatch('*ENERGY*', $Buffer->Payload)) {
+                $myBuffer = json_decode($Buffer->Payload);
                 if (property_exists($myBuffer, 'ENERGY')) {
-                    $this->Debug('ENERGY MSG', $Buffer->MSG, 'Pow');
+                    $this->Debug('ENERGY Payload', $Buffer->Payload, 'Pow');
                     $this->RegisterVariableFloat('Tasmota_POWTotal', 'Total', '~Electricity');
                     $this->RegisterVariableFloat('Tasmota_POWYesterday', 'Yesterday', '~Electricity');
                     $this->RegisterVariableFloat('Tasmota_POWToday', 'Today', '~Electricity');
