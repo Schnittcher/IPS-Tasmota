@@ -19,7 +19,7 @@ System Variables| aktivieren, wenn die System Variablen vom Tasmota als Variable
 
 Wenn die einzelnen Haken des Debug Modus aktiviert werden, sind im Debug Fenster weitere Meldungen zu finden.
 
-Die Übergeordnete Instanz sollte immer der IPS_KS_MQTTClient sein, dieser sollte normalerweise direkt gesetzt werden, wenn das Modul angelegt wird.
+Die Übergeordnete Instanz sollte immer der MQTT Server sein, dieser sollte normalerweise direkt gesetzt werden, wenn das Modul angelegt wird.
 
 ## 2. Funktionen
 

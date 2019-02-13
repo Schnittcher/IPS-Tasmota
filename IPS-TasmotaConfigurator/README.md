@@ -14,4 +14,4 @@ Um die Änderungen in der Form sehen zu können, muss das Konfigurationsformular
 
 Um eine Instanz zu erzeugen, muss das jeweilige Gerät in der Liste selektiert werden und der Geräte Typ ausgewählt werden, danach nur auf den Button **Instanz erzeugen** klicken.
 
-Die Übergeordnete Instanz sollte immer der IPS_KS_MQTTClient sein, dieser sollte normalerweise direkt gesetzt werden, wenn das Modul angelegt wird.
+Die Übergeordnete Instanz sollte immer der MQTT Server sein, dieser sollte normalerweise direkt gesetzt werden, wenn das Modul angelegt wird.

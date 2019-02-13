@@ -17,9 +17,8 @@ Kommuniziert wird über das MQTT Prokotoll, somit muss der Status der Geräte ni
 
 ## 1. Voraussetzungen
 
-* [Mosquitto Broker](https://mosquitto.org)
-* [MQTT Client](https://github.com/Schnittcher/IPS-KS-MQTT) - aktuell eine abgeänderte Version von [IPS_MQTT von thomasf68](https://github.com/thomasf68/IPS_MQTT)
-* mindestens IPS Version 4.1
+* mindestens IPS Version 5.1
+* MQTT Server
 
 ## 2. Enthaltene Module
 
@@ -33,12 +32,7 @@ Zum Beispiel: WS2812, AiLight, Sonoff Led, B1, BN-SZ01, H801 and MagicHome
 
 ## 3. Installation
 
-IPS-KS-MQTT Client:
-```
-https://github.com/Schnittcher/IPS-KS-MQTT.git
-```
-
-IPS-Tasmota:
+IPS-Tasmota (Branch 5.1):
 ```
 https://github.com/Schnittcher/IPS-Tasmota.git
 ```

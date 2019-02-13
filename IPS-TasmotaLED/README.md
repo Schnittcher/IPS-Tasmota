@@ -16,7 +16,7 @@ Power Off| 0 oder OFF - Je nachdem wie das Tasmota Gerät geflasht wurde
 Full Topic| Full Topic des Tasmota Gerätes, ist in den MQTT Einstellungen der Tasmota Firmware zu finden
 System Variables| aktivieren, wenn die System Variablen vom Tasmota als Variablen in IP-Symocn angelegt werden sollen
 
-Die Übergeordnete Instanz sollte immer der IPS_KS_MQTTClient sein, dieser sollte normalerweise direkt gesetzt werden, wenn das Modul angelegt wird.
+Die Übergeordnete Instanz sollte immer der MQTT Server sein, dieser sollte normalerweise direkt gesetzt werden, wenn das Modul angelegt wird.
 
 ## 2. Funktionen
 
