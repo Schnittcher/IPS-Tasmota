@@ -140,7 +140,7 @@ class TasmotaService extends IPSModule
     public function restart()
     {
         $command = 'restart';
-        $msg = 1;
+        $msg = strval(1);
 
         $retain = $this->ReadPropertyBoolean('MessageRetain');
         if ($retain) {
@@ -150,7 +150,7 @@ class TasmotaService extends IPSModule
         }
 
         $DataJSON = $this->MQTTCommand($command, $msg, $retain);
-        $this->SendDebug('restart', $BufferJSON, 0);
+        $this->SendDebug('restart', $DataJSON, 0);
         $this->SendDataToParent($DataJSON);
     }
 
