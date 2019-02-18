@@ -137,7 +137,7 @@ class IPS_Tasmota extends TasmotaService
             if (fnmatch('*FanSpeed*', $Buffer->Payload)) {
                 $myBuffer = json_decode($Buffer->Payload);
                 if (property_exists($myBuffer, 'FanSpeed')) {
-                    $this->SendDebug('FandSpeed',$Buffer->Payload,0);
+                    $this->SendDebug('FandSpeed', $Buffer->Payload, 0);
                     SetValue($this->GetIDForIdent('Tasmota_FanSpeed'), $myBuffer->FanSpeed);
                 }
             }
@@ -154,7 +154,7 @@ class IPS_Tasmota extends TasmotaService
                     $this->RegisterVariableFloat('Tasmota_POWFactor', 'Factor');
                     $this->RegisterVariableFloat('Tasmota_POWVoltage', 'Voltage', '~Volt');
                     $this->RegisterVariableFloat('Tasmota_POWCurrent', 'Current', '~Ampere');
-                    $this->RegisterVariableFloat('Tasmota_POWApparentPower', 'ApparentPower' );
+                    $this->RegisterVariableFloat('Tasmota_POWApparentPower', 'ApparentPower');
                     $this->RegisterVariableFloat('Tasmota_POWReactivePower', 'ReactivePower');
 
                     SetValue($this->GetIDForIdent('Tasmota_POWPower'), $myBuffer->ENERGY->Power);
