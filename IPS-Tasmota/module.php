@@ -154,6 +154,8 @@ class IPS_Tasmota extends TasmotaService
                     $this->RegisterVariableFloat('Tasmota_POWFactor', 'Factor');
                     $this->RegisterVariableFloat('Tasmota_POWVoltage', 'Voltage', '~Volt');
                     $this->RegisterVariableFloat('Tasmota_POWCurrent', 'Current', '~Ampere');
+                    $this->RegisterVariableFloat('Tasmota_POWApparentPower', 'ApparentPower' );
+                    $this->RegisterVariableFloat('Tasmota_POWReactivePower', 'ReactivePower');
 
                     SetValue($this->GetIDForIdent('Tasmota_POWPower'), $myBuffer->ENERGY->Power);
                     SetValue($this->GetIDForIdent('Tasmota_POWTotal'), $myBuffer->ENERGY->Total);
@@ -162,27 +164,8 @@ class IPS_Tasmota extends TasmotaService
                     SetValue($this->GetIDForIdent('Tasmota_POWCurrent'), $myBuffer->ENERGY->Current);
                     SetValue($this->GetIDForIdent('Tasmota_POWVoltage'), $myBuffer->ENERGY->Voltage);
                     SetValue($this->GetIDForIdent('Tasmota_POWFactor'), $myBuffer->ENERGY->Factor);
-                }
-            }
-            if (fnmatch('*ENERGY*', $Buffer->Payload)) {
-                $myBuffer = json_decode($Buffer->Payload);
-                if (property_exists($myBuffer, 'ENERGY')) {
-                    $this->Debug('ENERGY Payload', $Buffer->Payload, 'Pow');
-                    $this->RegisterVariableFloat('Tasmota_POWTotal', 'Total', '~Electricity');
-                    $this->RegisterVariableFloat('Tasmota_POWYesterday', 'Yesterday', '~Electricity');
-                    $this->RegisterVariableFloat('Tasmota_POWToday', 'Today', '~Electricity');
-                    $this->RegisterVariableFloat('Tasmota_POWPower', 'Power', '~Watt.3680');
-                    $this->RegisterVariableFloat('Tasmota_POWFactor', 'Factor');
-                    $this->RegisterVariableFloat('Tasmota_POWVoltage', 'Voltage', '~Volt');
-                    $this->RegisterVariableFloat('Tasmota_POWCurrent', 'Current', '~Ampere');
-
-                    SetValue($this->GetIDForIdent('Tasmota_POWPower'), $myBuffer->ENERGY->Power);
-                    SetValue($this->GetIDForIdent('Tasmota_POWTotal'), $myBuffer->ENERGY->Total);
-                    SetValue($this->GetIDForIdent('Tasmota_POWToday'), $myBuffer->ENERGY->Today);
-                    SetValue($this->GetIDForIdent('Tasmota_POWYesterday'), $myBuffer->ENERGY->Yesterday);
-                    SetValue($this->GetIDForIdent('Tasmota_POWCurrent'), $myBuffer->ENERGY->Current);
-                    SetValue($this->GetIDForIdent('Tasmota_POWVoltage'), $myBuffer->ENERGY->Voltage);
-                    SetValue($this->GetIDForIdent('Tasmota_POWFactor'), $myBuffer->ENERGY->Factor);
+                    SetValue($this->GetIDForIdent('Tasmota_POWApparentPower'), $myBuffer->ENERGY->ApparentPower);
+                    SetValue($this->GetIDForIdent('Tasmota_POWReactivePower'), $myBuffer->ENERGY->ReactivePower);
                 }
             }
         }
