@@ -145,7 +145,7 @@ class IPS_Tasmota extends TasmotaService
             if (fnmatch('*IrReceived*', $Buffer->Payload)) {
                 $myBuffer = json_decode($Buffer->Payload);
                 $this->SendDebug('IrReceived', $Buffer->Payload, 0);
-                IPS_LogMessage("test",print_r($myBuffer));
+                IPS_LogMessage('test', print_r($myBuffer));
                 if (property_exists($myBuffer->IrReceived, 'Protocol')) {
                     $this->RegisterVariableString('Tasmota_IRProtocol', 'IR Protocol', '', 0);
                     SetValue($this->GetIDForIdent('Tasmota_IRProtocol'), $myBuffer->IrReceived->Protocol);
