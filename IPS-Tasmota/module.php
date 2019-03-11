@@ -141,6 +141,20 @@ class IPS_Tasmota extends TasmotaService
                     SetValue($this->GetIDForIdent('Tasmota_FanSpeed'), $myBuffer->FanSpeed);
                 }
             }
+            //IrReceived
+            if (fnmatch('*IrReceived*', $Buffer->Payload)) {
+                $myBuffer = json_decode($Buffer->Payload);
+                $this->SendDebug('IrReceived', $Buffer->Payload, 0);
+                if (property_exists($myBuffer, 'Protocol')) {
+                    SetValue($this->GetIDForIdent('Tasmota_IRProtocol'), $myBuffer->Protocol);
+                }
+                if (property_exists($myBuffer, 'Bits')) {
+                    SetValue($this->GetIDForIdent('Tasmota_IRBits'), $myBuffer->Bits);
+                }
+                if (property_exists($myBuffer, 'Data')) {
+                    SetValue($this->GetIDForIdent('Tasmota_IRData'), $myBuffer->Data);
+                }
+            }
 
             //POW Variablen
             if (fnmatch('*ENERGY*', $Buffer->Payload)) {
