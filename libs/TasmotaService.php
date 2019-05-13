@@ -1,5 +1,12 @@
 <?php
 
+if (!function_exists('fnmatch')) {
+    function fnmatch($pattern, $string)
+    {
+        return preg_match('#^' . strtr(preg_quote($pattern, '#'), ['\*' => '.*', '\?' => '.']) . '$#i', $string);
+    }
+}
+
 class TasmotaService extends IPSModule
 {
     protected function MQTTCommand($command, $msg, $retain = 0)
