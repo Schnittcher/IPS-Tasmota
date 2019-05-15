@@ -87,7 +87,7 @@ class IPS_TasmotaConfigurator extends TasmotaService
             $i = 0;
             if ((ip2long($sIP1) !== -1) && (ip2long($sIP2) !== -1)) { // As of PHP5, -1 => False
                 for ($lIP = ip2long($sIP1); $lIP <= ip2long($sIP2); $lIP++) {
-                    $result = Sys_Ping($lIP, 30); //Max. 10 ms warten
+                    $result = Sys_Ping($lIP, 40); //Max. 10 ms warten
                     if ($result) {
                         $ch = curl_init();
                         curl_setopt($ch, CURLOPT_URL, long2ip($lIP) . '/cm?cmnd=Topic');
