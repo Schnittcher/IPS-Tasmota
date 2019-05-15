@@ -1,5 +1,6 @@
 <?php
-ini_set( 'max_execution_time', 0);
+
+ini_set('max_execution_time', 0);
 require_once __DIR__ . '/../libs/TasmotaService.php';
 class IPS_TasmotaConfigurator extends TasmotaService
 {
@@ -22,7 +23,7 @@ class IPS_TasmotaConfigurator extends TasmotaService
     {
         $idsTasmota = IPS_GetInstanceListByModuleID('{1349F095-4820-4DB8-82EB-C1E93E680F08}');
         $idsTasmotaLed = IPS_GetInstanceListByModuleID('{5466CCED-1DA1-4FD9-9CBD-18E9399EFF42}');
-        $ids = array_merge($idsTasmota,$idsTasmotaLed);
+        $ids = array_merge($idsTasmota, $idsTasmotaLed);
         foreach ($ids as $id) {
             if (IPS_GetProperty($id, 'Topic') == $topic) {
                 return $id;
@@ -39,37 +40,37 @@ class IPS_TasmotaConfigurator extends TasmotaService
             foreach ($TasmotaDevices as $device) {
                 $InstanzName = '-';
                 $instanceID = $this->searchTasmotaDevice($device['Topic']);
-                if ($instanceID <> 0) {
+                if ($instanceID != 0) {
                     $InstanzName = IPS_GetInstance($instanceID)['ModuleInfo']['ModuleName'];
                 }
-                $data->actions[0]->values[] = [
-                    'IP'    => $device['IP'],
-                    'Topic'       => $device['Topic'],
-                    'Module'       => $device['Module'],
+                $data->actions[0]->values[] = array(
+                    'IP'             => $device['IP'],
+                    'Topic'          => $device['Topic'],
+                    'Module'         => $device['Module'],
                     'Firmware'       => $device['FW'],
-                    'Instanz'       => $InstanzName,
-                    'instanceID' => $instanceID,
-                    'create'     => [
-                        'Tasmota'     => [
+                    'Instanz'        => $InstanzName,
+                    'instanceID'     => $instanceID,
+                    'create'         => array(
+                        'Tasmota'     => array(
                         'moduleID'      => '{1349F095-4820-4DB8-82EB-C1E93E680F08}',
-                        'configuration' => [
+                        'configuration' => array(
                             'Topic'    => $device['Topic']
-                        ]
-                    ],
-                        'TasmotaLED'     => [
+                        )
+                    ),
+                        'TasmotaLED'     => array(
                         'moduleID'      => '{5466CCED-1DA1-4FD9-9CBD-18E9399EFF42}',
-                        'configuration' => [
+                        'configuration' => array(
                             'Topic'    => $device['Topic']
-                        ]
-                    ],
-                        'TasmotaSwitchTopic'     => [
+                        )
+                    ),
+                        'TasmotaSwitchTopic'     => array(
                         'moduleID'      => '{74BEB8D0-6BA8-4159-B7B8-E95EB7B29779}',
-                        'configuration' => [
+                        'configuration' => array(
                             'Topic'    => $device['Topic']
-                        ]
-                    ]
-                    ]
-                ];
+                        )
+                    )
+                    )
+                );
             }
         }
         IPS_LogMessage(__FUNCTION__, json_encode($data));
@@ -80,17 +81,16 @@ class IPS_TasmotaConfigurator extends TasmotaService
     {
         $sIP1 = $this->ReadPropertyString('StartIP');
         $sIP2 = $this->ReadPropertyString('EndIP');
-        $TasmotaDevices = [];
+        $TasmotaDevices = array();
 
-        if ($sIP1 <> '' && $sIP2 <> '') {
+        if ($sIP1 != '' && $sIP2 != '') {
             $i = 0;
-            if ((ip2long($sIP1) !== -1) && (ip2long($sIP2) !== -1)) // As of PHP5, -1 => False
-            {
-                for ($lIP = ip2long($sIP1) ; $lIP <= ip2long($sIP2) ; $lIP++) {
+            if ((ip2long($sIP1) !== -1) && (ip2long($sIP2) !== -1)) { // As of PHP5, -1 => False
+                for ($lIP = ip2long($sIP1); $lIP <= ip2long($sIP2); $lIP++) {
                     $result = Sys_Ping($lIP, 30); //Max. 10 ms warten
                     if ($result) {
                         $ch = curl_init();
-                        curl_setopt($ch, CURLOPT_URL, long2ip($lIP).'/cm?cmnd=Topic');
+                        curl_setopt($ch, CURLOPT_URL, long2ip($lIP) . '/cm?cmnd=Topic');
                         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                         curl_setopt($ch, CURLOPT_TIMEOUT, 1);
                         curl_setopt($ch, CURLOPT_HEADER, false);
@@ -100,13 +100,13 @@ class IPS_TasmotaConfigurator extends TasmotaService
                         $result = json_decode($apiResultJSON, true);
                         curl_close($ch);
                         if (is_array($result)) {
-                            if (array_key_exists('WARNING',$result)) {
+                            if (array_key_exists('WARNING', $result)) {
                                 $TasmotaDevices[$i]['IP'] = long2ip($lIP);
-                                $TasmotaDevices[$i]['Topic'] ='';
-                                $TasmotaDevices[$i]['Module'] ='';
-                                $TasmotaDevices[$i]['FW'] ='';
+                                $TasmotaDevices[$i]['Topic'] = '';
+                                $TasmotaDevices[$i]['Module'] = '';
+                                $TasmotaDevices[$i]['FW'] = '';
                             }
-                            if (array_key_exists('Topic',$result)) {
+                            if (array_key_exists('Topic', $result)) {
                                 $TasmotaDevices[$i]['IP'] = long2ip($lIP);
                                 $TasmotaDevices[$i]['Topic'] = $result['Topic'];
                                 $TasmotaDevices[$i]['Module'] = $this->getModule(long2ip($lIP));
@@ -118,37 +118,36 @@ class IPS_TasmotaConfigurator extends TasmotaService
                 }
             }
         }
-            return $TasmotaDevices;
+        return $TasmotaDevices;
     }
 
-    private function getFirmwareVersion($ip) {
+    private function getFirmwareVersion($ip)
+    {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $ip.'/cm?cmnd=Status%202');
+        curl_setopt($ch, CURLOPT_URL, $ip . '/cm?cmnd=Status%202');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT_MS, 500);
         curl_setopt($ch, CURLOPT_HEADER, false);
 
         $apiResultJSON = curl_exec($ch);
         $headerInfo = curl_getinfo($ch);
-        $result = json_decode($apiResultJSON,true);
+        $result = json_decode($apiResultJSON, true);
         curl_close($ch);
         return $result['StatusFWR']['Version'];
     }
 
-    private function getModule($ip) {
+    private function getModule($ip)
+    {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $ip.'/cm?cmnd=Module');
+        curl_setopt($ch, CURLOPT_URL, $ip . '/cm?cmnd=Module');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT_MS, 500);
         curl_setopt($ch, CURLOPT_HEADER, false);
 
         $apiResultJSON = curl_exec($ch);
         $headerInfo = curl_getinfo($ch);
-        $result = json_decode($apiResultJSON,true);
+        $result = json_decode($apiResultJSON, true);
         curl_close($ch);
         return $result['Module'];
     }
-
-
-
 }
