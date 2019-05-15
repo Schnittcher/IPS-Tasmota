@@ -115,9 +115,11 @@ class IPS_TasmotaConfigurator extends TasmotaService
                             $i++;
                         }
                     }
+                    $OfflineIPs[] = long2ip($lIP);
                 }
             }
         }
+        IPS_LogMessage('Tasmota Configurator Offline IPs',print_r($OfflineIPs,true));
         return $TasmotaDevices;
     }
 
