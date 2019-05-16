@@ -27,6 +27,11 @@
           "width": "auto"
         },
         {
+          "caption": "Friendly Name",
+          "name": "FriendlyName",
+          "width": "350px"
+        },
+        {
           "caption": "Module",
           "name": "Module",
           "width": "250px"

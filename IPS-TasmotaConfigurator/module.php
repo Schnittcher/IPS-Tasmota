@@ -46,6 +46,7 @@ class IPS_TasmotaConfigurator extends TasmotaService
                 $data->actions[0]->values[] = array(
                     'IP'             => $device['IP'],
                     'Topic'          => $device['Topic'],
+                    'FriendlyName'          => $device['FriendlyName'],
                     'Module'         => $device['Module'],
                     'Firmware'       => $device['FW'],
                     'Instanz'        => $InstanzName,
@@ -79,6 +80,7 @@ class IPS_TasmotaConfigurator extends TasmotaService
 
     private function getTasmotaDevices()
     {
+        $OfflineIPs = array();
         $sIP1 = $this->ReadPropertyString('StartIP');
         $sIP2 = $this->ReadPropertyString('EndIP');
         $TasmotaDevices = array();
@@ -103,12 +105,14 @@ class IPS_TasmotaConfigurator extends TasmotaService
                             if (array_key_exists('WARNING', $result)) {
                                 $TasmotaDevices[$i]['IP'] = long2ip($lIP);
                                 $TasmotaDevices[$i]['Topic'] = '';
+                                $TasmotaDevices[$i]['FriendlyName'] = '';
                                 $TasmotaDevices[$i]['Module'] = '';
                                 $TasmotaDevices[$i]['FW'] = '';
                             }
                             if (array_key_exists('Topic', $result)) {
                                 $TasmotaDevices[$i]['IP'] = long2ip($lIP);
                                 $TasmotaDevices[$i]['Topic'] = $result['Topic'];
+                                $TasmotaDevices[$i]['FriendlyName'] = $this->getFriendlyName(long2ip($lIP));
                                 $TasmotaDevices[$i]['Module'] = $this->getModule(long2ip($lIP));
                                 $TasmotaDevices[$i]['FW'] = $this->getFirmwareVersion(long2ip($lIP));
                             }
@@ -151,5 +155,19 @@ class IPS_TasmotaConfigurator extends TasmotaService
         $result = json_decode($apiResultJSON, true);
         curl_close($ch);
         return $result['Module'];
+    }
+
+    private function getFriendlyName($ip) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $ip . '/cm?cmnd=friendlyname');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT_MS, 500);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+
+        $apiResultJSON = curl_exec($ch);
+        $headerInfo = curl_getinfo($ch);
+        $result = json_decode($apiResultJSON, true);
+        curl_close($ch);
+        return $result['FriendlyName1'];
     }
 }
