@@ -44,14 +44,14 @@ class IPS_TasmotaConfigurator extends TasmotaService
                     $InstanzName = IPS_GetInstance($instanceID)['ModuleInfo']['ModuleName'];
                 }
                 $data->actions[0]->values[] = array(
-                    'IP'             => $device['IP'],
-                    'Topic'          => $device['Topic'],
+                    'IP'                    => $device['IP'],
+                    'Topic'                 => $device['Topic'],
                     'FriendlyName'          => $device['FriendlyName'],
-                    'Module'         => $device['Module'],
-                    'Firmware'       => $device['FW'],
-                    'Instanz'        => $InstanzName,
-                    'instanceID'     => $instanceID,
-                    'create'         => array(
+                    'Module'                => $device['Module'],
+                    'Firmware'              => $device['FW'],
+                    'Instanz'               => $InstanzName,
+                    'instanceID'            => $instanceID,
+                    'create'                => array(
                         'Tasmota'     => array(
                         'moduleID'      => '{1349F095-4820-4DB8-82EB-C1E93E680F08}',
                         'configuration' => array(
@@ -123,7 +123,7 @@ class IPS_TasmotaConfigurator extends TasmotaService
                 }
             }
         }
-        IPS_LogMessage('Tasmota Configurator Offline IPs',print_r($OfflineIPs,true));
+        IPS_LogMessage('Tasmota Configurator Offline IPs', print_r($OfflineIPs, true));
         return $TasmotaDevices;
     }
 
@@ -157,7 +157,8 @@ class IPS_TasmotaConfigurator extends TasmotaService
         return $result['Module'];
     }
 
-    private function getFriendlyName($ip) {
+    private function getFriendlyName($ip)
+    {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $ip . '/cm?cmnd=friendlyname');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
