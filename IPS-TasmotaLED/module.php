@@ -65,7 +65,7 @@ class IPS_TasmotaLED extends TasmotaService
             $Payload = json_decode($Buffer->Payload);
             $this->SendDebug('Topic', $Buffer->Topic, 0);
             if (fnmatch('*LWT', $Buffer->Topic)) {
-                $this->Debug('State Payload', $Buffer->Payload, 'State');
+                $this->SendDebug('State Payload', $Buffer->Payload, 0);
                 if (strtolower($Buffer->Payload) == 'online') {
                     SetValue($this->GetIDForIdent('TasmotaLED_DeviceStatus'), true);
                 } else {
