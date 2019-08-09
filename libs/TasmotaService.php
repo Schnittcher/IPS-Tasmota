@@ -294,9 +294,10 @@ class TasmotaService extends IPSModule
         $this->RegisterVariableString('Tasmota_SleepMode', 'SleepMode');
         SetValue($this->GetIDForIdent('Tasmota_SleepMode'), $myBuffer->SleepMode);
 
-        $this->RegisterVariableFloat('Tasmota_Vcc', 'Vcc');
-        SetValue($this->GetIDForIdent('Tasmota_Vcc'), $myBuffer->Vcc);
-
+        if (property_exists($myBuffer, 'Vcc')) {
+            $this->RegisterVariableFloat('Tasmota_Vcc', 'Vcc');
+            SetValue($this->GetIDForIdent('Tasmota_Vcc'), $myBuffer->Vcc);
+        }
         $this->RegisterVariableInteger('Tasmota_Sleep', 'Sleep');
         SetValue($this->GetIDForIdent('Tasmota_Sleep'), $myBuffer->Sleep);
 
