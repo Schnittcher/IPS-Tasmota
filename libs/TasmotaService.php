@@ -32,7 +32,6 @@ class TasmotaService extends IPSModule
         $SetCommandArr[$index] = $command;
 
         $topic = implode('/', $SetCommandArr);
-
         $Data['DataID'] = '{043EA491-0325-4ADD-8FC2-A30C8EEB4D3F}';
         $Data['PacketType'] = 3;
         $Data['QualityOfService'] = 0;
@@ -59,10 +58,10 @@ class TasmotaService extends IPSModule
         $TopicIndex = array_search('%topic%', $FullTopic);
 
         $SetCommandArr = $FullTopic;
-
-        unset($SetCommandArr[$PrefixIndex]);
+        $SetCommandArr[$PrefixIndex] = '.*.';
+        //unset($SetCommandArr[$PrefixIndex]);
         $SetCommandArr[$TopicIndex] = $this->ReadPropertyString('Topic');
-        $topic = implode('/', $SetCommandArr);
+        $topic = implode('\/', $SetCommandArr);
 
         return $topic;
     }
