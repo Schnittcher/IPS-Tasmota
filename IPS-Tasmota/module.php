@@ -218,12 +218,12 @@ class IPS_Tasmota extends TasmotaService
                     }
 
                     if (property_exists($myBuffer->ENERGY, 'ImportActivePower')) {
-                        $this->RegisterVariableFloat('Tasmota_ImportActivePower', 'ImportActivePower','~Electricity');
+                        $this->RegisterVariableFloat('Tasmota_ImportActivePower', 'ImportActivePower', '~Electricity');
                         SetValue($this->GetIDForIdent('Tasmota_ImportActivePower'), $myBuffer->ENERGY->ImportActivePower);
                     }
 
                     if (property_exists($myBuffer->ENERGY, 'ExportActivePower')) {
-                        $this->RegisterVariableFloat('Tasmota_ExportActivePower', 'ExportActivePower','~Electricity');
+                        $this->RegisterVariableFloat('Tasmota_ExportActivePower', 'ExportActivePower', '~Electricity');
                         SetValue($this->GetIDForIdent('Tasmota_ExportActivePower'), $myBuffer->ENERGY->ExportActivePower);
                     }
 
@@ -240,10 +240,7 @@ class IPS_Tasmota extends TasmotaService
                     if (property_exists($myBuffer->ENERGY, 'TotalReactivePower')) {
                         $this->RegisterVariableFloat('Tasmota_TotalReactivePower', 'TotalReactivePower');
                         SetValue($this->GetIDForIdent('Tasmota_TotalReactivePower'), $myBuffer->ENERGY->TotalReactivePower);
-                    }                    
-
-                    
-                        
+                    }
                 }
             }
         }
