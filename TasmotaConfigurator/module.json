@@ -1,6 +1,6 @@
 {
   "id": "{992E933B-C91F-4582-963B-043D96C86F88}",
-  "name": "IPS_TasmotaConfigurator",
+  "name": "TasmotaConfigurator",
   "type": 4,
   "vendor": "",
   "aliases": ["Tasmota Configurator"],

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 ini_set('max_execution_time', 0);
 require_once __DIR__ . '/../libs/TasmotaService.php';
-class IPS_TasmotaConfigurator extends TasmotaService
+class TasmotaConfigurator extends TasmotaService
 {
     public function Create()
     {

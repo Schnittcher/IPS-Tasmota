@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../libs/TasmotaService.php';
 
-class IPS_TasmotaSwitchTopic extends TasmotaService
+class TasmotaSwitchTopic extends TasmotaService
 {
     public function Create()
     {
