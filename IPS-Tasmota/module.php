@@ -203,12 +203,12 @@ class IPS_Tasmota extends TasmotaService
                     }
 
                     if (property_exists($myBuffer->ENERGY, 'ApparentPower')) {
-                        $this->RegisterVariableFloat('Tasmota_POWApparentPower', 'ApparentPower');
+                        $this->RegisterVariableFloat('Tasmota_POWApparentPower', 'ApparentPower', 'Tasmota.ApparentPower');
                         SetValue($this->GetIDForIdent('Tasmota_POWApparentPower'), $myBuffer->ENERGY->ApparentPower);
                     }
 
                     if (property_exists($myBuffer->ENERGY, 'ReactivePower')) {
-                        $this->RegisterVariableFloat('Tasmota_POWReactivePower', 'ReactivePower');
+                        $this->RegisterVariableFloat('Tasmota_POWReactivePower', 'ReactivePower', 'Tasmota.ReactivePower');
                         SetValue($this->GetIDForIdent('Tasmota_POWReactivePower'), $myBuffer->ENERGY->ReactivePower);
                     }
 
@@ -228,17 +228,17 @@ class IPS_Tasmota extends TasmotaService
                     }
 
                     if (property_exists($myBuffer->ENERGY, 'ImportReactivePower')) {
-                        $this->RegisterVariableFloat('Tasmota_ImportReactivePower', 'ImportReactivePower');
+                        $this->RegisterVariableFloat('Tasmota_ImportReactivePower', 'ImportReactivePower', 'Tasmota.ReactivePower_kvarh');
                         SetValue($this->GetIDForIdent('Tasmota_ImportReactivePower'), $myBuffer->ENERGY->ImportReactivePower);
                     }
 
                     if (property_exists($myBuffer->ENERGY, 'ExportReactivePower')) {
-                        $this->RegisterVariableFloat('Tasmota_ExportReactivePower', 'ExportReactivePower');
+                        $this->RegisterVariableFloat('Tasmota_ExportReactivePower', 'ExportReactivePower', 'Tasmota.ReactivePower_kvarh');
                         SetValue($this->GetIDForIdent('Tasmota_ExportReactivePower'), $myBuffer->ENERGY->ExportReactivePower);
                     }
 
                     if (property_exists($myBuffer->ENERGY, 'TotalReactivePower')) {
-                        $this->RegisterVariableFloat('Tasmota_TotalReactivePower', 'TotalReactivePower');
+                        $this->RegisterVariableFloat('Tasmota_TotalReactivePower', 'TotalReactivePower', 'Tasmota.ReactivePower_kvarh');
                         SetValue($this->GetIDForIdent('Tasmota_TotalReactivePower'), $myBuffer->ENERGY->TotalReactivePower);
                     }
                 }
@@ -279,5 +279,23 @@ class IPS_Tasmota extends TasmotaService
             [false, 'Offline',  '', 0xFF0000],
             [true, 'Online',  '', 0x00FF00]
         ]);
+
+        if (!IPS_VariableProfileExists('Tasmota.ReactivePower_kvarh')) {
+            IPS_CreateVariableProfile('Tasmota.ReactivePower_kvarh', 2);
+        }
+        IPS_SetVariableProfileDigits('Tasmota.ReactivePower_kvarh', 2);
+        IPS_SetVariableProfileText('Tasmota.ReactivePower_kvarh', '', ' kvarh');
+
+        if (!IPS_VariableProfileExists('Tasmota.ReactivePower')) {
+            IPS_CreateVariableProfile('Tasmota.ReactivePower', 2);
+        }
+        IPS_SetVariableProfileDigits('Tasmota.ReactivePower', 2);
+        IPS_SetVariableProfileText('Tasmota.ReactivePower', '', ' VAr');
+
+        if (!IPS_VariableProfileExists('Tasmota.ApparentPower')) {
+            IPS_CreateVariableProfile('Tasmota.ApparentPower', 2);
+        }
+        IPS_SetVariableProfileDigits('Tasmota.ApparentPower', 2);
+        IPS_SetVariableProfileText('Tasmota.ApparentPower', '', ' VA');
     }
 }
