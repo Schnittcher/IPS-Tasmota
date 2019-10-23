@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once __DIR__ . '/../libs/TasmotaService.php';
 
 class IPS_TasmotaLED extends TasmotaService
@@ -276,25 +278,25 @@ class IPS_TasmotaLED extends TasmotaService
         $this->RegisterProfileInteger('TasmotaLED.Speed', 'Speedo', '', '', 1, 20, 1);
         $this->RegisterProfileInteger('TasmotaLED.RSSI', 'Intensity', '', '', 1, 100, 1);
         //Scheme Profile
-        $this->RegisterProfileIntegerEx('TasmotaLED.Scheme', 'Shuffle', '', '', array(
-                                        array(0, 'Default',  '', -1),
-                                        array(1, 'Wake up',  '', -1),
-                                        array(2, 'RGB Cycle', '', -1),
-                                        array(3, 'RBG Cycle', '', -1),
-                                        array(4, 'Random cycle', '', -1),
-                                        array(5, 'Clock', '', -1),
-                                        array(6, 'Incandescent pattern', '', -1),
-                                        array(7, 'RGB Pattern', '', -1),
-                                        array(8, 'Christmas', '', -1),
-                                        array(9, 'Hanukkah', '', -1),
-                                        array(10, 'Kwanzaa', '', -1),
-                                        array(11, 'Rainbow', '', -1),
-                                        array(12, 'Fire', '', -1)
-                                    ));
+        $this->RegisterProfileIntegerEx('TasmotaLED.Scheme', 'Shuffle', '', '', [
+                                        [0, 'Default',  '', -1],
+                                        [1, 'Wake up',  '', -1],
+                                        [2, 'RGB Cycle', '', -1],
+                                        [3, 'RBG Cycle', '', -1],
+                                        [4, 'Random cycle', '', -1],
+                                        [5, 'Clock', '', -1],
+                                        [6, 'Incandescent pattern', '', -1],
+                                        [7, 'RGB Pattern', '', -1],
+                                        [8, 'Christmas', '', -1],
+                                        [9, 'Hanukkah', '', -1],
+                                        [10, 'Kwanzaa', '', -1],
+                                        [11, 'Rainbow', '', -1],
+                                        [12, 'Fire', '', -1]
+                                    ]);
         //Online / Offline Profile
-        $this->RegisterProfileBooleanEx('TasmotaLED.DeviceStatus', 'Network', '', '', array(
-            array(false, 'Offline',  '', 0xFF0000),
-            array(true, 'Online',  '', 0x00FF00)
-        ));
+        $this->RegisterProfileBooleanEx('TasmotaLED.DeviceStatus', 'Network', '', '', [
+            [false, 'Offline',  '', 0xFF0000],
+            [true, 'Online',  '', 0x00FF00]
+        ]);
     }
 }
