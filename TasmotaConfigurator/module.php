@@ -21,19 +21,6 @@ class TasmotaConfigurator extends TasmotaService
         parent::ApplyChanges();
     }
 
-    private function searchTasmotaDevice($topic)
-    {
-        $idsTasmota = IPS_GetInstanceListByModuleID('{1349F095-4820-4DB8-82EB-C1E93E680F08}');
-        $idsTasmotaLed = IPS_GetInstanceListByModuleID('{5466CCED-1DA1-4FD9-9CBD-18E9399EFF42}');
-        $ids = array_merge($idsTasmota, $idsTasmotaLed);
-        foreach ($ids as $id) {
-            if (IPS_GetProperty($id, 'Topic') == $topic) {
-                return $id;
-            }
-        }
-        return 0;
-    }
-
     public function GetConfigurationForm()
     {
         $data = json_decode(file_get_contents(__DIR__ . '/form.json'));
@@ -55,29 +42,42 @@ class TasmotaConfigurator extends TasmotaService
                     'instanceID'            => $instanceID,
                     'create'                => [
                         'Tasmota'     => [
-                        'moduleID'      => '{1349F095-4820-4DB8-82EB-C1E93E680F08}',
-                        'configuration' => [
-                            'Topic'    => $device['Topic']
-                        ]
-                    ],
+                            'moduleID'      => '{1349F095-4820-4DB8-82EB-C1E93E680F08}',
+                            'configuration' => [
+                                'Topic'    => $device['Topic']
+                            ]
+                        ],
                         'TasmotaLED'     => [
-                        'moduleID'      => '{5466CCED-1DA1-4FD9-9CBD-18E9399EFF42}',
-                        'configuration' => [
-                            'Topic'    => $device['Topic']
-                        ]
-                    ],
+                            'moduleID'      => '{5466CCED-1DA1-4FD9-9CBD-18E9399EFF42}',
+                            'configuration' => [
+                                'Topic'    => $device['Topic']
+                            ]
+                        ],
                         'TasmotaSwitchTopic'     => [
-                        'moduleID'      => '{74BEB8D0-6BA8-4159-B7B8-E95EB7B29779}',
-                        'configuration' => [
-                            'Topic'    => $device['Topic']
+                            'moduleID'      => '{74BEB8D0-6BA8-4159-B7B8-E95EB7B29779}',
+                            'configuration' => [
+                                'Topic'    => $device['Topic']
+                            ]
                         ]
-                    ]
                     ]
                 ];
             }
         }
         IPS_LogMessage(__FUNCTION__, json_encode($data));
         return json_encode($data);
+    }
+
+    private function searchTasmotaDevice($topic)
+    {
+        $idsTasmota = IPS_GetInstanceListByModuleID('{1349F095-4820-4DB8-82EB-C1E93E680F08}');
+        $idsTasmotaLed = IPS_GetInstanceListByModuleID('{5466CCED-1DA1-4FD9-9CBD-18E9399EFF42}');
+        $ids = array_merge($idsTasmota, $idsTasmotaLed);
+        foreach ($ids as $id) {
+            if (IPS_GetProperty($id, 'Topic') == $topic) {
+                return $id;
+            }
+        }
+        return 0;
     }
 
     private function getTasmotaDevices()

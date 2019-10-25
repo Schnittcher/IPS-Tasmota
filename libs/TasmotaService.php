@@ -11,6 +11,92 @@ if (!function_exists('fnmatch')) {
 
 class TasmotaService extends IPSModule
 {
+    public function restart()
+    {
+        $command = 'restart';
+        $msg = strval(1);
+
+        $retain = $this->ReadPropertyBoolean('MessageRetain');
+        if ($retain) {
+            $retain = 1;
+        } else {
+            $retain = 0;
+        }
+
+        $DataJSON = $this->MQTTCommand($command, $msg, $retain);
+        $this->SendDebug('restart', $DataJSON, 0);
+        $this->SendDataToParent($DataJSON);
+    }
+
+    public function sendMQTTCommand(string $command, string $msg)
+    {
+        $retain = $this->ReadPropertyBoolean('MessageRetain');
+        if ($retain) {
+            $retain = 1;
+        } else {
+            $retain = 0;
+        }
+
+        $DataJSON = $this->MQTTCommand($command, $msg, $retain);
+        $this->SendDebug('sendMQTTCommand', $DataJSON, 0);
+        $this->BufferResponse = '';
+        $this->SendDataToParent($DataJSON);
+        $result = false;
+        for ($x = 0; $x < 500; $x++) {
+            if ($this->BufferResponse != '') {
+                $this->SendDebug('sendMQTTCommand Response', $this->BufferResponse, 0);
+                $result = $this->BufferResponse;
+                break;
+            }
+            IPS_Sleep(10);
+        }
+        return $result;
+    }
+
+    public function setPowerOnState(int $value)
+    {
+        $command = 'PowerOnState';
+        $msg = strval($value);
+
+        $retain = $this->ReadPropertyBoolean('MessageRetain');
+        if ($retain) {
+            $retain = 1;
+        } else {
+            $retain = 0;
+        }
+
+        $DataJSON = $this->MQTTCommand($command, $msg, $retain);
+        $this->SendDebug('setPowerOnState', $DataJSON, 0);
+        $this->SendDataToParent($DataJSON);
+    }
+
+    public function setPower(int $power, bool $Value)
+    {
+        //$this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
+        if ($power != 0) {
+            $PowerIdent = 'Tasmota_POWER' . strval($power);
+            $powerTopic = 'POWER' . strval($power);
+        } else {
+            $PowerIdent = 'Tasmota_POWER';
+            $powerTopic = 'POWER';
+        }
+        $command = $powerTopic;
+        $msg = $Value;
+        if ($msg === false) {
+            $msg = 'OFF';
+        } elseif ($msg === true) {
+            $msg = 'ON';
+        }
+        $retain = $this->ReadPropertyBoolean('MessageRetain');
+        if ($retain) {
+            $retain = 1;
+        } else {
+            $retain = 0;
+        }
+        $DataJSON = $this->MQTTCommand($command, $msg, $retain);
+        $this->SendDebug(__FUNCTION__, $DataJSON, 0);
+        $this->SendDataToParent($DataJSON);
+    }
     protected function MQTTCommand($command, $msg, $retain = 0)
     {
         $retain = $this->ReadPropertyBoolean('MessageRetain');
@@ -145,93 +231,6 @@ class TasmotaService extends IPSModule
         }
     }
 
-    public function restart()
-    {
-        $command = 'restart';
-        $msg = strval(1);
-
-        $retain = $this->ReadPropertyBoolean('MessageRetain');
-        if ($retain) {
-            $retain = 1;
-        } else {
-            $retain = 0;
-        }
-
-        $DataJSON = $this->MQTTCommand($command, $msg, $retain);
-        $this->SendDebug('restart', $DataJSON, 0);
-        $this->SendDataToParent($DataJSON);
-    }
-
-    public function sendMQTTCommand(string $command, string $msg)
-    {
-        $retain = $this->ReadPropertyBoolean('MessageRetain');
-        if ($retain) {
-            $retain = 1;
-        } else {
-            $retain = 0;
-        }
-
-        $DataJSON = $this->MQTTCommand($command, $msg, $retain);
-        $this->SendDebug('sendMQTTCommand', $DataJSON, 0);
-        $this->BufferResponse = '';
-        $this->SendDataToParent($DataJSON);
-        $result = false;
-        for ($x = 0; $x < 500; $x++) {
-            if ($this->BufferResponse != '') {
-                $this->SendDebug('sendMQTTCommand Response', $this->BufferResponse, 0);
-                $result = $this->BufferResponse;
-                break;
-            }
-            IPS_Sleep(10);
-        }
-        return $result;
-    }
-
-    public function setPowerOnState(int $value)
-    {
-        $command = 'PowerOnState';
-        $msg = strval($value);
-
-        $retain = $this->ReadPropertyBoolean('MessageRetain');
-        if ($retain) {
-            $retain = 1;
-        } else {
-            $retain = 0;
-        }
-
-        $DataJSON = $this->MQTTCommand($command, $msg, $retain);
-        $this->SendDebug('setPowerOnState', $DataJSON, 0);
-        $this->SendDataToParent($DataJSON);
-    }
-
-    public function setPower(int $power, bool $Value)
-    {
-        //$this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
-        if ($power != 0) {
-            $PowerIdent = 'Tasmota_POWER' . strval($power);
-            $powerTopic = 'POWER' . strval($power);
-        } else {
-            $PowerIdent = 'Tasmota_POWER';
-            $powerTopic = 'POWER';
-        }
-        $command = $powerTopic;
-        $msg = $Value;
-        if ($msg === false) {
-            $msg = 'OFF';
-        } elseif ($msg === true) {
-            $msg = 'ON';
-        }
-        $retain = $this->ReadPropertyBoolean('MessageRetain');
-        if ($retain) {
-            $retain = 1;
-        } else {
-            $retain = 0;
-        }
-        $DataJSON = $this->MQTTCommand($command, $msg, $retain);
-        $this->SendDebug(__FUNCTION__, $DataJSON, 0);
-        $this->SendDataToParent($DataJSON);
-    }
-
     //Für Sensoren
     protected function find_parent($array, $needle, $parent = null)
     {
@@ -260,7 +259,7 @@ class TasmotaService extends IPSModule
             } else {
                 $ParentKey = $this->find_parent($GesamtArray, $value);
                 $this->SendDebug('Rekursion Tasmota ' . $ParentKey . '_' . $key, "$key = $value", 0);
-                if (is_int($value) or is_float($value)) {
+                if (is_int($value) || is_float($value)) {
                     $ParentKey = str_replace('-', '_', $ParentKey);
                     $key = str_replace('-', '_', $key);
                     switch ($key) {

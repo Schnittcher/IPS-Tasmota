@@ -279,20 +279,20 @@ class TasmotaLED extends TasmotaService
         $this->RegisterProfileInteger('TasmotaLED.RSSI', 'Intensity', '', '', 1, 100, 1);
         //Scheme Profile
         $this->RegisterProfileIntegerEx('TasmotaLED.Scheme', 'Shuffle', '', '', [
-                                        [0, 'Default',  '', -1],
-                                        [1, 'Wake up',  '', -1],
-                                        [2, 'RGB Cycle', '', -1],
-                                        [3, 'RBG Cycle', '', -1],
-                                        [4, 'Random cycle', '', -1],
-                                        [5, 'Clock', '', -1],
-                                        [6, 'Incandescent pattern', '', -1],
-                                        [7, 'RGB Pattern', '', -1],
-                                        [8, 'Christmas', '', -1],
-                                        [9, 'Hanukkah', '', -1],
-                                        [10, 'Kwanzaa', '', -1],
-                                        [11, 'Rainbow', '', -1],
-                                        [12, 'Fire', '', -1]
-                                    ]);
+            [0, 'Default',  '', -1],
+            [1, 'Wake up',  '', -1],
+            [2, 'RGB Cycle', '', -1],
+            [3, 'RBG Cycle', '', -1],
+            [4, 'Random cycle', '', -1],
+            [5, 'Clock', '', -1],
+            [6, 'Incandescent pattern', '', -1],
+            [7, 'RGB Pattern', '', -1],
+            [8, 'Christmas', '', -1],
+            [9, 'Hanukkah', '', -1],
+            [10, 'Kwanzaa', '', -1],
+            [11, 'Rainbow', '', -1],
+            [12, 'Fire', '', -1]
+        ]);
         //Online / Offline Profile
         $this->RegisterProfileBooleanEx('TasmotaLED.DeviceStatus', 'Network', '', '', [
             [false, 'Offline',  '', 0xFF0000],
