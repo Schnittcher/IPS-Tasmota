@@ -260,7 +260,7 @@ class Tasmota extends TasmotaService
         } else {
             $power = 0;
         }
-        $result = $this->setPower($power, $Value);
+        $result = $this->setPower(intval($power), $Value);
     }
 
     public function setFanSpeed(int $value)
