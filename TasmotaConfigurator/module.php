@@ -19,6 +19,7 @@ class TasmotaConfigurator extends TasmotaService
     {
         //Apply filter
         parent::ApplyChanges();
+        $this->SetReceiveDataFilter('keine-daten-für-mich');
     }
 
     public function GetConfigurationForm()
