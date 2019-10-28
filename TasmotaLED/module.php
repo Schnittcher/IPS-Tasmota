@@ -251,7 +251,7 @@ class TasmotaLED extends TasmotaService
         $this->setSpeed($Value);
         break;
       case 'TasmotaLED_Fade':
-        $this->setFade(intval($Value));
+        $this->setFade($Value);
         break;
       case 'TasmotaLED_Scheme':
         $this->setScheme($Value);
