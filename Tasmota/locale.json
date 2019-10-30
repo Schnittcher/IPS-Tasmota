@@ -1,0 +1,37 @@
+{
+  "translations": {
+    "de": {
+      "Parameter Settings": "Parameter Einstellungen",
+      "Settings": "Einstellungen",
+      "System Variables": "System Variablen",
+      "Multi Switch (Several power variables)": "Multischalter (Mehrere Power Variablen)",
+      "Fan": "Ventilator",
+      "Power on State": "Einschaltzustand",
+      "Off": "Aus",
+      "On": "An",
+      "Toggle": "Umschalten (Toggle)",
+      "default": "Standard",
+      "Turn relay(s) on, disable further relay control": "Relais einschalten, weitere Relaissteuerung deaktivieren",
+      "Restart Tasmota Device": "Tasmota Gerät neustarten",
+      "ApparentPower": "Scheinleistung",
+      "Current": "Strom (Current)",
+      "Factor": "Faktor",
+      "Power": "Leistung",
+      "ReactivePower": "Blindleistung",
+      "Today": "Heute",
+      "Total": "Gesamt",
+      "Yesterday": "Gestern",
+      "Voltage": "Volt",
+      "Speed": "Geschwindigkeit",
+      "IR Protocol": "IR Protokoll",
+      "IR Bits": "IR Bits",
+      "IR Data": "IR Daten",
+      "PhaseAngle": "Phasenwinkel",
+      "ImportActivePower": "Import Wirkleistung",
+      "ExportActivePower": "Export Wirkleistung",
+      "ImportReactivePower": "Import Blindleistung",
+      "ExportReactivePower": "Export Blindleistung",
+      "TotalReactivePower": "Gesamte Blindleistung"
+    }
+  }
+}
