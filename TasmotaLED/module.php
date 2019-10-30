@@ -19,18 +19,17 @@ class TasmotaLED extends TasmotaService
         $this->RegisterPropertyString('FullTopic', '%prefix%/%topic%');
         $this->RegisterPropertyBoolean('MessageRetain', false);
         $this->RegisterPropertyInteger('PowerOnState', 3);
-        //$this->RegisterPropertyString("DeviceLanguage","en");
         $this->RegisterPropertyBoolean('SystemVariables', false);
         $this->RegisterPropertyBoolean('Power1Deactivate', false);
         $this->RegisterPropertyBoolean('Sensoren', true);
 
         $this->createVariabenProfiles();
-        $this->RegisterVariableBoolean('TasmotaLED_Fade', 'Fade', 'Switch', 1);
-        $this->RegisterVariableInteger('TasmotaLED_Color', 'Color', 'HexColor', 2);
-        $this->RegisterVariableInteger('TasmotaLED_Dimmer', 'Dimmer', 'Intensity.100', 3);
-        $this->RegisterVariableInteger('TasmotaLED_Scheme', 'Scheme', 'TasmotaLED.Scheme', 4);
-        $this->RegisterVariableInteger('TasmotaLED_Speed', 'Speed', 'TasmotaLED.Speed', 5);
-        $this->RegisterVariableInteger('TasmotaLED_Pixels', 'Pixels', '', 6);
+        $this->RegisterVariableBoolean('TasmotaLED_Fade', $this->Translate('Fade'), 'Switch', 1);
+        $this->RegisterVariableInteger('TasmotaLED_Color', $this->Translate('Color'), 'HexColor', 2);
+        $this->RegisterVariableInteger('TasmotaLED_Dimmer', $this->Translate('Dimmer'), 'Intensity.100', 3);
+        $this->RegisterVariableInteger('TasmotaLED_Scheme', $this->Translate('Scheme'), 'TasmotaLED.Scheme', 4);
+        $this->RegisterVariableInteger('TasmotaLED_Speed', $this->Translate('Speed'), 'TasmotaLED.Speed', 5);
+        $this->RegisterVariableInteger('TasmotaLED_Pixels', $this->Translate('Pixels'), '', 6);
         $this->RegisterVariableInteger('TasmotaLED_RSSI', 'RSSI', 'TasmotaLED.RSSI', 7);
         $this->RegisterVariableBoolean('TasmotaLED_DeviceStatus', 'Status', 'TasmotaLED.DeviceStatus', 8);
         $this->EnableAction('TasmotaLED_Speed');

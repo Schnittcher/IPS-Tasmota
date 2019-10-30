@@ -2,17 +2,17 @@
     "elements":
     [
       { "type": "ValidationTextBox", "name": "Topic", "caption": "Tasmota MQTT Topic" },
-      { "type": "Label", "label": "Parameter Einstellungen" },
+      { "type": "Label", "label": "Parameter Settings" },
       { "type": "ValidationTextBox", "name": "On", "caption": "Power On" },
       { "type": "ValidationTextBox", "name": "Off", "caption": "Power Off" },
       { "type": "ValidationTextBox", "name": "FullTopic", "caption": "Full Topic" },
 
     { "type": "Label", "label": "Settings" },
     { "type": "CheckBox", "name": "SystemVariables", "caption": "System Variables" },
-    { "type": "CheckBox", "name": "Power1Deactivate", "caption": "Multi Switch" },
+    { "type": "CheckBox", "name": "Power1Deactivate", "caption": "Multi Switch (Several power variables)" },
       { "type": "CheckBox", "name": "Fan", "caption": "Fan" },
-    { "type": "CheckBox", "name": "MessageRetain", "caption": "Message Retain" },
-    { "type": "Select", "name": "PowerOnState", "caption": "PowerOnState",
+    { "type": "CheckBox", "name": "MessageRetain", "caption": "Retain (MQTT)" },
+    { "type": "Select", "name": "PowerOnState", "caption": "Power on State",
     "options": [
         { "label": "Off", "value": 0 },
         { "label": "On", "value": 1 },
@@ -20,12 +20,7 @@
         { "label": "default", "value": 3 },
         { "label": "Turn relay(s) on, disable further relay control", "value": 4 }
     ]
-},
-
-	  { "type": "Label", "label": "Debug Modus" },
-	  { "type": "CheckBox", "name": "State", "caption": "State" },
-	  { "type": "CheckBox", "name": "Sensoren", "caption": "Sensoren" },
-	  { "type": "CheckBox", "name": "Pow", "caption": "Pow" }
+    }
     ],
     "actions":
     [
