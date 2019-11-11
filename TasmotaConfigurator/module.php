@@ -102,7 +102,14 @@ class TasmotaConfigurator extends TasmotaService
 
                         $apiResultJSON = curl_exec($ch);
                         $headerInfo = curl_getinfo($ch);
-                        $result = json_decode($apiResultJSON, true);
+                        if ($headerInfo['http_code'] == 200) {
+                            if ($apiResultJSON != false) {
+                                $result = json_decode($apiResultJSON, true);
+                            } else {
+                                IPS_LogMessage('Tasmota Curl Error', curl_error($ch));
+                                continue;
+                            }
+                        }
                         curl_close($ch);
                         if (is_array($result)) {
                             if (array_key_exists('WARNING', $result)) {
