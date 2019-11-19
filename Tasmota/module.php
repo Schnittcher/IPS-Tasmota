@@ -114,6 +114,23 @@ class Tasmota extends TasmotaService
                 if (fnmatch('*RESULT', $Buffer->Topic)) {
                     $this->SendDebug('Result Payload', $Buffer->Payload, 0);
                     $this->BufferResponse = $Buffer->Payload;
+
+                    if (fnmatch('*MCP230XX_INT*', $Buffer->Payload)) {
+                        $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
+                        $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
+                        $Payload = json_decode($Buffer->Payload);
+
+                        for ($i = 0; $i <= 15; $i++) {
+                            if (property_exists($Payload->MCP230XX_INT, 'D' . $i)) {
+                                $this->RegisterVariableInteger('Tasmota_MCP230XX_INT_D' . $i, 'MCP230XX_INT D' . $i, '', 0);
+                                SetValue($this->GetIDForIdent('Tasmota_MCP230XX_INT_D' . $i), $Payload->MCP230XX_INT->{'D' . $i});
+
+                                //MS
+                                $this->RegisterVariableInteger('Tasmota_MCP230XX_INT_D' . $i . '_MS', 'MCP230XX_INT D' . $i . ' MS', '', 0);
+                                SetValue($this->GetIDForIdent('Tasmota_MCP230XX_INT_D' . $i . '_MS'), $Payload->MCP230XX_INT->MS);
+                            }
+                        }
+                    }
                 }
                 if (fnmatch('*LWT', $Buffer->Topic)) {
                     $this->SendDebug('LWT Payload', $Buffer->Payload, 0);
