@@ -260,7 +260,7 @@ class TasmotaService extends IPSModule
                 $ParentKey = $this->find_parent($GesamtArray, $value);
                 $this->SendDebug('Rekursion Tasmota ' . $ParentKey . '_' . $key, "$key = $value", 0);
                 $ParentKey = str_replace('-', '_', $ParentKey);
-                if ((is_int($value) || is_float($value)) && ($ParentKey != 'MCP230XX')) {
+                if ((is_int($value) || is_float($value)) && ($ParentKey != 'MCP230XX') && ($ParentKey != 'PCA9685')) {
                     $key = str_replace('-', '_', $key);
                     switch ($key) {
                         case 'Temperature':
@@ -288,6 +288,12 @@ class TasmotaService extends IPSModule
                         SetValue($this->GetIDForIdent('Tasmota_MCP230XX_INT_' . $key), $value);
                     }
                 }
+                if ($ParentKey == 'PCA9685') {
+                    if ($this->GetIDForIdent('Tasmota_PCA9685_' . $key) != false) {
+                        $this->SendDebug('Tasmota_PCA9685 Key', $key, 0);
+                        SetValue($this->GetIDForIdent('Tasmota_PCA9685_' . $key), $value);
+                    }
+                }                
             }
         }
     }

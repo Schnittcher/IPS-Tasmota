@@ -114,12 +114,11 @@ class Tasmota extends TasmotaService
                 if (fnmatch('*RESULT', $Buffer->Topic)) {
                     $this->SendDebug('Result Payload', $Buffer->Payload, 0);
                     $this->BufferResponse = $Buffer->Payload;
+                    $Payload = json_decode($Buffer->Payload);
 
                     if (fnmatch('*MCP230XX_INT*', $Buffer->Payload)) {
                         $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
                         $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
-                        $Payload = json_decode($Buffer->Payload);
-
                         for ($i = 0; $i <= 15; $i++) {
                             if (property_exists($Payload->MCP230XX_INT, 'D' . $i)) {
                                 $this->RegisterVariableInteger('Tasmota_MCP230XX_INT_D' . $i, 'MCP230XX_INT D' . $i, '', 0);
@@ -130,6 +129,12 @@ class Tasmota extends TasmotaService
                                 SetValue($this->GetIDForIdent('Tasmota_MCP230XX_INT_D' . $i . '_MS'), $Payload->MCP230XX_INT->MS);
                             }
                         }
+                    }
+                    IPS_LogMessage('test',print_r($Payload,true));
+                    if (property_exists($Payload, 'PCA9685')) {
+                        $this->RegisterVariableInteger('Tasmota_PCA9685_PWM'.$Payload->PCA9685->PIN,'PWM'.$Payload->PCA9685->PIN,'',0);
+                        $this->EnableAction('Tasmota_PCA9685_PWM'.$Payload->PCA9685->PIN);
+                        $this->SetValue('Tasmota_PCA9685_PWM'.$Payload->PCA9685->PIN,$Payload->PCA9685->PWM);
                     }
                 }
                 if (fnmatch('*LWT', $Buffer->Topic)) {
