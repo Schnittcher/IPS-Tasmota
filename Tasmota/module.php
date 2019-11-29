@@ -121,7 +121,7 @@ class Tasmota extends TasmotaService
                         $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
                         for ($i = 0; $i <= 15; $i++) {
                             if (property_exists($Payload->MCP230XX_INT, 'D' . $i)) {
-                                $this->RegisterVariableInteger('Tasmota_MCP230XX_INT_D' . $i, 'MCP230XX_INT D' . $i, '', 0);
+                                $this->RegisterVariableBoolean('Tasmota_MCP230XX_INT_D' . $i, 'MCP230XX_INT D' . $i, '', 0);
                                 SetValue($this->GetIDForIdent('Tasmota_MCP230XX_INT_D' . $i), $Payload->MCP230XX_INT->{'D' . $i});
 
                                 //MS
@@ -130,11 +130,11 @@ class Tasmota extends TasmotaService
                             }
                         }
                     }
-                    IPS_LogMessage('test',print_r($Payload,true));
                     if (property_exists($Payload, 'PCA9685')) {
-                        $this->RegisterVariableInteger('Tasmota_PCA9685_PWM'.$Payload->PCA9685->PIN,'PWM'.$Payload->PCA9685->PIN,'',0);
-                        $this->EnableAction('Tasmota_PCA9685_PWM'.$Payload->PCA9685->PIN);
-                        $this->SetValue('Tasmota_PCA9685_PWM'.$Payload->PCA9685->PIN,$Payload->PCA9685->PWM);
+                        $this->RegisterProfileInteger('Tasmota.PCA9685', 'Intensity', '', '%', 0, 4095, 1);
+                        $this->RegisterVariableInteger('Tasmota_PCA9685_PWM' . $Payload->PCA9685->PIN, 'PWM' . $Payload->PCA9685->PIN, 'Tasmota.PCA9685', 0);
+                        $this->EnableAction('Tasmota_PCA9685_PWM' . $Payload->PCA9685->PIN);
+                        $this->SetValue('Tasmota_PCA9685_PWM' . $Payload->PCA9685->PIN, $Payload->PCA9685->PWM);
                     }
                 }
                 if (fnmatch('*LWT', $Buffer->Topic)) {
@@ -271,6 +271,17 @@ class Tasmota extends TasmotaService
         $this->SendDebug(__FUNCTION__ . ' Value', $Value, 0);
         if ($Ident == 'Tasmota_FanSpeed') {
             $result = $this->setFanSpeed($Value);
+            return true;
+        }
+
+        if (fnmatch('Tasmota_PCA9685_PWM*', $Ident)) {
+            $pin = substr($Ident, 19);
+            $command = 'driver15';
+            $msg = 'pwm,' . $pin . ',' . $Value;
+            $this->SendDebug(__FUNCTION__ . ' MQTT MSG', $msg, 0);
+            $DataJSON = $this->MQTTCommand($command, $msg);
+            $this->SendDebug('set PCA9685_PWM', $DataJSON, 0);
+            $this->SendDataToParent($DataJSON);
             return true;
         }
 
