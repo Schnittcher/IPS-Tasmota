@@ -283,13 +283,13 @@ class TasmotaService extends IPSModule
                     SetValue($this->GetIDForIdent('Tasmota_' . $ParentKey . '_' . $key), $value);
                 }
                 if ($ParentKey == 'MCP230XX') {
-                    if ($this->GetIDForIdent('Tasmota_MCP230XX_INT_' . $key) != false) {
+                    if (@$this->GetIDForIdent('Tasmota_MCP230XX_INT_' . $key) != false) {
                         $this->SendDebug('MCP230XX', $key, 0);
                         SetValue($this->GetIDForIdent('Tasmota_MCP230XX_INT_' . $key), $value);
                     }
                 }
                 if ($ParentKey == 'PCA9685') {
-                    if ($this->GetIDForIdent('Tasmota_PCA9685_' . $key) != false) {
+                    if (@$this->GetIDForIdent('Tasmota_PCA9685_' . $key) != false) {
                         $this->SendDebug('Tasmota_PCA9685 Key', $key, 0);
                         SetValue($this->GetIDForIdent('Tasmota_PCA9685_' . $key), $value);
                     }
