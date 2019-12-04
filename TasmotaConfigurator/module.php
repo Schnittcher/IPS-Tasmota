@@ -64,7 +64,6 @@ class TasmotaConfigurator extends TasmotaService
                 ];
             }
         }
-        IPS_LogMessage(__FUNCTION__, json_encode($data));
         return json_encode($data);
     }
 
@@ -106,7 +105,7 @@ class TasmotaConfigurator extends TasmotaService
                             if ($apiResultJSON != false) {
                                 $result = json_decode($apiResultJSON, true);
                             } else {
-                                IPS_LogMessage('Tasmota Curl Error', curl_error($ch));
+                                $this->LogMessage('Tasmota Curl Error: '.curl_error($ch),10204);
                                 continue;
                             }
                         }
