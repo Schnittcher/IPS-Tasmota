@@ -105,7 +105,7 @@ class TasmotaConfigurator extends TasmotaService
                             if ($apiResultJSON != false) {
                                 $result = json_decode($apiResultJSON, true);
                             } else {
-                                $this->LogMessage('Tasmota Curl Error: '.curl_error($ch),10204);
+                                $this->LogMessage('Tasmota Curl Error: ' . curl_error($ch), 10204);
                                 continue;
                             }
                         }
