@@ -137,6 +137,7 @@ class Tasmota extends TasmotaService
                             if (property_exists($Payload, 'S29cmnd_D' . $i)) {
                                 if (property_exists($Payload->{'S29cmnd_D' . $i}, 'STATE')) {
                                     $this->RegisterVariableBoolean('Tasmota_S29cmnd_D' . $i, 'S29cmnd D' . $i, '', 0);
+                                    $this->EnableAction('Tasmota_S29cmnd_D' . $i);
                                     switch ($Payload->{'S29cmnd_D' . $i}->STATE) {
                                     case 'ON':
                                         $value = true;
@@ -306,6 +307,23 @@ class Tasmota extends TasmotaService
             return true;
         }
 
+        if (fnmatch('S29cmnd_D*', $Ident)) {
+            $pin = substr($Ident, 9);
+            $command = 'sensor29';
+            switch ($Value) {
+                case true:
+                    $msg = $pin . ',on';
+                    break;
+                case false:
+                    $msg = $pin . ',off';
+                    break;
+            }
+            $this->SendDebug(__FUNCTION__ . ' MQTT MSG', $msg, 0);
+            $DataJSON = $this->MQTTCommand($command, $msg);
+            $this->SendDebug('set S29cmnd_D', $DataJSON, 0);
+            $this->SendDataToParent($DataJSON);
+            return true;
+        }
         if (strlen($Ident) != 13) {
             $power = substr($Ident, 13);
         } else {
