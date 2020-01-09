@@ -130,6 +130,27 @@ class Tasmota extends TasmotaService
                             }
                         }
                     }
+                    if (fnmatch('*S29cmnd_D*', $Buffer->Payload)) {
+                        $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
+                        $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
+                        for ($i = 0; $i <= 15; $i++) {
+                            if (property_exists($Payload, 'S29cmnd_D' . $i)) {
+                                if (property_exists($Payload->{'S29cmnd_D' . $i}, 'STATE')) {
+                                    $this->RegisterVariableBoolean('Tasmota_S29cmnd_D' . $i, 'S29cmnd D' . $i, '', 0);
+                                    switch ($Payload->{'S29cmnd_D' . $i}->STATE) {
+                                    case 'ON':
+                                        $value = true;
+                                        break;
+                                    case 'OFF':
+                                        $value = false;
+                                        break;
+                                }
+                                    SetValue($this->GetIDForIdent('Tasmota_S29cmnd_D' . $i), $value);
+                                }
+                            }
+                        }
+                    }
+
                     if (property_exists($Payload, 'PCA9685')) {
                         $this->RegisterProfileInteger('Tasmota.PCA9685', 'Intensity', '', '%', 0, 4095, 1);
                         $this->RegisterVariableInteger('Tasmota_PCA9685_PWM' . $Payload->PCA9685->PIN, 'PWM' . $Payload->PCA9685->PIN, 'Tasmota.PCA9685', 0);
