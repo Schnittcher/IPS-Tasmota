@@ -46,7 +46,9 @@ class TasmotaLED extends TasmotaService
         $this->BufferResponse = '';
         $this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
         //Setze Filter für ReceiveData
-        $this->setPowerOnState($this->ReadPropertyInteger('PowerOnState'));
+        if (IPS_GetKernelRunlevel == KR_READY) {
+            $this->setPowerOnState($this->ReadPropertyInteger('PowerOnState'));
+        }
 
         $this->SendDebug(__FUNCTION__ . ' FullTopic', $this->ReadPropertyString('FullTopic'), 0);
         $topic = $this->FilterFullTopicReceiveData();
