@@ -38,7 +38,7 @@ class Tasmota extends TasmotaService
         $this->BufferResponse = '';
         $this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
         //Setze Filter fÃ¼r ReceiveData
-        if (IPS_GetKernelRunlevel == KR_READY) {
+        if (IPS_GetKernelRunlevel() == KR_READY) {
             $this->setPowerOnState($this->ReadPropertyInteger('PowerOnState'));
         }
 
