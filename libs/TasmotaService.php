@@ -106,6 +106,8 @@ class TasmotaService extends IPSModule
             $retain = 0;
         }
 
+        $GatewayMode = $this->ReadAttributeInteger('GatewayMode');
+
         $retain = 0; // Solange der IPS MQTT Server noch kein Retain kann
 
         $FullTopic = explode('/', $this->ReadPropertyString('FullTopic'));
@@ -120,14 +122,30 @@ class TasmotaService extends IPSModule
         $SetCommandArr[$index] = $command;
 
         $topic = implode('/', $SetCommandArr);
-        $Data['DataID'] = '{043EA491-0325-4ADD-8FC2-A30C8EEB4D3F}';
-        $Data['PacketType'] = 3;
-        $Data['QualityOfService'] = 0;
-        $Data['Retain'] = false;
-        $Data['Topic'] = $topic;
-        $Data['Payload'] = $msg;
 
-        $DataJSON = json_encode($Data, JSON_UNESCAPED_SLASHES);
+        switch ($GatewayMode) {
+            case 0: //MQTTServer
+                $Data['DataID'] = '{043EA491-0325-4ADD-8FC2-A30C8EEB4D3F}';
+                $Data['PacketType'] = 3;
+                $Data['QualityOfService'] = 0;
+                $Data['Retain'] = false;
+                $Data['Topic'] = $topic;
+                $Data['Payload'] = $msg;
+                $DataJSON = json_encode($Data, JSON_UNESCAPED_SLASHES);
+                break;
+            case 1: //MQTTClient
+                $Buffer['PacketType'] = 3;
+                $Buffer['QualityOfService'] = 0;
+                $Buffer['Retain'] = false;
+                $Buffer['Topic'] = $topic;
+                $Buffer['Payload'] = $msg;
+                $BufferJSON = json_encode($Buffer, JSON_UNESCAPED_SLASHES);
+                $DataJSON = json_encode(['DataID' => '{97475B04-67C3-A74D-C970-E9409B0EFA1D}', 'Buffer' => $BufferJSON]);
+                break;
+            default:
+                $this->LogMessage('Invalid Parend', KL_ERROR);
+                break;
+        }
 
         return $DataJSON;
     }

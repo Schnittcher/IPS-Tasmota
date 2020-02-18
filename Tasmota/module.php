@@ -15,6 +15,8 @@ class Tasmota extends TasmotaService
         parent::Create();
         $this->BufferResponse = '';
         $this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
+        $this->RegisterAttributeInteger('GatewayMode', 0); // 0 = MQTTServer 1 = MQTTClient
+
         $this->createVariablenProfiles();
         //Anzahl die in der Konfirgurationsform angezeigt wird - Hier Standard auf 1
         $this->RegisterPropertyString('Topic', '');
@@ -22,6 +24,7 @@ class Tasmota extends TasmotaService
         $this->RegisterPropertyString('Off', 'OFF');
         $this->RegisterPropertyString('FullTopic', '%prefix%/%topic%');
         $this->RegisterPropertyInteger('PowerOnState', 3);
+        $this->RegisterPropertyInteger('GatewayMode', 0);
         $this->RegisterPropertyBoolean('MessageRetain', false);
         $this->RegisterVariableFloat('Tasmota_RSSI', 'RSSI');
         $this->RegisterVariableBoolean('Tasmota_DeviceStatus', 'Status', 'Tasmota.DeviceStatus');
@@ -34,9 +37,12 @@ class Tasmota extends TasmotaService
     public function ApplyChanges()
     {
         //Never delete this line!
+
+        $this->RegisterMessage($this->InstanceID, FM_CONNECT);
+        $this->RegisterMessage($this->InstanceID, FM_DISCONNECT);
         parent::ApplyChanges();
         $this->BufferResponse = '';
-        $this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
+
         //Setze Filter fÃ¼r ReceiveData
         if (IPS_GetKernelRunlevel() == KR_READY) {
             $this->setPowerOnState($this->ReadPropertyInteger('PowerOnState'));
@@ -55,15 +61,41 @@ class Tasmota extends TasmotaService
         $this->SetReceiveDataFilter('.*' . $topic . '.*');
     }
 
+    public function MessageSink($TimeStamp, $SenderID, $Message, $Data)
+    {
+        switch ($Message) {
+            case FM_CONNECT:
+                //$this->LogMessage('parentGUID '. print_r($Data),KL_DEBUG);
+                $parentGUID = IPS_GetInstance($Data[0])['ModuleInfo']['ModuleID'];
+                switch ($parentGUID) {
+                    case '{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}':
+                        $this->WriteAttributeInteger('GatewayMode', 0);
+                        break;
+                    case '{EE0D345A-CF31-428A-A613-33CE98E752DD}':
+                        $this->WriteAttributeInteger('GatewayMode', 1);
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     public function ReceiveData($JSONString)
     {
+        $GatewayMode = $this->ReadAttributeInteger('GatewayMode');
         $this->SendDebug('JSON', $JSONString, 0);
         if (!empty($this->ReadPropertyString('Topic'))) {
             $this->SendDebug('ReceiveData JSON', $JSONString, 0);
             $data = json_decode($JSONString);
-            // Buffer decodieren und in eine Variable schreiben
-            $Buffer = $data;
-            $this->SendDebug('Topic', $Buffer->Topic, 0);
+            $this->SendDebug('GatewayMode', $GatewayMode, 0);
+            if ($GatewayMode == 0) {
+                $Buffer = $data;
+            } else {
+                $Buffer = json_decode($data->Buffer);
+            }
+
+            $this->SendDebug('Topic', print_r($Buffer, true), 0);
             $off = $this->ReadPropertyString('Off');
             $on = $this->ReadPropertyString('On');
 
@@ -288,7 +320,7 @@ class Tasmota extends TasmotaService
             }
         }
     }
-
+    
     public function RequestAction($Ident, $Value)
     {
         $this->SendDebug(__FUNCTION__ . ' Ident', $Ident, 0);

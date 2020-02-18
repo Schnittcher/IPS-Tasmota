@@ -11,6 +11,8 @@ class TasmotaSwitchTopic extends TasmotaService
         //Never delete this line!
         parent::Create();
         $this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
+        $this->RegisterAttributeInteger('GatewayMode', 0); // 0 = MQTTServer 1 = MQTTClient
+
         //Anzahl die in der Konfirgurationsform angezeigt wird - Hier Standard auf 1
         $this->RegisterPropertyString('SwitchTopicPräfix', '');
     }
@@ -25,15 +27,39 @@ class TasmotaSwitchTopic extends TasmotaService
         $this->SetReceiveDataFilter('.*' . $SwitchTopicPraefix . '.*');
     }
 
+    public function MessageSink($TimeStamp, $SenderID, $Message, $Data)
+    {
+        switch ($Message) {
+            case FM_CONNECT:
+                //$this->LogMessage('parentGUID '. print_r($Data),KL_DEBUG);
+                $parentGUID = IPS_GetInstance($Data[0])['ModuleInfo']['ModuleID'];
+                switch ($parentGUID) {
+                    case '{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}':
+                        $this->WriteAttributeInteger('GatewayMode', 0);
+                        break;
+                    case '{EE0D345A-CF31-428A-A613-33CE98E752DD}':
+                        $this->WriteAttributeInteger('GatewayMode', 1);
+                        break;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     public function ReceiveData($JSONString)
     {
+        $GatewayMode = $this->ReadAttributeInteger('GatewayMode');
         if (!empty($this->ReadPropertyString('SwitchTopicPräfix'))) {
             $this->SendDebug('ReceiveData JSON', $JSONString, 0);
             $data = json_decode($JSONString);
 
-            // Buffer decodieren und in eine Variable schreiben
-            $Buffer = $data;
-            $MSG = json_decode($Buffer->Payload);
+            $this->SendDebug('GatewayMode', $GatewayMode, 0);
+            if ($GatewayMode == 0) {
+                $Buffer = $data;
+            } else {
+                $Buffer = json_decode($data->Buffer);
+            }
             $this->SendDebug('Topic', $Buffer->Topic, 0);
             $this->SendDebug('MSG', $Buffer->Payload, 0);
             $SwitchTopic = explode('/', $Buffer->Topic);
