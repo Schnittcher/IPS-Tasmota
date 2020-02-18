@@ -37,7 +37,6 @@ class Tasmota extends TasmotaService
     public function ApplyChanges()
     {
         //Never delete this line!
-
         $this->RegisterMessage($this->InstanceID, FM_CONNECT);
         $this->RegisterMessage($this->InstanceID, FM_DISCONNECT);
         parent::ApplyChanges();
