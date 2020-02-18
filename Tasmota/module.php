@@ -319,7 +319,7 @@ class Tasmota extends TasmotaService
             }
         }
     }
-    
+
     public function RequestAction($Ident, $Value)
     {
         $this->SendDebug(__FUNCTION__ . ' Ident', $Ident, 0);
