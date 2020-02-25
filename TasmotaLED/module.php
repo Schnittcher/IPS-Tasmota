@@ -276,7 +276,7 @@ class TasmotaLED extends TasmotaService
             } else {
                 $power = 0;
             }
-            $this->setPower($power, $Value);
+            $this->setPower(intval($power), $Value);
         }
         switch ($Ident) {
       case 'TasmotaLED_Speed':
