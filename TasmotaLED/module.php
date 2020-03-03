@@ -184,45 +184,35 @@ class TasmotaLED extends TasmotaService
     {
         $command = 'Led' . $LED;
         $msg = $color;
-        $DataJSON = $this->MQTTCommand($command, $msg);
-        $this->SendDebug('setLED', $DataJSON, 0);
-        $this->SendDataToParent($DataJSON);
+        $this->MQTTCommand($command, $msg);
     }
 
     public function setScheme(int $schemeID)
     {
         $command = 'Scheme';
         $msg = strval($schemeID);
-        $DataJSON = $this->MQTTCommand($command, $msg);
-        $this->SendDebug('setScheme', $DataJSON, 0);
-        $this->SendDataToParent($DataJSON);
+        $this->MQTTCommand($command, $msg);
     }
 
     public function setPixel(int $count)
     {
         $command = 'Pixels';
         $msg = strval($count);
-        $DataJSON = $this->MQTTCommand($command, $msg);
-        $this->SendDebug('setPixel', $DataJSON, 0);
-        $this->SendDataToParent($DataJSON);
+        $this->MQTTCommand($command, $msg);
     }
 
     public function setDimmer(int $value)
     {
         $command = 'Dimmer';
         $msg = strval($value);
-        $DataJSON = $this->MQTTCommand($command, $msg);
-        $this->SendDebug('setDimmer', $DataJSON, 0);
-        $this->SendDataToParent($DataJSON);
+        $this->MQTTCommand($command, $msg);
     }
 
     public function setColorHex(string $color)
     {
         $command = 'Color';
         $msg = $color;
-        $DataJSON = $this->MQTTCommand($command, $msg);
-        $this->SendDebug('setColorHex', $DataJSON, 0);
-        $this->SendDataToParent($DataJSON);
+        $this->MQTTCommand($command, $msg);
     }
 
     public function setFade(bool $value)
@@ -234,18 +224,14 @@ class TasmotaLED extends TasmotaService
         } elseif ($msg === true) {
             $msg = 'ON';
         }
-        $DataJSON = $this->MQTTCommand($command, $msg);
-        $this->SendDebug('setFade', $DataJSON, 0);
-        $this->SendDataToParent($DataJSON);
+        $this->MQTTCommand($command, $msg);
     }
 
     public function setSpeed(int $value)
     {
         $command = 'Speed';
         $msg = strval($value);
-        $DataJSON = $this->MQTTCommand($command, $msg);
-        $this->SendDebug('setSpeed', $DataJSON, 0);
-        $this->SendDataToParent($DataJSON);
+        $this->MQTTCommand($command, $msg);
     }
 
     public function RequestAction($Ident, $Value)

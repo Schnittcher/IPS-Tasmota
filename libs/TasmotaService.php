@@ -23,9 +23,7 @@ class TasmotaService extends IPSModule
             $retain = 0;
         }
 
-        $DataJSON = $this->MQTTCommand($command, $msg, $retain);
-        $this->SendDebug('restart', $DataJSON, 0);
-        $this->SendDataToParent($DataJSON);
+        $this->MQTTCommand($command, $msg, $retain);
     }
 
     public function sendMQTTCommand(string $command, string $msg)
@@ -64,15 +62,11 @@ class TasmotaService extends IPSModule
         } else {
             $retain = 0;
         }
-
-        $DataJSON = $this->MQTTCommand($command, $msg, $retain);
-        $this->SendDebug('setPowerOnState', $DataJSON, 0);
-        $this->SendDataToParent($DataJSON);
+        $this->MQTTCommand($command, $msg, $retain);
     }
 
     public function setPower(int $power, bool $Value)
     {
-        //$this->defineLanguage($this->ReadPropertyString("DeviceLanguage"));
         if ($power != 0) {
             $PowerIdent = 'Tasmota_POWER' . strval($power);
             $powerTopic = 'POWER' . strval($power);
@@ -93,12 +87,10 @@ class TasmotaService extends IPSModule
         } else {
             $retain = 0;
         }
-        $DataJSON = $this->MQTTCommand($command, $msg, $retain);
-        $this->SendDebug(__FUNCTION__, $DataJSON, 0);
-        $this->SendDataToParent($DataJSON);
+        $this->MQTTCommand($command, $msg, $retain);
     }
 
-    protected function MQTTCommand($command, $msg, $retain = 0)
+    protected function MQTTCommand($command, $Payload, $retain = 0)
     {
         $retain = $this->ReadPropertyBoolean('MessageRetain');
         if ($retain) {
@@ -120,36 +112,40 @@ class TasmotaService extends IPSModule
         $SetCommandArr[$TopicIndex] = $this->ReadPropertyString('Topic');
         $SetCommandArr[$index] = $command;
 
-        $topic = implode('/', $SetCommandArr);
+        $Topic = implode('/', $SetCommandArr);
 
-        $parentID = IPS_GetInstance($this->InstanceID)['ConnectionID'];
-        $parentGUID = IPS_GetInstance($parentID)['ModuleInfo']['ModuleID'];
+        $resultServer = true;
+        $resultClient = true;
+        //MQTT Server
+        $Server['DataID'] = '{043EA491-0325-4ADD-8FC2-A30C8EEB4D3F}';
+        $Server['PacketType'] = 3;
+        $Server['QualityOfService'] = 0;
+        $Server['Retain'] = false;
+        $Server['Topic'] = $Topic;
+        $Server['Payload'] = $Payload;
+        $ServerJSON = json_encode($Server, JSON_UNESCAPED_SLASHES);
+        $this->SendDebug(__FUNCTION__ . 'MQTT Server', $ServerJSON, 0);
+        $resultServer = @$this->SendDataToParent($ServerJSON);
 
-        switch ($parentGUID) {
-            case '{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}': //MQTTServer
-                $Data['DataID'] = '{043EA491-0325-4ADD-8FC2-A30C8EEB4D3F}';
-                $Data['PacketType'] = 3;
-                $Data['QualityOfService'] = 0;
-                $Data['Retain'] = false;
-                $Data['Topic'] = $topic;
-                $Data['Payload'] = $msg;
-                $DataJSON = json_encode($Data, JSON_UNESCAPED_SLASHES);
-                break;
-            case '{EE0D345A-CF31-428A-A613-33CE98E752DD}': //MQTTClient
-                $Buffer['PacketType'] = 3;
-                $Buffer['QualityOfService'] = 0;
-                $Buffer['Retain'] = false;
-                $Buffer['Topic'] = $topic;
-                $Buffer['Payload'] = $msg;
-                $BufferJSON = json_encode($Buffer, JSON_UNESCAPED_SLASHES);
-                $DataJSON = json_encode(['DataID' => '{97475B04-67C3-A74D-C970-E9409B0EFA1D}', 'Buffer' => $BufferJSON]);
-                break;
-            default:
-                $this->LogMessage('Invalid Parent: ' . $parentGUID, KL_ERROR);
-                break;
+        //MQTT Client
+        $Buffer['PacketType'] = 3;
+        $Buffer['QualityOfService'] = 0;
+        $Buffer['Retain'] = false;
+        $Buffer['Topic'] = $Topic;
+        $Buffer['Payload'] = $Payload;
+        $BufferJSON = json_encode($Buffer, JSON_UNESCAPED_SLASHES);
+
+        $Client['DataID'] = '{97475B04-67C3-A74D-C970-E9409B0EFA1D}';
+        $Client['Buffer'] = $BufferJSON;
+
+        $ClientJSON = json_encode($Client);
+        $this->SendDebug(__FUNCTION__ . 'MQTT Client', $ClientJSON, 0);
+        $resultClient = @$this->SendDataToParent($ClientJSON);
+
+        if ($resultServer === false && $resultClient === false) {
+            $last_error = error_get_last();
+            echo $last_error['message'];
         }
-
-        return $DataJSON;
     }
 
     protected function Debug($Meldungsname, $Daten, $Category)

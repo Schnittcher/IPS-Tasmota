@@ -313,9 +313,7 @@ class Tasmota extends TasmotaService
             $command = 'driver15';
             $msg = 'pwm,' . $pin . ',' . $Value;
             $this->SendDebug(__FUNCTION__ . ' MQTT MSG', $msg, 0);
-            $DataJSON = $this->MQTTCommand($command, $msg);
-            $this->SendDebug('set PCA9685_PWM', $DataJSON, 0);
-            $this->SendDataToParent($DataJSON);
+            $this->MQTTCommand($command, $msg);
             return true;
         }
 
@@ -331,9 +329,7 @@ class Tasmota extends TasmotaService
                     break;
             }
             $this->SendDebug(__FUNCTION__ . ' MQTT MSG', $msg, 0);
-            $DataJSON = $this->MQTTCommand($command, $msg);
-            $this->SendDebug('set S29cmnd_D', $DataJSON, 0);
-            $this->SendDataToParent($DataJSON);
+            $this->MQTTCommand($command, $msg);
             return true;
         }
         if (strlen($Ident) != 13) {
@@ -348,9 +344,7 @@ class Tasmota extends TasmotaService
     {
         $command = 'FanSpeed';
         $msg = strval($value);
-        $DataJSON = $this->MQTTCommand($command, $msg);
-        $this->SendDebug('setFanSpeed', $DataJSON, 0);
-        $this->SendDataToParent($DataJSON);
+        $this->MQTTCommand($command, $msg);
     }
 
     private function createVariablenProfiles()
