@@ -269,6 +269,8 @@ class TasmotaService extends IPSModule
 
     protected function traverseArray($array, $GesamtArray)
     {
+        $this->SendDebug('array', print_r($array), 0);
+        $this->SendDebug('GesamtArray', print_r($GesamtArray), 0);
         foreach ($array as $key=> $value) {
             if (is_array($value)) {
                 $this->traverseArray($value, $GesamtArray);
