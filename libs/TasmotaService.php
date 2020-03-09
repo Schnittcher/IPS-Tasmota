@@ -269,8 +269,8 @@ class TasmotaService extends IPSModule
 
     protected function traverseArray($array, $GesamtArray)
     {
-        $this->IPS_LogMessage(print_r($array), KL_NOTIFY);
-        $this->IPS_LogMessage(print_r($GesamtArray), KL_NOTIFY);
+        $this->LogMessage(print_r($array), KL_NOTIFY);
+        $this->LogMessage(print_r($GesamtArray), KL_NOTIFY);
         foreach ($array as $key=> $value) {
             if (is_array($value)) {
                 $this->traverseArray($value, $GesamtArray);
