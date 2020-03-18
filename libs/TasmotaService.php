@@ -35,10 +35,10 @@ class TasmotaService extends IPSModule
             $retain = 0;
         }
 
-        $DataJSON = $this->MQTTCommand($command, $msg, $retain);
-        $this->SendDebug('sendMQTTCommand', $DataJSON, 0);
+        $this->MQTTCommand($command, $msg, $retain);
+        //$this->SendDebug('sendMQTTCommand', $DataJSON, 0);
         $this->BufferResponse = '';
-        $this->SendDataToParent($DataJSON);
+        //$this->SendDataToParent($DataJSON);
         $result = false;
         for ($x = 0; $x < 500; $x++) {
             if ($this->BufferResponse != '') {
