@@ -18,9 +18,9 @@ class TasmotaService extends IPSModule
 
         $retain = $this->ReadPropertyBoolean('MessageRetain');
         if ($retain) {
-            $retain = 1;
+            $retain = true;
         } else {
-            $retain = 0;
+            $retain = false;
         }
 
         $this->MQTTCommand($command, $msg, $retain);
@@ -30,9 +30,9 @@ class TasmotaService extends IPSModule
     {
         $retain = $this->ReadPropertyBoolean('MessageRetain');
         if ($retain) {
-            $retain = 1;
+            $retain = true;
         } else {
-            $retain = 0;
+            $retain = false;
         }
 
         $this->MQTTCommand($command, $msg, $retain);
@@ -58,9 +58,9 @@ class TasmotaService extends IPSModule
 
         $retain = $this->ReadPropertyBoolean('MessageRetain');
         if ($retain) {
-            $retain = 1;
+            $retain = true;
         } else {
-            $retain = 0;
+            $retain = false;
         }
         $this->MQTTCommand($command, $msg, $retain);
     }
@@ -83,9 +83,9 @@ class TasmotaService extends IPSModule
         }
         $retain = $this->ReadPropertyBoolean('MessageRetain');
         if ($retain) {
-            $retain = 1;
+            $retain = true;
         } else {
-            $retain = 0;
+            $retain = false;
         }
         $this->MQTTCommand($command, $msg, $retain);
     }
@@ -94,12 +94,12 @@ class TasmotaService extends IPSModule
     {
         $retain = $this->ReadPropertyBoolean('MessageRetain');
         if ($retain) {
-            $retain = 1;
+            $retain = true;
         } else {
-            $retain = 0;
+            $retain = false;
         }
 
-        $retain = 0; // Solange der IPS MQTT Server noch kein Retain kann
+        $retain = false; // Solange der IPS MQTT Server noch kein Retain kann
 
         $FullTopic = explode('/', $this->ReadPropertyString('FullTopic'));
         $PrefixIndex = array_search('%prefix%', $FullTopic);
