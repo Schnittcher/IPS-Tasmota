@@ -1,0 +1,8 @@
+{
+    "elements":
+    [
+      { "type": "ValidationTextBox", "name": "Topic", "caption": "Tasmota MQTT Topic" },
+      { "type": "ValidationTextBox", "name": "FullTopic", "caption": "Full Topic" },
+      { "type": "CheckBox", "name": "MessageRetain", "caption": "Retain (MQTT)" }
+    ]
+}

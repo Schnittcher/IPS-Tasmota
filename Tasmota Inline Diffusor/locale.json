@@ -1,0 +1,20 @@
+{
+  "translations": {
+    "de": {
+      "Off": "Aus",
+      "Low": "Gering",
+      "Medium": "Mittel",
+      "High": "Stark",
+      "Atomizer Level": "Zerstäuber Stärke",
+      "Water": "Wasser",
+      "No Water": "Kein Wasser",
+      "Water ok": "Wasser ok",
+      "LED Power": "LED Status",
+      "LED Color": "LED Farbe",
+      "LED Brightness": "LED Helligkeit",
+      "LED Scheme": "LED Effekt",
+      "RSSI": "RSSI",
+      "Device State": "Geräte Status"
+    }
+  }
+}
