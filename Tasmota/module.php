@@ -82,8 +82,10 @@ class Tasmota extends TasmotaService
                 $this->SendDebug('PowerOnState Topic', $Buffer->Topic, 0);
                 $this->SendDebug('PowerOnState Payload', $Buffer->Payload, 0);
                 $Payload = json_decode($Buffer->Payload);
-                if (property_exists($Payload, 'PowerOnState')) {
-                    $this->setPowerOnStateInForm($Payload->PowerOnState);
+                if (is_object($Payload)) {
+                    if (property_exists($Payload, 'PowerOnState')) {
+                        $this->setPowerOnStateInForm($Payload->PowerOnState);
+                    }
                 }
             }
             //Power Vairablen checken
