@@ -278,6 +278,7 @@ class TasmotaService extends IPSModule
                 $ParentKey = str_replace('-', '_', $ParentKey);
                 if ((is_int($value) || is_float($value)) && ($ParentKey != 'MCP230XX') && ($ParentKey != 'PCA9685')) {
                     $key = str_replace('-', '_', $key);
+                    $key = str_replace('.', '_', $key);
                     switch ($key) {
                         case 'Temperature':
                             $variablenID = $this->RegisterVariableFloat('Tasmota_' . $ParentKey . '_' . $key, $ParentKey . ' Temperatur', '~Temperature');
