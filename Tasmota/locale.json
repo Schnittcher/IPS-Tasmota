@@ -31,7 +31,8 @@
       "ExportActivePower": "Export Wirkleistung",
       "ImportReactivePower": "Import Blindleistung",
       "ExportReactivePower": "Export Blindleistung",
-      "TotalReactivePower": "Gesamte Blindleistung"
+      "TotalReactivePower": "Gesamte Blindleistung",
+      "Frequency": "Frequenz"
     }
   }
 }

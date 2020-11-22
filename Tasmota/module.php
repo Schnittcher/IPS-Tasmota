@@ -338,6 +338,10 @@ class Tasmota extends TasmotaService
                         $this->RegisterVariableFloat('Tasmota_TotalReactivePower', $this->Translate('TotalReactivePower'), 'Tasmota.ReactivePower_kvarh');
                         SetValue($this->GetIDForIdent('Tasmota_TotalReactivePower'), $myBuffer->ENERGY->TotalReactivePower);
                     }
+                    if (property_exists($myBuffer->ENERGY, 'Frequency')) {
+                        $this->RegisterVariableFloat('Tasmota_Frequency', $this->Translate('Frequency'), '~Hertz');
+                        SetValue($this->GetIDForIdent('Tasmota_Frequency'), $myBuffer->ENERGY->Frequency);
+                    }
                 }
             }
         }
