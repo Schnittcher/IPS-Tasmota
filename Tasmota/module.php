@@ -181,41 +181,7 @@ class Tasmota extends TasmotaService
                         SetValue($this->GetIDForIdent('Tasmota_DeviceStatus'), false);
                     }
                 }
-                //Sensor Variablen checken
-                if (fnmatch('*SENSOR', $Buffer->Topic)) {
-                    $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
-                    $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
-                    $myBuffer = json_decode($Buffer->Payload, true);
-                    $this->traverseArray($myBuffer, $myBuffer);
-                }
-            }
-            //FanSpeed
-            if (fnmatch('*FanSpeed*', $Buffer->Payload)) {
-                $myBuffer = json_decode($Buffer->Payload);
-                if (property_exists($myBuffer, 'FanSpeed')) {
-                    $this->SendDebug('FanSpeed Payload', $Buffer->Payload, 0);
-                    SetValue($this->GetIDForIdent('Tasmota_FanSpeed'), $myBuffer->FanSpeed);
-                }
-            }
-            //IrReceived
-            if (fnmatch('*IrReceived*', $Buffer->Payload)) {
-                $myBuffer = json_decode($Buffer->Payload);
-                $this->SendDebug('IrReceived Payload', $Buffer->Payload, 0);
-                if (property_exists($myBuffer->IrReceived, 'Protocol')) {
-                    $this->RegisterVariableString('Tasmota_IRProtocol', $this->Translate('IR Protocol'), '', 0);
-                    SetValue($this->GetIDForIdent('Tasmota_IRProtocol'), $myBuffer->IrReceived->Protocol);
-                }
-                if (property_exists($myBuffer->IrReceived, 'Bits')) {
-                    $this->RegisterVariableString('Tasmota_IRBits', $this->Translate('IR Bits'), '', 0);
-                    SetValue($this->GetIDForIdent('Tasmota_IRBits'), $myBuffer->IrReceived->Bits);
-                }
-                if (property_exists($myBuffer->IrReceived, 'Data')) {
-                    $this->RegisterVariableString('Tasmota_IRData', $this->Translate('IR Data'), '', 0);
-                    SetValue($this->GetIDForIdent('Tasmota_IRData'), $myBuffer->IrReceived->Data);
-                }
-            }
-
-            //POW Variablen
+                            //POW Variablen
             if (fnmatch('*ENERGY*', $Buffer->Payload)) {
                 $myBuffer = json_decode($Buffer->Payload);
                 if (property_exists($myBuffer, 'ENERGY')) {
@@ -342,6 +308,40 @@ class Tasmota extends TasmotaService
                         $this->RegisterVariableFloat('Tasmota_Frequency', $this->Translate('Frequency'), '~Hertz');
                         SetValue($this->GetIDForIdent('Tasmota_Frequency'), $myBuffer->ENERGY->Frequency);
                     }
+                }
+                return;
+            }
+                //Sensor Variablen checken
+                if (fnmatch('*SENSOR', $Buffer->Topic)) {
+                    $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
+                    $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
+                    $myBuffer = json_decode($Buffer->Payload, true);
+                    $this->traverseArray($myBuffer, $myBuffer);
+                }
+            }
+            //FanSpeed
+            if (fnmatch('*FanSpeed*', $Buffer->Payload)) {
+                $myBuffer = json_decode($Buffer->Payload);
+                if (property_exists($myBuffer, 'FanSpeed')) {
+                    $this->SendDebug('FanSpeed Payload', $Buffer->Payload, 0);
+                    SetValue($this->GetIDForIdent('Tasmota_FanSpeed'), $myBuffer->FanSpeed);
+                }
+            }
+            //IrReceived
+            if (fnmatch('*IrReceived*', $Buffer->Payload)) {
+                $myBuffer = json_decode($Buffer->Payload);
+                $this->SendDebug('IrReceived Payload', $Buffer->Payload, 0);
+                if (property_exists($myBuffer->IrReceived, 'Protocol')) {
+                    $this->RegisterVariableString('Tasmota_IRProtocol', $this->Translate('IR Protocol'), '', 0);
+                    SetValue($this->GetIDForIdent('Tasmota_IRProtocol'), $myBuffer->IrReceived->Protocol);
+                }
+                if (property_exists($myBuffer->IrReceived, 'Bits')) {
+                    $this->RegisterVariableString('Tasmota_IRBits', $this->Translate('IR Bits'), '', 0);
+                    SetValue($this->GetIDForIdent('Tasmota_IRBits'), $myBuffer->IrReceived->Bits);
+                }
+                if (property_exists($myBuffer->IrReceived, 'Data')) {
+                    $this->RegisterVariableString('Tasmota_IRData', $this->Translate('IR Data'), '', 0);
+                    SetValue($this->GetIDForIdent('Tasmota_IRData'), $myBuffer->IrReceived->Data);
                 }
             }
         }
