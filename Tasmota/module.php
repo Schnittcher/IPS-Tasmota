@@ -258,7 +258,7 @@ class Tasmota extends TasmotaService
 
                     if (property_exists($myBuffer->ENERGY, 'Current')) {
                         if (!is_array($myBuffer->ENERGY->Current)) {
-                            $this->RegisterVariableFloat('Tasmota_POWCurrent', $this->Translate('Current'), '~Ampere');
+                            $this->RegisterVariableFloat('Tasmota_POWCurrent', $this->Translate('Current'), '');
                             SetValue($this->GetIDForIdent('Tasmota_POWCurrent'), $myBuffer->ENERGY->Current);
                         } else {
                             foreach ($myBuffer->ENERGY->Current as $key=> $value) {
@@ -279,7 +279,7 @@ class Tasmota extends TasmotaService
                             SetValue($this->GetIDForIdent('Tasmota_POWFactor'), $myBuffer->ENERGY->Factor);
                         } else {
                             foreach ($myBuffer->ENERGY->Factor as $key=> $value) {
-                                $this->RegisterVariableFloat('Tasmota_POWFactor' . $key, $this->Translate('Factor') . ' ' . strval(intval($key) + 1), '~Ampere');
+                                $this->RegisterVariableFloat('Tasmota_POWFactor' . $key, $this->Translate('Factor') . ' ' . strval(intval($key) + 1), '');
                                 SetValue($this->GetIDForIdent('Tasmota_POWFactor' . $key), $value);
                             }
                         }
