@@ -226,6 +226,11 @@ class Tasmota extends TasmotaService
                         if (!is_array($myBuffer->ENERGY->Power)) {
                             $this->RegisterVariableFloat('Tasmota_POWPower', $this->Translate('Power'), '~Watt.3680');
                             SetValue($this->GetIDForIdent('Tasmota_POWPower'), $myBuffer->ENERGY->Power);
+                        } else {
+                            foreach ($myBuffer->ENERGY->Power as $key=> $value) {
+                                $this->RegisterVariableFloat('Tasmota_POWPower' . $key, $this->Translate('Power') . ' ' . strval(intval($key) + 1), '~Watt.3680');
+                                SetValue($this->GetIDForIdent('Tasmota_POWPower' . $key), $value);
+                            }
                         }
                     }
 
@@ -233,6 +238,11 @@ class Tasmota extends TasmotaService
                         if (!is_array($myBuffer->ENERGY->Total)) {
                             $this->RegisterVariableFloat('Tasmota_POWTotal', $this->Translate('Total'), '~Electricity');
                             SetValue($this->GetIDForIdent('Tasmota_POWTotal'), $myBuffer->ENERGY->Total);
+                        } else {
+                            foreach ($myBuffer->ENERGY->Total as $key=> $value) {
+                                $this->RegisterVariableFloat('Tasmota_POWTotal' . $key, $this->Translate('Total') . ' ' . strval(intval($key) + 1), '~Electricity');
+                                SetValue($this->GetIDForIdent('Tasmota_POWTotal' . $key), $value);
+                            }
                         }
                     }
 
@@ -250,6 +260,11 @@ class Tasmota extends TasmotaService
                         if (!is_array($myBuffer->ENERGY->Current)) {
                             $this->RegisterVariableFloat('Tasmota_POWCurrent', $this->Translate('Current'), '~Ampere');
                             SetValue($this->GetIDForIdent('Tasmota_POWCurrent'), $myBuffer->ENERGY->Current);
+                        } else {
+                            foreach ($myBuffer->ENERGY->Current as $key=> $value) {
+                                $this->RegisterVariableFloat('Tasmota_POWCurrent' . $key, $this->Translate('Current') . ' ' . strval(intval($key) + 1), '~Ampere');
+                                SetValue($this->GetIDForIdent('Tasmota_POWCurrent' . $key), $value);
+                            }
                         }
                     }
 
@@ -262,6 +277,11 @@ class Tasmota extends TasmotaService
                         if (!is_array($myBuffer->ENERGY->Factor)) {
                             $this->RegisterVariableFloat('Tasmota_POWFactor', $this->Translate('Factor'));
                             SetValue($this->GetIDForIdent('Tasmota_POWFactor'), $myBuffer->ENERGY->Factor);
+                        } else {
+                            foreach ($myBuffer->ENERGY->Factor as $key=> $value) {
+                                $this->RegisterVariableFloat('Tasmota_POWFactor' . $key, $this->Translate('Factor') . ' ' . strval(intval($key) + 1), '~Ampere');
+                                SetValue($this->GetIDForIdent('Tasmota_POWFactor' . $key), $value);
+                            }
                         }
                     }
 
@@ -269,6 +289,11 @@ class Tasmota extends TasmotaService
                         if (!is_array($myBuffer->ENERGY->ApparentPower)) {
                             $this->RegisterVariableFloat('Tasmota_POWApparentPower', $this->Translate('ApparentPower'), 'Tasmota.ApparentPower');
                             SetValue($this->GetIDForIdent('Tasmota_POWApparentPower'), $myBuffer->ENERGY->ApparentPower);
+                        } else {
+                            foreach ($myBuffer->ENERGY->ApparentPower as $key=> $value) {
+                                $this->RegisterVariableFloat('Tasmota_POWApparentPower' . $key, $this->Translate('ApparentPower') . ' ' . strval(intval($key) + 1), 'Tasmota.ApparentPower');
+                                SetValue($this->GetIDForIdent('Tasmota_POWApparentPower' . $key), $value);
+                            }
                         }
                     }
 
@@ -276,6 +301,11 @@ class Tasmota extends TasmotaService
                         if (!is_array($myBuffer->ENERGY->ReactivePower)) {
                             $this->RegisterVariableFloat('Tasmota_POWReactivePower', $this->Translate('ReactivePower'), 'Tasmota.ReactivePower');
                             SetValue($this->GetIDForIdent('Tasmota_POWReactivePower'), $myBuffer->ENERGY->ReactivePower);
+                        } else {
+                            foreach ($myBuffer->ENERGY->ReactivePower as $key=> $value) {
+                                $this->RegisterVariableFloat('Tasmota_POWReactivePower' . $key, $this->Translate('ReactivePower') . ' ' . strval(intval($key) + 1), 'Tasmota.ReactivePower');
+                                SetValue($this->GetIDForIdent('Tasmota_POWReactivePower' . $key), $value);
+                            }
                         }
                     }
 
