@@ -183,8 +183,8 @@ class Tasmota extends TasmotaService
                 }
                 //POW Variablen
                 if (fnmatch('*ENERGY*', $Buffer->Payload)) {
-                        $myBuffer = json_decode($Buffer->Payload);
-                        if (is_object($myBuffer)) {
+                    $myBuffer = json_decode($Buffer->Payload);
+                    if (is_object($myBuffer)) {
                         if (property_exists($myBuffer, 'ENERGY')) {
                             $this->SendDebug('Energy Payload', $Buffer->Payload, 0);
                             $this->SendDebug('Energy Topic', $Buffer->Topic, 0);
