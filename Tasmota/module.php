@@ -312,13 +312,13 @@ class Tasmota extends TasmotaService
                         }
                         return;
                     }
-                    //Sensor Variablen checken
-                    if (fnmatch('*SENSOR', $Buffer->Topic)) {
-                        $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
-                        $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
-                        $myBuffer = json_decode($Buffer->Payload, true);
-                        $this->traverseArray($myBuffer, $myBuffer);
-                    }
+                }
+                //Sensor Variablen checken
+                if (fnmatch('*SENSOR', $Buffer->Topic)) {
+                    $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
+                    $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
+                    $myBuffer = json_decode($Buffer->Payload, true);
+                    $this->traverseArray($myBuffer, $myBuffer);
                 }
             }
             //FanSpeed
