@@ -22,6 +22,8 @@ class TasmotaLED extends TasmotaService
         $this->RegisterPropertyInteger('PowerOnState', 3);
         $this->RegisterPropertyBoolean('SystemVariables', false);
         $this->RegisterPropertyBoolean('Power1Deactivate', false);
+        $this->RegisterPropertyBoolean('White', false);
+        $this->RegisterPropertyBoolean('CT', false);
         $this->RegisterPropertyBoolean('Sensoren', true);
 
         $this->createVariabenProfiles();
@@ -32,6 +34,16 @@ class TasmotaLED extends TasmotaService
         $this->RegisterVariableInteger('TasmotaLED_Speed', $this->Translate('Speed'), 'TasmotaLED.Speed', 5);
         $this->RegisterVariableInteger('TasmotaLED_Pixels', $this->Translate('Pixels'), '', 6);
         $this->RegisterVariableInteger('TasmotaLED_RSSI', 'RSSI', 'TasmotaLED.RSSI', 7);
+
+        $this->MaintainVariable('TasmotaLED_White', $this->Translate('White'), 1, '~Intensity.100', 0, $this->ReadPropertyBoolean('White') == true);
+        if ($this->ReadPropertyBoolean('White')) {
+            $this->EnableAction('TasmotaLED_White');
+        }
+        $this->MaintainVariable('TasmotaLED_CT', $this->Translate('Color Temperature'), 1, 'TasmotaLED.CT', 0, $this->ReadPropertyBoolean('CT') == true);
+        if ($this->ReadPropertyBoolean('CT')) {
+            $this->EnableAction('TasmotaLED_CT');
+        }
+
         $this->RegisterVariableBoolean('TasmotaLED_DeviceStatus', 'Status', 'TasmotaLED.DeviceStatus', 8);
         $this->EnableAction('TasmotaLED_Speed');
         $this->EnableAction('TasmotaLED_Fade');
@@ -147,6 +159,18 @@ class TasmotaLED extends TasmotaService
                     $this->SendDebug('Receive Result: Dimmer', $Payload->Dimmer, 0);
                     SetValue($this->GetIDForIdent('TasmotaLED_Dimmer'), $Payload->Dimmer);
                 }
+                if (property_exists($Payload, 'CT')) {
+                    $this->SendDebug('Receive Result: CT', $Payload->CT, 0);
+                    if ($this->GetIDForIdent('TasmotaLED_CT')) {
+                        SetValue($this->GetIDForIdent('TasmotaLED_CT'), $Payload->CT);
+                    }
+                }
+                if (property_exists($Payload, 'White')) {
+                    $this->SendDebug('Receive Result: White', $Payload->White, 0);
+                    if ($this->GetIDForIdent('TasmotaLED_White')) {
+                        SetValue($this->GetIDForIdent('TasmotaLED_White'), $Payload->White);
+                    }
+                }
                 if (property_exists($Payload, 'Color')) {
                     $this->SendDebug('Receive Result: Color', $Payload->Color, 0);
                     $rgb = explode(',', $Payload->Color);
@@ -209,6 +233,20 @@ class TasmotaLED extends TasmotaService
         $this->MQTTCommand($command, $msg);
     }
 
+    public function setCT(int $value)
+    {
+        $command = 'CT';
+        $msg = strval($value);
+        $this->MQTTCommand($command, $msg);
+    }
+
+    public function setWhite(int $value)
+    {
+        $command = 'White';
+        $msg = strval($value);
+        $this->MQTTCommand($command, $msg);
+    }
+
     public function setColorHex(string $color)
     {
         $command = 'Color';
@@ -266,6 +304,12 @@ class TasmotaLED extends TasmotaService
       case 'TasmotaLED_Dimmer':
         $this->setDimmer($Value);
         break;
+      case 'TasmotaLED_White':
+        $this->setWhite($Value);
+        break;
+    case 'TasmotaLED_CT':
+        $this->setCT($Value);
+        break;
       default:
         // code...
         break;
@@ -293,6 +337,9 @@ class TasmotaLED extends TasmotaService
             [11, 'Rainbow', '', -1],
             [12, 'Fire', '', -1]
         ]);
+
+        //Color Temperature
+        $this->RegisterProfileInteger('TasmotaLED.CT', 'Intensity', '', '', 158, 500, 1);
         //Online / Offline Profile
         $this->RegisterProfileBooleanEx('TasmotaLED.DeviceStatus', 'Network', '', '', [
             [false, 'Offline',  '', 0xFF0000],
