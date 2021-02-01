@@ -179,7 +179,6 @@ class TasmotaLED extends TasmotaService
                         $color = ltrim($color, '#');
                         SetValue($this->GetIDForIdent('TasmotaLED_Color'), hexdec(($color)));
                     }
-
                 }
                 if (property_exists($Payload, 'Fade')) {
                     $this->SendDebug('Receive Result: Fade', $Payload->Fade, 0);
