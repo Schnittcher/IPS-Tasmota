@@ -173,10 +173,13 @@ class TasmotaLED extends TasmotaService
                 }
                 if (property_exists($Payload, 'Color')) {
                     $this->SendDebug('Receive Result: Color', $Payload->Color, 0);
-                    $rgb = explode(',', $Payload->Color);
-                    $color = sprintf('#%02x%02x%02x', $rgb[0], $rgb[1], $rgb[2]);
-                    $color = ltrim($color, '#');
-                    SetValue($this->GetIDForIdent('TasmotaLED_Color'), hexdec(($color)));
+                    if (strlen($Payload->Color) == 6) {
+                        $rgb = explode(',', $Payload->Color);
+                        $color = sprintf('#%02x%02x%02x', $rgb[0], $rgb[1], $rgb[2]);
+                        $color = ltrim($color, '#');
+                        SetValue($this->GetIDForIdent('TasmotaLED_Color'), hexdec(($color)));
+                    }
+
                 }
                 if (property_exists($Payload, 'Fade')) {
                     $this->SendDebug('Receive Result: Fade', $Payload->Fade, 0);
