@@ -35,15 +35,6 @@ class TasmotaLED extends TasmotaService
         $this->RegisterVariableInteger('TasmotaLED_Pixels', $this->Translate('Pixels'), '', 6);
         $this->RegisterVariableInteger('TasmotaLED_RSSI', 'RSSI', 'TasmotaLED.RSSI', 7);
 
-        $this->MaintainVariable('TasmotaLED_White', $this->Translate('White'), 1, '~Intensity.100', 0, $this->ReadPropertyBoolean('White') == true);
-        if ($this->ReadPropertyBoolean('White')) {
-            $this->EnableAction('TasmotaLED_White');
-        }
-        $this->MaintainVariable('TasmotaLED_CT', $this->Translate('Color Temperature'), 1, 'TasmotaLED.CT', 0, $this->ReadPropertyBoolean('CT') == true);
-        if ($this->ReadPropertyBoolean('CT')) {
-            $this->EnableAction('TasmotaLED_CT');
-        }
-
         $this->RegisterVariableBoolean('TasmotaLED_DeviceStatus', 'Status', 'TasmotaLED.DeviceStatus', 8);
         $this->EnableAction('TasmotaLED_Speed');
         $this->EnableAction('TasmotaLED_Fade');
@@ -61,6 +52,15 @@ class TasmotaLED extends TasmotaService
         //Setze Filter für ReceiveData
         if (IPS_GetKernelRunlevel() == KR_READY) {
             $this->setPowerOnState($this->ReadPropertyInteger('PowerOnState'));
+        }
+
+        $this->MaintainVariable('TasmotaLED_White', $this->Translate('White'), 1, '~Intensity.100', 0, $this->ReadPropertyBoolean('White') == true);
+        if ($this->ReadPropertyBoolean('White')) {
+            $this->EnableAction('TasmotaLED_White');
+        }
+        $this->MaintainVariable('TasmotaLED_CT', $this->Translate('Color Temperature'), 1, 'TasmotaLED.CT', 0, $this->ReadPropertyBoolean('CT') == true);
+        if ($this->ReadPropertyBoolean('CT')) {
+            $this->EnableAction('TasmotaLED_CT');
         }
 
         $this->SendDebug(__FUNCTION__ . ' FullTopic', $this->ReadPropertyString('FullTopic'), 0);
