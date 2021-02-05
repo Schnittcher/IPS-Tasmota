@@ -173,6 +173,45 @@ class Tasmota extends TasmotaService
                         $this->SetValue('Tasmota_PCA9685_PWM' . $Payload->PCA9685->PIN, $Payload->PCA9685->PWM);
                     }
                 }
+                if (fnmatch('*Switch*', $Buffer->Payload)) {
+                    $this->SendDebug('Switch Payload', $Buffer->Payload, 0);
+                    $this->SendDebug('Switch Topic', $Buffer->Topic, 0);
+                    for ($i = 0; $i <= 15; $i++) {
+                        if (property_exists($Payload->{'Switch' . $i}, 'Action')) {
+                            $this->RegisterVariableString('Tasmota_Switch' . $i, 'Switch' . $i, '', 0);
+                            SetValue($this->GetIDForIdent('Tasmota_Switch' . $i), $Payload->{'Switch' . $i}->{'Action'});
+                        }
+                    }
+                }
+                if (fnmatch('*Shutter*', $Buffer->Payload)) {
+                    $this->SendDebug('Shutter Payload', $Buffer->Payload, 0);
+                    $this->SendDebug('Shutter Topic', $Buffer->Topic, 0);
+                    for ($i = 0; $i <= 5; $i++) {
+                        if (property_exists($Payload->{'Shutter' . $i}, 'Position')) {
+                            $this->RegisterVariableInteger('Tasmota_Shutter' . $i . '_Position', 'Shutter' . $i . '_Position', '', 0);
+                            SetValue($this->GetIDForIdent('Tasmota_Shutter' . $i . '_Position'), $Payload->{'Shutter' . $i}->{'Position'});
+                        }
+                        if (property_exists($Payload->{'Shutter' . $i}, 'Direction')) {
+                            $this->RegisterVariableInteger('Tasmota_Shutter' . $i . '_Direction', 'Shutter' . $i . '_Direction', '', 0);
+                            SetValue($this->GetIDForIdent('Tasmota_Shutter' . $i . '_Direction'), $Payload->{'Shutter' . $i}->{'Direction'});
+                        }
+                        if (property_exists($Payload->{'Shutter' . $i}, 'Target')) {
+                            $this->RegisterVariableInteger('Tasmota_Shutter' . $i . '_Target', 'Shutter' . $i . '_Target', '', 0);
+                            SetValue($this->GetIDForIdent('Tasmota_Shutter' . $i . '_Target'), $Payload->{'Shutter' . $i}->{'Target'});
+                        }
+                    }
+                }
+                if (fnmatch('*Button*', $Buffer->Payload)) {
+                    $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
+                    $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
+                    for ($i = 0; $i <= 15; $i++) {
+                        if (property_exists($Payload->{'Button' . $i}, 'Action')) {
+                            $this->RegisterVariableString('Tasmota_Button' . $i, 'Button' . $i, '', 0);
+                            SetValue($this->GetIDForIdent('Tasmota_Button' . $i), $Payload->{'Button' . $i}->{'Action'});
+                        }
+                    }
+                }
+
                 if (fnmatch('*LWT', $Buffer->Topic)) {
                     $this->SendDebug('LWT Payload', $Buffer->Payload, 0);
                     if (strtolower($Buffer->Payload) == 'online') {
