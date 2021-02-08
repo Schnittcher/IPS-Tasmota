@@ -176,6 +176,7 @@ class Tasmota extends TasmotaService
                 if (fnmatch('*Switch*', $Buffer->Payload)) {
                     $this->SendDebug('Switch Payload', $Buffer->Payload, 0);
                     $this->SendDebug('Switch Topic', $Buffer->Topic, 0);
+                    $Payload = json_decode($Buffer->Payload);
                     for ($i = 0; $i <= 15; $i++) {
                         if (property_exists($Payload->{'Switch' . $i}, 'Action')) {
                             $this->RegisterVariableString('Tasmota_Switch' . $i, 'Switch' . $i, '', 0);
@@ -186,6 +187,7 @@ class Tasmota extends TasmotaService
                 if (fnmatch('*Shutter*', $Buffer->Payload)) {
                     $this->SendDebug('Shutter Payload', $Buffer->Payload, 0);
                     $this->SendDebug('Shutter Topic', $Buffer->Topic, 0);
+                    $Payload = json_decode($Buffer->Payload);
                     for ($i = 0; $i <= 5; $i++) {
                         if (property_exists($Payload->{'Shutter' . $i}, 'Position')) {
                             $this->RegisterVariableInteger('Tasmota_Shutter' . $i . '_Position', 'Shutter' . $i . '_Position', '', 0);
@@ -204,6 +206,7 @@ class Tasmota extends TasmotaService
                 if (fnmatch('*Button*', $Buffer->Payload)) {
                     $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
                     $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
+                    $Payload = json_decode($Buffer->Payload);
                     for ($i = 0; $i <= 15; $i++) {
                         if (property_exists($Payload->{'Button' . $i}, 'Action')) {
                             $this->RegisterVariableString('Tasmota_Button' . $i, 'Button' . $i, '', 0);
