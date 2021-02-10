@@ -178,9 +178,11 @@ class Tasmota extends TasmotaService
                     $this->SendDebug('Switch Topic', $Buffer->Topic, 0);
                     $Payload = json_decode($Buffer->Payload);
                     for ($i = 0; $i <= 15; $i++) {
-                        if (property_exists($Payload->{'Switch' . $i}, 'Action')) {
-                            $this->RegisterVariableString('Tasmota_Switch' . $i, 'Switch' . $i, '', 0);
-                            SetValue($this->GetIDForIdent('Tasmota_Switch' . $i), $Payload->{'Switch' . $i}->{'Action'});
+                        if (property_exists($Payload, 'Switch' . $i)) {
+                            if (property_exists($Payload->{'Switch' . $i}, 'Action')) {
+                                $this->RegisterVariableString('Tasmota_Switch' . $i, 'Switch' . $i, '', 0);
+                                SetValue($this->GetIDForIdent('Tasmota_Switch' . $i), $Payload->{'Switch' . $i}->{'Action'});
+                            }
                         }
                     }
                 }
@@ -189,17 +191,19 @@ class Tasmota extends TasmotaService
                     $this->SendDebug('Shutter Topic', $Buffer->Topic, 0);
                     $Payload = json_decode($Buffer->Payload);
                     for ($i = 0; $i <= 5; $i++) {
-                        if (property_exists($Payload->{'Shutter' . $i}, 'Position')) {
-                            $this->RegisterVariableInteger('Tasmota_Shutter' . $i . '_Position', 'Shutter' . $i . '_Position', '', 0);
-                            SetValue($this->GetIDForIdent('Tasmota_Shutter' . $i . '_Position'), $Payload->{'Shutter' . $i}->{'Position'});
-                        }
-                        if (property_exists($Payload->{'Shutter' . $i}, 'Direction')) {
-                            $this->RegisterVariableInteger('Tasmota_Shutter' . $i . '_Direction', 'Shutter' . $i . '_Direction', '', 0);
-                            SetValue($this->GetIDForIdent('Tasmota_Shutter' . $i . '_Direction'), $Payload->{'Shutter' . $i}->{'Direction'});
-                        }
-                        if (property_exists($Payload->{'Shutter' . $i}, 'Target')) {
-                            $this->RegisterVariableInteger('Tasmota_Shutter' . $i . '_Target', 'Shutter' . $i . '_Target', '', 0);
-                            SetValue($this->GetIDForIdent('Tasmota_Shutter' . $i . '_Target'), $Payload->{'Shutter' . $i}->{'Target'});
+                        if (property_exists($Payload, 'Shutter' . $i)) {
+                            if (property_exists($Payload->{'Shutter' . $i}, 'Position')) {
+                                $this->RegisterVariableInteger('Tasmota_Shutter' . $i . '_Position', 'Shutter' . $i . '_Position', '', 0);
+                                SetValue($this->GetIDForIdent('Tasmota_Shutter' . $i . '_Position'), $Payload->{'Shutter' . $i}->{'Position'});
+                            }
+                            if (property_exists($Payload->{'Shutter' . $i}, 'Direction')) {
+                                $this->RegisterVariableInteger('Tasmota_Shutter' . $i . '_Direction', 'Shutter' . $i . '_Direction', '', 0);
+                                SetValue($this->GetIDForIdent('Tasmota_Shutter' . $i . '_Direction'), $Payload->{'Shutter' . $i}->{'Direction'});
+                            }
+                            if (property_exists($Payload->{'Shutter' . $i}, 'Target')) {
+                                $this->RegisterVariableInteger('Tasmota_Shutter' . $i . '_Target', 'Shutter' . $i . '_Target', '', 0);
+                                SetValue($this->GetIDForIdent('Tasmota_Shutter' . $i . '_Target'), $Payload->{'Shutter' . $i}->{'Target'});
+                            }
                         }
                     }
                 }
