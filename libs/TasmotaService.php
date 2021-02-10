@@ -120,7 +120,7 @@ class TasmotaService extends IPSModule
         $Server['DataID'] = '{043EA491-0325-4ADD-8FC2-A30C8EEB4D3F}';
         $Server['PacketType'] = 3;
         $Server['QualityOfService'] = 0;
-        $Server['Retain'] = false;
+        $Server['Retain'] = $retain;
         $Server['Topic'] = $Topic;
         $Server['Payload'] = $Payload;
         $ServerJSON = json_encode($Server, JSON_UNESCAPED_SLASHES);
@@ -130,7 +130,7 @@ class TasmotaService extends IPSModule
         //MQTT Client
         $Buffer['PacketType'] = 3;
         $Buffer['QualityOfService'] = 0;
-        $Buffer['Retain'] = false;
+        $Buffer['Retain'] = $retain;
         $Buffer['Topic'] = $Topic;
         $Buffer['Payload'] = $Payload;
         $BufferJSON = json_encode($Buffer, JSON_UNESCAPED_SLASHES);
