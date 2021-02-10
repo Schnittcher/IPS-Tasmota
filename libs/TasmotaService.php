@@ -99,7 +99,7 @@ class TasmotaService extends IPSModule
             $retain = false;
         }
 
-        $retain = false; // Solange der IPS MQTT Server noch kein Retain kann
+        //$retain = false; // Solange der IPS MQTT Server noch kein Retain kann
 
         $FullTopic = explode('/', $this->ReadPropertyString('FullTopic'));
         $PrefixIndex = array_search('%prefix%', $FullTopic);
