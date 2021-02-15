@@ -345,7 +345,8 @@ class TasmotaService extends IPSModule
         }
     }
 
-    protected function getInfo2Variables($myBuffer) {
+    protected function getInfo2Variables($myBuffer)
+    {
         if (is_object($myBuffer)) {
             $this->RegisterVariableString('Tasmota_Hostname', 'Hostname');
             SetValue($this->GetIDForIdent('Tasmota_Hostname'), $myBuffer->Hostname);
