@@ -21,6 +21,7 @@ class TasmotaLED extends TasmotaService
         $this->RegisterPropertyBoolean('MessageRetain', false);
         $this->RegisterPropertyInteger('PowerOnState', 3);
         $this->RegisterPropertyBoolean('SystemVariables', false);
+        $this->RegisterPropertyBoolean('Info2', false);
         $this->RegisterPropertyBoolean('Power1Deactivate', false);
         $this->RegisterPropertyBoolean('White', false);
         $this->RegisterPropertyBoolean('CT', false);
@@ -99,6 +100,15 @@ class TasmotaLED extends TasmotaService
                     SetValue($this->GetIDForIdent('TasmotaLED_DeviceStatus'), false);
                 }
             }
+                            //Info2
+                            if (fnmatch('*INFO2', $Buffer->Topic)) {
+                                $myBuffer = json_decode($Buffer->Payload);
+                                $this->SendDebug('Info2 Payload', $Buffer->Payload, 0);
+            
+                                if ($this->ReadPropertyBoolean('Info2')) {
+                                    $this->getInfo2Variables($myBuffer);
+                                }
+                            }
             if (fnmatch('*RESULT', $Buffer->Topic)) {
                 $this->SendDebug('Result', $Buffer->Payload, 0);
                 $this->BufferResponse = $Buffer->Payload;

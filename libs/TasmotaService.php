@@ -344,4 +344,14 @@ class TasmotaService extends IPSModule
             SetValue($this->GetIDForIdent('Tasmota_Wifi_Channel'), $myBuffer->Wifi->Channel);
         }
     }
+
+    protected function getInfo2Variables($myBuffer) {
+        if (is_object($myBuffer)) {
+            $this->RegisterVariableString('Tasmota_Hostname', 'Hostname');
+            SetValue($this->GetIDForIdent('Tasmota_Hostname'), $myBuffer->Hostname);
+
+            $this->RegisterVariableString('Tasmota_IPAddress', 'IPAddress');
+            SetValue($this->GetIDForIdent('Tasmota_IPAddress'), $myBuffer->IPAddress);
+        }
+    }
 }

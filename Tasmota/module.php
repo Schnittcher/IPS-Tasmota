@@ -29,6 +29,7 @@ class Tasmota extends TasmotaService
         $this->RegisterVariableBoolean('Tasmota_DeviceStatus', 'Status', 'Tasmota.DeviceStatus');
         //Settings
         $this->RegisterPropertyBoolean('SystemVariables', false);
+        $this->RegisterPropertyBoolean('Info2', false);
         $this->RegisterPropertyBoolean('Power1Deactivate', false);
         $this->RegisterPropertyBoolean('Fan', false);
     }
@@ -124,6 +125,15 @@ class Tasmota extends TasmotaService
                     }
 
                     SetValue($this->GetIDForIdent('Tasmota_RSSI'), $myBuffer->Wifi->RSSI);
+                }
+                //Info2
+                if (fnmatch('*INFO2', $Buffer->Topic)) {
+                    $myBuffer = json_decode($Buffer->Payload);
+                    $this->SendDebug('Info2 Payload', $Buffer->Payload, 0);
+
+                    if ($this->ReadPropertyBoolean('Info2')) {
+                        $this->getInfo2Variables($myBuffer);
+                    }
                 }
                 if (fnmatch('*RESULT', $Buffer->Topic)) {
                     $this->SendDebug('Result Payload', $Buffer->Payload, 0);
