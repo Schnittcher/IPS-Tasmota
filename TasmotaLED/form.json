@@ -11,6 +11,7 @@
     { "type": "CheckBox", "name": "CT", "caption": "Variable for color temperature" },
     { "type": "CheckBox", "name": "White", "caption": "Variable for white" },
     { "type": "CheckBox", "name": "SystemVariables", "caption": "System Variables" },
+    { "type": "CheckBox", "name": "Info2", "caption": "Info 2 Variables" },
     { "type": "CheckBox", "name": "Power1Deactivate", "caption": "Multi Switch (Several power variables)" },
     { "type": "CheckBox", "name": "MessageRetain", "caption": "Retain (MQTT)" },
     { "type": "Select", "name": "PowerOnState", "caption": "PowerOnState",
