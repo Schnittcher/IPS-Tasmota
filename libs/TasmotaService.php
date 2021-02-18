@@ -295,7 +295,8 @@ class TasmotaService extends IPSModule
                             }
                     }
                 }
-                if ($ParentKey == 'PN532') {
+                if (is_string($value)) {
+                    //if ($ParentKey == 'PN532') {
                     $variablenID = $this->RegisterVariableString('Tasmota_' . $ParentKey . '_' . $key, $ParentKey . '_' . $key, '');
                     SetValue($this->GetIDForIdent('Tasmota_' . $ParentKey . '_' . $key), $value);
                 }
@@ -311,6 +312,7 @@ class TasmotaService extends IPSModule
                         SetValue($this->GetIDForIdent('Tasmota_PCA9685_' . $key), $value);
                     }
                 }
+
             }
         }
     }
