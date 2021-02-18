@@ -312,7 +312,6 @@ class TasmotaService extends IPSModule
                         SetValue($this->GetIDForIdent('Tasmota_PCA9685_' . $key), $value);
                     }
                 }
-
             }
         }
     }
