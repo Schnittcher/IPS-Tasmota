@@ -175,12 +175,13 @@ class Tasmota extends TasmotaService
                             }
                         }
                     }
-
-                    if (property_exists($Payload, 'PCA9685')) {
-                        $this->RegisterProfileInteger('Tasmota.PCA9685', 'Intensity', '', '%', 0, 4095, 1);
-                        $this->RegisterVariableInteger('Tasmota_PCA9685_PWM' . $Payload->PCA9685->PIN, 'PWM' . $Payload->PCA9685->PIN, 'Tasmota.PCA9685', 0);
-                        $this->EnableAction('Tasmota_PCA9685_PWM' . $Payload->PCA9685->PIN);
-                        $this->SetValue('Tasmota_PCA9685_PWM' . $Payload->PCA9685->PIN, $Payload->PCA9685->PWM);
+                    if (fnmatch('*PCA9685*', $Buffer->Payload)) {
+                        if (property_exists($Payload, 'PCA9685')) {
+                            $this->RegisterProfileInteger('Tasmota.PCA9685', 'Intensity', '', '%', 0, 4095, 1);
+                            $this->RegisterVariableInteger('Tasmota_PCA9685_PWM' . $Payload->PCA9685->PIN, 'PWM' . $Payload->PCA9685->PIN, 'Tasmota.PCA9685', 0);
+                            $this->EnableAction('Tasmota_PCA9685_PWM' . $Payload->PCA9685->PIN);
+                            $this->SetValue('Tasmota_PCA9685_PWM' . $Payload->PCA9685->PIN, $Payload->PCA9685->PWM);
+                        }
                     }
                 }
                 if (fnmatch('*Switch*', $Buffer->Payload)) {
