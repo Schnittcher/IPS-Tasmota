@@ -11,7 +11,8 @@
     { "type": "CheckBox", "name": "SystemVariables", "caption": "System Variables" },
     { "type": "CheckBox", "name": "Info2", "caption": "Info 2 Variables" },
     { "type": "CheckBox", "name": "Power1Deactivate", "caption": "Multi Switch (Several power variables)" },
-      { "type": "CheckBox", "name": "Fan", "caption": "Fan" },
+    { "type": "CheckBox", "name": "AutomatedSensorValues", "caption": "Automated Sensor Values" },
+    { "type": "CheckBox", "name": "Fan", "caption": "Fan" },
     { "type": "CheckBox", "name": "MessageRetain", "caption": "Retain (MQTT)" },
     { "type": "Select", "name": "PowerOnState", "caption": "Power on State",
       "options": [

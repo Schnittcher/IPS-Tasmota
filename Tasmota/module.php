@@ -32,7 +32,7 @@ class Tasmota extends TasmotaService
         $this->RegisterPropertyBoolean('Info2', false);
         $this->RegisterPropertyBoolean('Power1Deactivate', false);
         $this->RegisterPropertyBoolean('Fan', false);
-        $this->RegisterAttributeBoolean('AutomatedSensorValues', true);
+        $this->RegisterPropertyBoolean('AutomatedSensorValues', true);
     }
 
     public function ApplyChanges()
