@@ -372,7 +372,7 @@ class Tasmota extends TasmotaService
                     }
                 }
                 //Sensor Variablen checken
-                if ($this->ReadAttributeBoolean('AutomatedSensorValues')) {
+                if ($this->ReadPropertyBoolean('AutomatedSensorValues')) {
                     if (fnmatch('*SENSOR', $Buffer->Topic)) {
                         $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
                         $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
