@@ -32,6 +32,7 @@ class Tasmota extends TasmotaService
         $this->RegisterPropertyBoolean('Info2', false);
         $this->RegisterPropertyBoolean('Power1Deactivate', false);
         $this->RegisterPropertyBoolean('Fan', false);
+        $this->RegisterAttributeBoolean('AutomatedSensorValues', true);
     }
 
     public function ApplyChanges()
@@ -371,33 +372,35 @@ class Tasmota extends TasmotaService
                     }
                 }
                 //Sensor Variablen checken
-                if (fnmatch('*SENSOR', $Buffer->Topic)) {
-                    $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
-                    $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
-                    $myBuffer = json_decode($Buffer->Payload, true);
+                if ($this->ReadAttributeBoolean('AutomatedSensorValues')) {
+                    if (fnmatch('*SENSOR', $Buffer->Topic)) {
+                        $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
+                        $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
+                        $myBuffer = json_decode($Buffer->Payload, true);
 
-                    $Payload = json_decode($Buffer->Payload);
-                    if (property_exists($Payload, 'IBEACON')) {
-                        $iBeacon = $Payload->IBEACON;
-                        if (property_exists($iBeacon, 'MAC')) {
-                            $this->RegisterVariableString('Tasmota_iBeaconMac_' . $iBeacon->MAC, 'iBeacon ' . $iBeacon->NAME . ' MAC', '', 0);
-                            $this->SetValue('Tasmota_iBeaconMac_' . $iBeacon->MAC, $iBeacon->MAC);
+                        $Payload = json_decode($Buffer->Payload);
+                        if (property_exists($Payload, 'IBEACON')) {
+                            $iBeacon = $Payload->IBEACON;
+                            if (property_exists($iBeacon, 'MAC')) {
+                                $this->RegisterVariableString('Tasmota_iBeaconMac_' . $iBeacon->MAC, 'iBeacon ' . $iBeacon->NAME . ' MAC', '', 0);
+                                $this->SetValue('Tasmota_iBeaconMac_' . $iBeacon->MAC, $iBeacon->MAC);
+                            }
+                            if (property_exists($iBeacon, 'RSSI')) {
+                                $this->RegisterVariableString('Tasmota_iBeaconRSSI_' . $iBeacon->MAC, 'iBeacon ' . $iBeacon->NAME . ' RSSI', '', 0);
+                                $this->SetValue('Tasmota_iBeaconRSSI_' . $iBeacon->MAC, $iBeacon->RSSI);
+                            }
+                            if (property_exists($iBeacon, 'STATE')) {
+                                $this->RegisterVariableString('Tasmota_iBeaconState_' . $iBeacon->MAC, 'iBeacon ' . $iBeacon->NAME . ' ' . $this->Translate('State'), '', 0);
+                                $this->SetValue('Tasmota_iBeaconState_' . $iBeacon->MAC, $iBeacon->STATE);
+                            }
+                            if (property_exists($iBeacon, 'PERSEC')) {
+                                $this->RegisterVariableString('Tasmota_iBeaconPersec_' . $iBeacon->MAC, 'iBeacon ' . $iBeacon->NAME . ' PERSEC', '', 0);
+                                $this->SetValue('Tasmota_iBeaconPersec_' . $iBeacon->MAC, $iBeacon->PERSEC);
+                            }
+                            return;
                         }
-                        if (property_exists($iBeacon, 'RSSI')) {
-                            $this->RegisterVariableString('Tasmota_iBeaconRSSI_' . $iBeacon->MAC, 'iBeacon ' . $iBeacon->NAME . ' RSSI', '', 0);
-                            $this->SetValue('Tasmota_iBeaconRSSI_' . $iBeacon->MAC, $iBeacon->RSSI);
-                        }
-                        if (property_exists($iBeacon, 'STATE')) {
-                            $this->RegisterVariableString('Tasmota_iBeaconState_' . $iBeacon->MAC, 'iBeacon ' . $iBeacon->NAME . ' ' . $this->Translate('State'), '', 0);
-                            $this->SetValue('Tasmota_iBeaconState_' . $iBeacon->MAC, $iBeacon->STATE);
-                        }
-                        if (property_exists($iBeacon, 'PERSEC')) {
-                            $this->RegisterVariableString('Tasmota_iBeaconPersec_' . $iBeacon->MAC, 'iBeacon ' . $iBeacon->NAME . ' PERSEC', '', 0);
-                            $this->SetValue('Tasmota_iBeaconPersec_' . $iBeacon->MAC, $iBeacon->PERSEC);
-                        }
-                        return;
+                        $this->traverseArray($myBuffer, $myBuffer);
                     }
-                    $this->traverseArray($myBuffer, $myBuffer);
                 }
             }
             //FanSpeed

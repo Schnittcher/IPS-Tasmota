@@ -9,6 +9,7 @@
       "Hostname": "Hostname",
       "Multi Switch (Several power variables)": "Multischalter (Mehrere Power Variablen)",
       "Fan": "Ventilator",
+      "Automated Sensor Values": "Automatisierte Sensorwerte",
       "Power on State": "Einschaltzustand",
       "Off": "Aus",
       "On": "An",
