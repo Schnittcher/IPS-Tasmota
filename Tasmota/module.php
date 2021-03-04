@@ -190,10 +190,12 @@ class Tasmota extends TasmotaService
                     $this->SendDebug('Switch Topic', $Buffer->Topic, 0);
                     $Payload = json_decode($Buffer->Payload);
                     for ($i = 0; $i <= 15; $i++) {
-                        if (property_exists($Payload, 'Switch' . $i)) {
-                            if (property_exists($Payload->{'Switch' . $i}, 'Action')) {
-                                $this->RegisterVariableString('Tasmota_Switch' . $i, 'Switch' . $i, '', 0);
-                                SetValue($this->GetIDForIdent('Tasmota_Switch' . $i), $Payload->{'Switch' . $i}->{'Action'});
+                        if (is_object($Payload)) {
+                            if (property_exists($Payload, 'Switch' . $i)) {
+                                if (property_exists($Payload->{'Switch' . $i}, 'Action')) {
+                                    $this->RegisterVariableString('Tasmota_Switch' . $i, 'Switch' . $i, '', 0);
+                                    SetValue($this->GetIDForIdent('Tasmota_Switch' . $i), $Payload->{'Switch' . $i}->{'Action'});
+                                }
                             }
                         }
                     }
