@@ -26,6 +26,7 @@ class Tasmota extends TasmotaService
         $this->RegisterPropertyInteger('GatewayMode', 0);
         $this->RegisterPropertyBoolean('MessageRetain', false);
         $this->RegisterVariableFloat('Tasmota_RSSI', 'RSSI');
+        $this->RegisterVariableFloat('Tasmota_Signal', 'Signal');
         $this->RegisterVariableBoolean('Tasmota_DeviceStatus', 'Status', 'Tasmota.DeviceStatus');
         //Settings
         $this->RegisterPropertyBoolean('SystemVariables', false);
@@ -124,8 +125,10 @@ class Tasmota extends TasmotaService
                     if ($this->ReadPropertyBoolean('SystemVariables')) {
                         $this->getSystemVariables($myBuffer);
                     }
-
                     SetValue($this->GetIDForIdent('Tasmota_RSSI'), $myBuffer->Wifi->RSSI);
+                    if (property_exists($myBuffer->Wifi, 'Signal')) {
+                        SetValue($this->GetIDForIdent('Tasmota_Signal'), $myBuffer->Wifi->Signal);
+                    }
                 }
                 //Info2
                 if (fnmatch('*INFO2', $Buffer->Topic)) {
