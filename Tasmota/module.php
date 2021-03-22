@@ -398,7 +398,7 @@ class Tasmota extends TasmotaService
                                 $this->SetValue('Tasmota_iBeaconMac_' . $iBeacon->MAC, $iBeacon->MAC);
                             }
                             if (property_exists($iBeacon, 'RSSI')) {
-                                $this->RegisterVariableString('Tasmota_iBeaconRSSI_' . $iBeacon->MAC, 'iBeacon ' . $iBeaconName . ' RSSI', '', 0);
+                                $this->RegisterVariableInteger('Tasmota_iBeaconRSSI_' . $iBeacon->MAC, 'iBeacon ' . $iBeaconName . ' RSSI', '', 0);
                                 $this->SetValue('Tasmota_iBeaconRSSI_' . $iBeacon->MAC, $iBeacon->RSSI);
                             }
                             if (property_exists($iBeacon, 'STATE')) {
@@ -406,7 +406,7 @@ class Tasmota extends TasmotaService
                                 $this->SetValue('Tasmota_iBeaconState_' . $iBeacon->MAC, $iBeacon->STATE);
                             }
                             if (property_exists($iBeacon, 'PERSEC')) {
-                                $this->RegisterVariableString('Tasmota_iBeaconPersec_' . $iBeacon->MAC, 'iBeacon ' . $iBeaconName . ' PERSEC', '', 0);
+                                $this->RegisterVariableInteger('Tasmota_iBeaconPersec_' . $iBeacon->MAC, 'iBeacon ' . $iBeaconName . ' PERSEC', '', 0);
                                 $this->SetValue('Tasmota_iBeaconPersec_' . $iBeacon->MAC, $iBeacon->PERSEC);
                             }
                             return;
