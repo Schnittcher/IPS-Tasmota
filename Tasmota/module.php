@@ -228,14 +228,15 @@ class Tasmota extends TasmotaService
                     $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
                     $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
                     $Payload = json_decode($Buffer->Payload);
-                    for ($i = 0; $i <= 15; $i++) {
-                        if (property_exists($Payload->{'Button' . $i}, 'Action')) {
-                            $this->RegisterVariableString('Tasmota_Button' . $i, 'Button' . $i, '', 0);
-                            SetValue($this->GetIDForIdent('Tasmota_Button' . $i), $Payload->{'Button' . $i}->{'Action'});
+                    if (is_object($Payload)) {
+                        for ($i = 0; $i <= 15; $i++) {
+                            if (property_exists($Payload->{'Button' . $i}, 'Action')) {
+                                $this->RegisterVariableString('Tasmota_Button' . $i, 'Button' . $i, '', 0);
+                                SetValue($this->GetIDForIdent('Tasmota_Button' . $i), $Payload->{'Button' . $i}->{'Action'});
+                            }
                         }
                     }
                 }
-
                 if (fnmatch('*LWT', $Buffer->Topic)) {
                     $this->SendDebug('LWT Payload', $Buffer->Payload, 0);
                     if (strtolower($Buffer->Payload) == 'online') {
@@ -406,7 +407,7 @@ class Tasmota extends TasmotaService
                                 $this->SetValue('Tasmota_iBeaconState_' . $iBeacon->MAC, $iBeacon->STATE);
                             }
                             if (property_exists($iBeacon, 'PERSEC')) {
-                                $this->RegisterVariableInteger('Tasmota_iBeaconPersec_' . $iBeacon->MAC, 'iBeacon ' . $iBeaconName . ' PERSEC', '', 0);
+                                $this->RegisterVariableFloat('Tasmota_iBeaconPersec_' . $iBeacon->MAC, 'iBeacon ' . $iBeaconName . ' PERSEC', '', 0);
                                 $this->SetValue('Tasmota_iBeaconPersec_' . $iBeacon->MAC, $iBeacon->PERSEC);
                             }
                             return;
