@@ -15,13 +15,7 @@ class TasmotaService extends IPSModule
     {
         $command = 'restart';
         $msg = strval(1);
-
-        $retain = $this->ReadPropertyBoolean('MessageRetain');
-        if ($retain) {
-            $retain = true;
-        } else {
-            $retain = false;
-        }
+        $retain = false;
 
         $this->MQTTCommand($command, $msg, $retain);
     }
