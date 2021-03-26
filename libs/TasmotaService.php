@@ -86,13 +86,6 @@ class TasmotaService extends IPSModule
 
     protected function MQTTCommand($command, $Payload, $retain = 0)
     {
-        $retain = $this->ReadPropertyBoolean('MessageRetain');
-        if ($retain) {
-            $retain = true;
-        } else {
-            $retain = false;
-        }
-
         //$retain = false; // Solange der IPS MQTT Server noch kein Retain kann
 
         $FullTopic = explode('/', $this->ReadPropertyString('FullTopic'));
