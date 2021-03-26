@@ -230,9 +230,11 @@ class Tasmota extends TasmotaService
                     $Payload = json_decode($Buffer->Payload);
                     if (is_object($Payload)) {
                         for ($i = 0; $i <= 15; $i++) {
-                            if (property_exists($Payload->{'Button' . $i}, 'Action')) {
-                                $this->RegisterVariableString('Tasmota_Button' . $i, 'Button' . $i, '', 0);
-                                SetValue($this->GetIDForIdent('Tasmota_Button' . $i), $Payload->{'Button' . $i}->{'Action'});
+                            if (property_exists($Payload, 'Button' . $i)) {
+                                if (property_exists($Payload->{'Button' . $i}, 'Action')) {
+                                    $this->RegisterVariableString('Tasmota_Button' . $i, 'Button' . $i, '', 0);
+                                    SetValue($this->GetIDForIdent('Tasmota_Button' . $i), $Payload->{'Button' . $i}->{'Action'});
+                                }
                             }
                         }
                     }
