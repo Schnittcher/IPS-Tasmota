@@ -24,7 +24,8 @@
       "White": "Weiß",
       "Color Temperature": "Farbtemperatur",
       "Variable for white": "Variable für weiß",
-      "Variable for color temperature": "Variable für Farbtemperatur"
+      "Variable for color temperature": "Variable für Farbtemperatur",
+      "Use HSBColor": "Benutze HSB Farben"
     }
   }
 }

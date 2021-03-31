@@ -8,6 +8,7 @@
       { "type": "ValidationTextBox", "name": "FullTopic", "caption": "Full Topic" },
 
     { "type": "Label", "label": "Settings" },
+    { "type": "CheckBox", "name": "HSBColor", "caption": "Use HSBColor" },
     { "type": "CheckBox", "name": "CT", "caption": "Variable for color temperature" },
     { "type": "CheckBox", "name": "White", "caption": "Variable for white" },
     { "type": "CheckBox", "name": "SystemVariables", "caption": "System Variables" },

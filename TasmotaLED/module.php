@@ -23,6 +23,7 @@ class TasmotaLED extends TasmotaService
         $this->RegisterPropertyBoolean('SystemVariables', false);
         $this->RegisterPropertyBoolean('Info2', false);
         $this->RegisterPropertyBoolean('Power1Deactivate', false);
+        $this->RegisterPropertyBoolean('HSBColor', false);
         $this->RegisterPropertyBoolean('White', false);
         $this->RegisterPropertyBoolean('CT', false);
         $this->RegisterPropertyBoolean('Sensoren', true);
@@ -181,13 +182,24 @@ class TasmotaLED extends TasmotaService
                         SetValue($this->GetIDForIdent('TasmotaLED_White'), $Payload->White);
                     }
                 }
-                if (property_exists($Payload, 'Color')) {
-                    $this->SendDebug('Receive Result: Color', $Payload->Color, 0);
-                    if (strlen($Payload->Color) == 6) {
-                        $rgb = explode(',', $Payload->Color);
-                        $color = sprintf('#%02x%02x%02x', $rgb[0], $rgb[1], $rgb[2]);
-                        $color = ltrim($color, '#');
+                if (property_exists($Payload, 'HSBColor')) {
+                    if ($this->ReadPropertyBoolean('HSBColor')) {
+                        $this->SendDebug('HSBColor', $Payload->HSBColor, 0);
+                        $HSBColor = explode(',', $Payload->HSBColor);
+                        $Color = $this->hsv2rgb($HSBColor[0], $HSBColor[1], $HSBColor[2]);
+                        $color = ltrim($Color['hex'], '#');
                         SetValue($this->GetIDForIdent('TasmotaLED_Color'), hexdec(($color)));
+                    }
+                }
+                if (property_exists($Payload, 'Color')) {
+                    if (!$this->ReadPropertyBoolean('HSBColor')) {
+                        $this->SendDebug('Color', $Payload->Color, 0);
+                        if (strlen($Payload->Color) == 6) {
+                            $rgb = explode(',', $Payload->Color);
+                            $color = sprintf('#%02x%02x%02x', $rgb[0], $rgb[1], $rgb[2]);
+                            $color = ltrim($color, '#');
+                            SetValue($this->GetIDForIdent('TasmotaLED_Color'), hexdec(($color)));
+                        }
                     }
                 }
                 if (property_exists($Payload, 'Fade')) {
@@ -357,5 +369,25 @@ class TasmotaLED extends TasmotaService
             [false, 'Offline',  '', 0xFF0000],
             [true, 'Online',  '', 0x00FF00]
         ]);
+    }
+    private function hsv2rgb($hue, $sat, $val)
+    {
+        $rgb = [0, 0, 0];
+        //calc rgb for 100% SV, go +1 for BR-range
+        for ($i = 0; $i < 4; $i++) {
+            if (abs($hue - $i * 120) < 120) {
+                $distance = max(60, abs($hue - $i * 120));
+                $rgb[$i % 3] = 1 - (($distance - 60) / 60);
+            }
+        }
+        //desaturate by increasing lower levels
+        $max = max($rgb);
+        $factor = 255 * ($val / 100);
+        for ($i = 0; $i < 3; $i++) {
+            //use distance between 0 and max (1) and multiply with value
+            $rgb[$i] = round(($rgb[$i] + ($max - $rgb[$i]) * (1 - $sat / 100)) * $factor);
+        }
+        $rgb['hex'] = sprintf('#%02X%02X%02X', $rgb[0], $rgb[1], $rgb[2]);
+        return $rgb;
     }
 }
