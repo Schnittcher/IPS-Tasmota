@@ -50,5 +50,5 @@ Als Rückgabewert wird JSON geliefert.
 
 Beispiel:
 ```php
-Tasmota_sendMQTTCommand(25537, "POWER "ON");
+Tasmota_sendMQTTCommand(25537, "POWER", "ON");
 ```
