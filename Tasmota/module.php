@@ -442,6 +442,10 @@ class Tasmota extends TasmotaService
                     $this->RegisterVariableString('Tasmota_IRData', $this->Translate('IR Data'), '', 0);
                     SetValue($this->GetIDForIdent('Tasmota_IRData'), $myBuffer->IrReceived->Data);
                 }
+                if (property_exists($myBuffer->IrReceived, 'Hash')) {
+                    $this->RegisterVariableString('Tasmota_IRHash', $this->Translate('IR Hash'), '', 0);
+                    SetValue($this->GetIDForIdent('Tasmota_IRHash'), $myBuffer->IrReceived->Hash);
+                }
             }
         }
     }
