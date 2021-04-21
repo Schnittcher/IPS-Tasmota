@@ -223,6 +223,7 @@ class Tasmota extends TasmotaService
                             }
                         }
                     }
+                    return;
                 }
                 if (fnmatch('*Button*', $Buffer->Payload)) {
                     $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
