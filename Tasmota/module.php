@@ -415,6 +415,18 @@ class Tasmota extends TasmotaService
                             }
                             return;
                         }
+                        if (property_exists($Payload, 'Wiegand')) {
+                            $Wiegand = $Payload->Wiegand;
+                            if (propertyexists($Wiegand, 'UID')) {
+                                $this->RegisterVariableString('Tasmota' . $Wiegand->UID, 'Wiegand UID', '', 0);
+                                $this->SetValue('Tasmota_' . $Wiegand->UID, $Wiegand->UID);
+                            }
+                            if (propertyexists($Wiegand, 'Size')) {
+                                $this->RegisterVariableInteger('Tasmota' . $Wiegand->Size, 'Wiegand Size', '', 0);
+                                $this->SetValue('Tasmota_' . $Wiegand->Size, $Wiegand->Size);
+                            }
+                            return;
+                        }
                         $this->traverseArray($myBuffer, $myBuffer);
                     }
                 }
