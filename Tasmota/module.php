@@ -303,8 +303,15 @@ class Tasmota extends TasmotaService
                             }
 
                             if (property_exists($myBuffer->ENERGY, 'Voltage')) {
-                                $this->RegisterVariableFloat('Tasmota_POWVoltage', $this->Translate('Voltage'), '~Volt');
-                                SetValue($this->GetIDForIdent('Tasmota_POWVoltage'), $myBuffer->ENERGY->Voltage);
+                                if (!is_array($myBuffer->ENERGY->Voltage)) {
+                                    $this->RegisterVariableFloat('Tasmota_POWVoltage', $this->Translate('Voltage'), '~Volt');
+                                    SetValue($this->GetIDForIdent('Tasmota_POWVoltage'), $myBuffer->ENERGY->Voltage);
+                                }else{
+                                    foreach ($myBuffer->ENERGY->Voltage as $key=> $value) {
+                                        $this->RegisterVariableFloat('Tasmota_POWVoltage' . $key, $this->Translate('Voltage') . ' ' . strval(intval($key) + 1), '~Volt');
+                                        SetValue($this->GetIDForIdent('Tasmota_POWVoltage' . $key), $value);
+                                    }
+                                }
                             }
 
                             if (property_exists($myBuffer->ENERGY, 'Factor')) {
@@ -373,9 +380,16 @@ class Tasmota extends TasmotaService
                                 SetValue($this->GetIDForIdent('Tasmota_TotalReactivePower'), $myBuffer->ENERGY->TotalReactivePower);
                             }
                             if (property_exists($myBuffer->ENERGY, 'Frequency')) {
-                                $this->RegisterVariableFloat('Tasmota_Frequency', $this->Translate('Frequency'), '~Hertz');
-                                SetValue($this->GetIDForIdent('Tasmota_Frequency'), $myBuffer->ENERGY->Frequency);
-                            }
+                                if (!is_array($myBuffer->ENERGY->Frequency)) {
+                                    $this->RegisterVariableFloat('Tasmota_Frequency', $this->Translate('Frequency'), '~Hertz');
+                                    SetValue($this->GetIDForIdent('Tasmota_Frequency'), $myBuffer->ENERGY->Frequency);
+                                } else {
+                                    foreach ($myBuffer->ENERGY->Frequency as $key=> $value) {
+                                        $this->RegisterVariableFloat('Tasmota_Frequency' . $key, $this->Translate('Frequency') . ' ' . strval(intval($key) + 1), '~Hertz');
+                                        SetValue($this->GetIDForIdent('Tasmota_Frequency' . $key), $value);
+                                    }
+                                }
+                            }  
                         }
                         return;
                     }
