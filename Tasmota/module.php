@@ -376,6 +376,8 @@ class Tasmota extends TasmotaService
                                 $this->RegisterVariableFloat('Tasmota_Frequency', $this->Translate('Frequency'), '~Hertz');
                                 SetValue($this->GetIDForIdent('Tasmota_Frequency'), $myBuffer->ENERGY->Frequency);
                             }
+                        }
+                        if (property_exists($myBuffer, 'COUNTER')) {
                             if (property_exists($myBuffer->COUNTER, 'C1')) {
                                 $this->RegisterVariableFloat('Tasmota_COUNTER_C1', $this->Translate('Counter C1'), '');
                                 SetValue($this->GetIDForIdent('Tasmota_COUNTER_C1'), $myBuffer->COUNTER->C1);
@@ -385,7 +387,6 @@ class Tasmota extends TasmotaService
                                 SetValue($this->GetIDForIdent('Tasmota_COUNTER_C2'), $myBuffer->COUNTER->C2);
                             }
                         }
-
                         return;
                     }
                 }
