@@ -340,10 +340,14 @@ class TasmotaService extends IPSModule
     {
         if (is_object($myBuffer)) {
             $this->RegisterVariableString('Tasmota_Hostname', 'Hostname');
-            if (isset($myBuffer->Info2)) SetValue($this->GetIDForIdent('Tasmota_Hostname'), $myBuffer->Info2->Hostname);
+            if (isset($myBuffer->Info2)) {
+                SetValue($this->GetIDForIdent('Tasmota_Hostname'), $myBuffer->Info2->Hostname);
+            }
 
             $this->RegisterVariableString('Tasmota_IPAddress', 'IPAddress');
-            if (isset($myBuffer->Info2)) SetValue($this->GetIDForIdent('Tasmota_IPAddress'), $myBuffer->Info2->IPAddress);
+            if (isset($myBuffer->Info2)) {
+                SetValue($this->GetIDForIdent('Tasmota_IPAddress'), $myBuffer->Info2->IPAddress);
+            }
         }
     }
 }
