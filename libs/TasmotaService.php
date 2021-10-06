@@ -340,7 +340,7 @@ class TasmotaService extends IPSModule
     {
         if (is_object($myBuffer)) {
             $this->RegisterVariableString('Tasmota_Module', $this->Translate('Module'));
-            $this->RegisterVariableString('Tasmota_Verison', $this->Translate('Version'));
+            $this->RegisterVariableString('Tasmota_Version', $this->Translate('Version'));
             $this->RegisterVariableString('Tasmota_FallbackTopic', $this->Translate('Fallback Topic'));
             $this->RegisterVariableString('Tasmota_GroupTopic', $this->Translate('Group Topic'));
             if (isset($myBuffer->Info1)) {
