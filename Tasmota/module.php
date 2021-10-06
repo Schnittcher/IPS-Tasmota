@@ -30,6 +30,7 @@ class Tasmota extends TasmotaService
         $this->RegisterVariableBoolean('Tasmota_DeviceStatus', 'Status', 'Tasmota.DeviceStatus');
         //Settings
         $this->RegisterPropertyBoolean('SystemVariables', false);
+        $this->RegisterPropertyBoolean('Info1', false);
         $this->RegisterPropertyBoolean('Info2', false);
         $this->RegisterPropertyBoolean('Power1Deactivate', false);
         $this->RegisterPropertyBoolean('Fan', false);

@@ -9,6 +9,7 @@
 
     { "type": "Label", "label": "Settings" },
     { "type": "CheckBox", "name": "SystemVariables", "caption": "System Variables" },
+    { "type": "CheckBox", "name": "Info1", "caption": "Info 1 Variables" },
     { "type": "CheckBox", "name": "Info2", "caption": "Info 2 Variables" },
     { "type": "CheckBox", "name": "Power1Deactivate", "caption": "Multi Switch (Several power variables)" },
     { "type": "CheckBox", "name": "AutomatedSensorValues", "caption": "Automated Sensor Values" },

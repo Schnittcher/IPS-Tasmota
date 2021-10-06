@@ -38,7 +38,11 @@
       "ExportReactivePower": "Export Blindleistung",
       "TotalReactivePower": "Gesamte Blindleistung",
       "Frequency": "Frequenz",
-      "State": "Status"
+      "State": "Status",
+      "Module": "Modul",
+      "Version": "Version",
+      "Fallback Topic": "Fallback Topic",
+      "Group Topic": "Group Topic"
     }
   }
 }
