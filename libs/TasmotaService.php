@@ -269,38 +269,38 @@ class TasmotaService extends IPSModule
                     switch ($key) {
                         case 'Temperature':
                             $variablenID = $this->RegisterVariableFloat('Tasmota_' . $ParentKey . '_' . $key, $ParentKey . ' Temperatur', '~Temperature');
-                            SetValue($this->GetIDForIdent('Tasmota_' . $ParentKey . '_' . $key), $value);
+                            $this->SetValue('Tasmota_' . $ParentKey . '_' . $key, $value);
                             break;
                         case 'Humidity':
                             $variablenID = $this->RegisterVariableFloat('Tasmota_' . $ParentKey . '_' . $key, $ParentKey . ' Feuchte', '~Humidity.F');
-                            SetValue($this->GetIDForIdent('Tasmota_' . $ParentKey . '_' . $key), $value);
+                            $this->SetValue('Tasmota_' . $ParentKey . '_' . $key, $value);
                             break;
                         default:
                             if (($ParentKey != 'ENERGY') || ($ParentKey != 'IBEACON')) {
                                 $variablenID = $this->RegisterVariableFloat('Tasmota_' . $ParentKey . '_' . $key, $ParentKey . ' ' . $key);
-                                SetValue($this->GetIDForIdent('Tasmota_' . $ParentKey . '_' . $key), $value);
+                                $this->SetValue('Tasmota_' . $ParentKey . '_' . $key, $value);
                             }
                     }
                 }
                 if ($ParentKey == 'PN532') {
                     $variablenID = $this->RegisterVariableString('Tasmota_' . $ParentKey . '_' . $key, $ParentKey . '_' . $key, '');
-                    SetValue($this->GetIDForIdent('Tasmota_' . $ParentKey . '_' . $key), $value);
+                    $this->SetValue('Tasmota_' . $ParentKey . '_' . $key, $value);
                 }
                 if ($ParentKey == 'MCP230XX') {
                     if (@$this->GetIDForIdent('Tasmota_MCP230XX_INT_' . $key) != false) {
                         $this->SendDebug('MCP230XX', $key, 0);
-                        SetValue($this->GetIDForIdent('Tasmota_MCP230XX_INT_' . $key), $value);
+                        $this->SetValue('Tasmota_MCP230XX_INT_' . $key, $value);
                     }
                 }
                 if ($ParentKey == 'PCA9685') {
                     if (@$this->GetIDForIdent('Tasmota_PCA9685_' . $key) != false) {
                         $this->SendDebug('Tasmota_PCA9685 Key', $key, 0);
-                        SetValue($this->GetIDForIdent('Tasmota_PCA9685_' . $key), $value);
+                        $this->SetValue('Tasmota_PCA9685_' . $key, $value);
                     }
                 }
                 if ($ParentKey == 'RC522') {
                     $variablenID = $this->RegisterVariableString('Tasmota' . $ParentKey . '_' . $key, $ParentKey . '' . $key, '');
-                    SetValue($this->GetIDForIdent('Tasmota' . $ParentKey . '_' . $key), $value);
+                    $this->SetValue('Tasmota' . $ParentKey . '_' . $key, $value);
                 }
             }
         }

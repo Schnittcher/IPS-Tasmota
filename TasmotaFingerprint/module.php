@@ -69,9 +69,9 @@ class TasmotaFingerprint extends TasmotaService
             if (fnmatch('*LWT', $Buffer->Topic)) {
                 $this->SendDebug('State Payload', $Buffer->Payload, 0);
                 if (strtolower($Buffer->Payload) == 'online') {
-                    SetValue($this->GetIDForIdent('DeviceStatus'), true);
+                    $this->SetValue('DeviceStatus', true);
                 } else {
-                    SetValue($this->GetIDForIdent('DeviceStatus'), false);
+                    $this->SetValue('DeviceStatus', false);
                 }
             }
             if (fnmatch('*RESULT', $Buffer->Topic)) {
@@ -86,8 +86,8 @@ class TasmotaFingerprint extends TasmotaService
                 }
                 if (property_exists($Payload, 'FPrint')) {
                     $this->SendDebug('Receive Result: FPrint', json_encode($Payload->FPrint), 0);
-                    SetValue($this->GetIDForIdent('ID'), $Payload->FPrint->Id);
-                    SetValue($this->GetIDForIdent('Confidence'), $Payload->FPrint->Confidence);
+                    $this->SetValue('ID', $Payload->FPrint->Id);
+                    $this->SetValue('Confidence', $Payload->FPrint->Confidence);
                 }
                 if (property_exists($Payload, 'FpEnroll')) {
                     $this->SendDebug('Receive Result: FpEnroll', json_encode($Payload->FpEnroll), 0);
@@ -114,7 +114,7 @@ class TasmotaFingerprint extends TasmotaService
                 }
                 if (property_exists($Payload, 'Wifi')) {
                     $this->SendDebug('Receive Sate: Wifi RSSI', $Payload->Wifi->RSSI, 0);
-                    SetValue($this->GetIDForIdent('RSSI'), $Payload->Wifi->RSSI);
+                    $this->SetValue('RSSI', $Payload->Wifi->RSSI);
                 }
             }
         }

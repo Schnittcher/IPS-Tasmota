@@ -96,9 +96,9 @@ class TasmotaLED extends TasmotaService
             if (fnmatch('*LWT', $Buffer->Topic)) {
                 $this->SendDebug('State Payload', $Buffer->Payload, 0);
                 if (strtolower($Buffer->Payload) == 'online') {
-                    SetValue($this->GetIDForIdent('TasmotaLED_DeviceStatus'), true);
+                    $this->SetValue('TasmotaLED_DeviceStatus', true);
                 } else {
-                    SetValue($this->GetIDForIdent('TasmotaLED_DeviceStatus'), false);
+                    $this->SetValue('TasmotaLED_DeviceStatus', false);
                 }
             }
             //Info2
@@ -123,10 +123,10 @@ class TasmotaLED extends TasmotaService
                         $this->SendDebug('Receive Result: POWER', $Payload->POWER, 0);
                         switch ($Payload->POWER) {
                             case $this->ReadPropertyString('Off'):
-                                SetValue($this->GetIDForIdent('TasmotaLED_POWER'), 0);
+                                $this->SetValue('TasmotaLED_POWER', 0);
                                 break;
                             case $this->ReadPropertyString('On'):
-                                SetValue($this->GetIDForIdent('TasmotaLED_POWER'), 1);
+                                $this->SetValue('TasmotaLED_POWER', 1);
                                 break;
                         }
                     }
@@ -140,10 +140,10 @@ class TasmotaLED extends TasmotaService
                             $this->SendDebug('Receive Result: POWER' . $i, $Payload->{'POWER' . $i}, 0);
                             switch ($Payload->{'POWER' . $i}) {
                                 case $this->ReadPropertyString('Off'):
-                                    SetValue($this->GetIDForIdent('TasmotaLED_POWER' . $i), 0);
+                                    $this->SetValue('TasmotaLED_POWER' . $i, 0);
                                     break;
                                 case $this->ReadPropertyString('On'):
-                                    SetValue($this->GetIDForIdent('TasmotaLED_POWER' . $i), 1);
+                                    $this->SetValue('TasmotaLED_POWER' . $i, 1);
                                     break;
                             }
                         }
@@ -156,30 +156,30 @@ class TasmotaLED extends TasmotaService
                 }
                 if (property_exists($Payload, 'Pixels')) {
                     $this->SendDebug('Receive Result: Pixels', $Payload->Pixels, 0);
-                    SetValue($this->GetIDForIdent('TasmotaLED_Pixels'), $Payload->Pixels);
+                    $this->SetValue('TasmotaLED_Pixels', $Payload->Pixels);
                 }
                 if (property_exists($Payload, 'Speed')) {
                     $this->SendDebug('Receive Result: Speed', $Payload->Speed, 0);
-                    SetValue($this->GetIDForIdent('TasmotaLED_Speed'), $Payload->Speed);
+                    $this->SetValue('TasmotaLED_Speed', $Payload->Speed);
                 }
                 if (property_exists($Payload, 'Scheme')) {
                     $this->SendDebug('Receive Result: Scheme', $Payload->Scheme, 0);
-                    SetValue($this->GetIDForIdent('TasmotaLED_Scheme'), $Payload->Scheme);
+                    $this->SetValue('TasmotaLED_Scheme', $Payload->Scheme);
                 }
                 if (property_exists($Payload, 'Dimmer')) {
                     $this->SendDebug('Receive Result: Dimmer', $Payload->Dimmer, 0);
-                    SetValue($this->GetIDForIdent('TasmotaLED_Dimmer'), $Payload->Dimmer);
+                    $this->SetValue('TasmotaLED_Dimmer', $Payload->Dimmer);
                 }
                 if (property_exists($Payload, 'CT')) {
                     $this->SendDebug('Receive Result: CT', $Payload->CT, 0);
                     if ($this->GetIDForIdent('TasmotaLED_CT')) {
-                        SetValue($this->GetIDForIdent('TasmotaLED_CT'), $Payload->CT);
+                        $this->SetValue('TasmotaLED_CT', $Payload->CT);
                     }
                 }
                 if (property_exists($Payload, 'White')) {
                     $this->SendDebug('Receive Result: White', $Payload->White, 0);
                     if ($this->GetIDForIdent('TasmotaLED_White')) {
-                        SetValue($this->GetIDForIdent('TasmotaLED_White'), $Payload->White);
+                        $this->SetValue('TasmotaLED_White', $Payload->White);
                     }
                 }
                 if (property_exists($Payload, 'HSBColor')) {
@@ -188,7 +188,7 @@ class TasmotaLED extends TasmotaService
                         $HSBColor = explode(',', $Payload->HSBColor);
                         $Color = $this->hsv2rgb($HSBColor[0], $HSBColor[1], $HSBColor[2]);
                         $color = ltrim($Color['hex'], '#');
-                        SetValue($this->GetIDForIdent('TasmotaLED_Color'), hexdec(($color)));
+                        $this->SetValue('TasmotaLED_Color', hexdec(($color)));
                     }
                 }
                 if (property_exists($Payload, 'Color')) {
@@ -198,16 +198,16 @@ class TasmotaLED extends TasmotaService
                             $rgb = explode(',', $Payload->Color);
                             $color = sprintf('#%02x%02x%02x', $rgb[0], $rgb[1], $rgb[2]);
                             $color = ltrim($color, '#');
-                            SetValue($this->GetIDForIdent('TasmotaLED_Color'), hexdec(($color)));
+                            $this->SetValue('TasmotaLED_Color', hexdec(($color)));
                         }
                     }
                 }
                 if (property_exists($Payload, 'Fade')) {
                     $this->SendDebug('Receive Result: Fade', $Payload->Fade, 0);
                     if (strtoupper($Payload->Fade) == 'ON') {
-                        SetValue($this->GetIDForIdent('TasmotaLED_Fade'), true);
+                        $this->SetValue('TasmotaLED_Fade', true);
                     } else {
-                        SetValue($this->GetIDForIdent('TasmotaLED_Fade'), false);
+                        $this->SetValue('TasmotaLED_Fade', false);
                     }
                 }
                 break;
@@ -222,7 +222,7 @@ class TasmotaLED extends TasmotaService
                 }
                 if (property_exists($Payload, 'Wifi')) {
                     $this->SendDebug('Receive Sate: Wifi RSSI', $Payload->Wifi->RSSI, 0);
-                    SetValue($this->GetIDForIdent('TasmotaLED_RSSI'), $Payload->Wifi->RSSI);
+                    $this->SetValue('TasmotaLED_RSSI', $Payload->Wifi->RSSI);
                 }
 
             }

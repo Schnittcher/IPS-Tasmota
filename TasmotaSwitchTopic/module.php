@@ -53,9 +53,9 @@ class TasmotaSwitchTopic extends TasmotaService
                     $SwitchTopic = str_replace('-', '_', $SwitchTopic[1]);
                     $variablenID = $this->RegisterVariableBoolean('Tasmota_' . $SwitchTopic, 'SwtichTopic ' . $SwitchTopic);
                     if ($Buffer->Payload == 'ON') {
-                        SetValue($this->GetIDForIdent('Tasmota_' . $SwitchTopic), true);
+                        $this->SetValue('Tasmota_' . $SwitchTopic, true);
                     } else {
-                        SetValue($this->GetIDForIdent('Tasmota_' . $SwitchTopic), false);
+                        $this->SetValue('Tasmota_' . $SwitchTopic, false);
                     }
                     break;
             }
