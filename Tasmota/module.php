@@ -131,6 +131,15 @@ class Tasmota extends TasmotaService
                         SetValue($this->GetIDForIdent('Tasmota_Signal'), $myBuffer->Wifi->Signal);
                     }
                 }
+                //Info1
+                if (fnmatch('*INFO1', $Buffer->Topic)) {
+                    $myBuffer = json_decode($Buffer->Payload);
+                    $this->SendDebug('Info1 Payload', $Buffer->Payload, 0);
+
+                    if ($this->ReadPropertyBoolean('Info2')) {
+                        $this->getInfo1Variables($myBuffer);
+                    }
+                }
                 //Info2
                 if (fnmatch('*INFO2', $Buffer->Topic)) {
                     $myBuffer = json_decode($Buffer->Payload);
