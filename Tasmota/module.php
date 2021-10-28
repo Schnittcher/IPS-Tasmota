@@ -503,6 +503,13 @@ class Tasmota extends TasmotaService
             $result = $this->setFanSpeed($Value);
             return true;
         }
+        if (fnmatch('Tasmota_Channel*', $Ident)) {
+            $id = substr($Ident, 15);
+            $command = 'Channel' . $id;
+            $msg = strval($Value);
+            $this->MQTTCommand($command, $msg);
+            return true;
+        }
 
         if (fnmatch('Tasmota_PCA9685_PWM*', $Ident)) {
             $pin = substr($Ident, 19);
