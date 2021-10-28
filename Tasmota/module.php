@@ -154,6 +154,18 @@ class Tasmota extends TasmotaService
                     $this->BufferResponse = $Buffer->Payload;
                     $Payload = json_decode($Buffer->Payload);
 
+                    if (fnmatch('*Channel*', $Buffer->Payload)) {
+                        $this->SendDebug('Channel Payload', $Buffer->Payload, 0);
+                        $this->SendDebug('Result Topic', $Buffer->Topic, 0);
+                        for ($i = 1; $i <= 5; $i++) {
+                            if (property_exists($Payload, 'Channel' . $i)) {
+                                $this->RegisterVariableInteger('Tasmota_Channel' . $i, 'Channel ' . $i, '~Intensity.100', 0);
+                                $this->EnableAction('Tasmota_Channel' . $i);
+                                $this->SetValue('Tasmota_Channel' . $i, $Payload->{'Channel' . $i});
+                            }
+                        }
+                    }
+
                     if (fnmatch('*MCP230XX_INT*', $Buffer->Payload)) {
                         $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
                         $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
