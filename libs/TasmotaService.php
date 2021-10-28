@@ -254,6 +254,64 @@ class TasmotaService extends IPSModule
         return false;
     }
 
+    protected function getSensorData($Array)
+    {
+        foreach ($Array as $key=> $Sensor) {
+            if (is_array($Sensor)) {
+                $SensorKey = $key;
+                IPS_LogMessage('Sensor Key', $SensorKey);
+                foreach ($Sensor as $DataKey=> $SensorData) {
+                    if ((is_int($SensorData) || is_float($SensorData)) && ($SensorKey != 'MCP230XX') && ($SensorKey != 'PCA9685')) {
+                        IPS_LogMessage($SensorKey . ' DataKey', $DataKey);
+                        IPS_LogMessage($SensorKey . 'SensorData', $SensorData);
+
+                        //Ident dar nur Buchstaben und Zahlen enthalten
+                        $SensorKey = str_replace('-', '_', $SensorKey);
+                        $DataKey = str_replace('-', '_', $DataKey);
+                        $DataKey = str_replace('.', '_', $DataKey);
+
+                        switch ($DataKey) {
+                            case 'Temperature':
+                                $variablenID = $this->RegisterVariableFloat('Tasmota_' . $SensorKey . '_' . $DataKey, $SensorKey . ' Temperatur', '~Temperature');
+                                $this->SetValue('Tasmota_' . $SensorKey . '_' . $DataKey, $SensorData);
+                                break;
+                            case 'Humidity':
+                                $variablenID = $this->RegisterVariableFloat('Tasmota_' . $SensorKey . '_' . $DataKey, $SensorKey . ' Feuchte', '~Humidity.F');
+                                $this->SetValue('Tasmota_' . $SensorKey . '_' . $DataKey, $SensorData);
+                                break;
+                            default:
+                                if (($SensorKey != 'ENERGY') || ($SensorKey != 'IBEACON')) {
+                                    $variablenID = $this->RegisterVariableFloat('Tasmota_' . $SensorKey . '_' . $DataKey, $SensorKey . ' ' . $DataKey);
+                                    $this->SetValue('Tasmota_' . $SensorKey . '_' . $DataKey, $SensorData);
+                                }
+                        }
+
+                        if ($ParentKey == 'PN532') {
+                            $variablenID = $this->RegisterVariableString('Tasmota_' . $ParentKey . '_' . $key, $ParentKey . '_' . $key, '');
+                            $this->SetValue('Tasmota_' . $ParentKey . '_' . $key, $value);
+                        }
+                        if ($ParentKey == 'MCP230XX') {
+                            if (@$this->GetIDForIdent('Tasmota_MCP230XX_INT_' . $key) != false) {
+                                $this->SendDebug('MCP230XX', $key, 0);
+                                $this->SetValue('Tasmota_MCP230XX_INT_' . $key, $value);
+                            }
+                        }
+                        if ($ParentKey == 'PCA9685') {
+                            if (@$this->GetIDForIdent('Tasmota_PCA9685_' . $key) != false) {
+                                $this->SendDebug('Tasmota_PCA9685 Key', $key, 0);
+                                $this->SetValue('Tasmota_PCA9685_' . $key, $value);
+                            }
+                        }
+                        if ($ParentKey == 'RC522') {
+                            $variablenID = $this->RegisterVariableString('Tasmota' . $ParentKey . '_' . $key, $ParentKey . '' . $key, '');
+                            $this->SetValue('Tasmota' . $ParentKey . '_' . $key, $value);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     protected function traverseArray($array, $GesamtArray)
     {
         foreach ($array as $key=> $value) {

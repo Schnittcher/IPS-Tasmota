@@ -459,7 +459,8 @@ class Tasmota extends TasmotaService
                             }
                             return;
                         }
-                        $this->traverseArray($myBuffer, $myBuffer);
+                        $this->getSensorData($myBuffer);
+                        //$this->traverseArray($myBuffer, $myBuffer);
                     }
                 }
             }
