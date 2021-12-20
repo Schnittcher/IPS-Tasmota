@@ -25,6 +25,7 @@ class TasmotaFingerprint extends TasmotaService
         $this->RegisterVariableInteger('Confidence', $this->Translate('Confidence'), '', 2);
         $this->RegisterVariableBoolean('DeviceStatus', 'Status', 'Tasmota.DeviceStatus', 3);
         $this->RegisterVariableInteger('RSSI', 'RSSI', 'Tasmota.RSSI', 4);
+        $this->RegisterVariableInteger('count', $this->Translate('Number of fingers'), '', 5);
     }
 
     public function ApplyChanges()
@@ -99,6 +100,7 @@ class TasmotaFingerprint extends TasmotaService
                 }
                 if (property_exists($Payload, 'FpCount')) {
                     $this->SendDebug('Receive Result: FpCount', json_encode($Payload->FpCount), 0);
+                    $this->SetValue('count', $Payload->FpCount);
                     $this->UpdateFormField('CountValue', 'caption', $Payload->FpCount);
                 }
 
