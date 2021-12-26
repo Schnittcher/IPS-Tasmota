@@ -3,9 +3,12 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../libs/TasmotaService.php';
+require_once __DIR__ . '/../libs/helper.php';
 
 class TasmotaFingerprint extends TasmotaService
 {
+    use BufferHelper;
+
     public function Create()
     {
         //Never delete this line!
@@ -16,16 +19,19 @@ class TasmotaFingerprint extends TasmotaService
         //Anzahl die in der Konfirgurationsform angezeigt wird - Hier Standard auf 1
         $this->RegisterPropertyString('Topic', '');
         $this->RegisterPropertyString('FullTopic', '%prefix%/%topic%');
+        $this->RegisterPropertyString('On', 'ON');
+        $this->RegisterPropertyString('Off', 'OFF');
         $this->RegisterPropertyBoolean('MessageRetain', false);
         $this->RegisterPropertyInteger('PowerOnState', 3);
         $this->RegisterPropertyBoolean('SystemVariables', false);
+        $this->RegisterPropertyBoolean('Power1Deactivate', false);
 
         $this->createVariabenProfiles();
         $this->RegisterVariableInteger('ID', $this->Translate('ID'), '', 1);
         $this->RegisterVariableInteger('Confidence', $this->Translate('Confidence'), '', 2);
         $this->RegisterVariableBoolean('DeviceStatus', 'Status', 'Tasmota.DeviceStatus', 3);
         $this->RegisterVariableInteger('RSSI', 'RSSI', 'Tasmota.RSSI', 4);
-        $this->RegisterVariableInteger('count', $this->Translate('Number of fingers'), '', 5);
+        $this->RegisterVariableInteger('count', $this->Translate('count'), '', 5);
     }
 
     public function ApplyChanges()
@@ -64,6 +70,9 @@ class TasmotaFingerprint extends TasmotaService
                     return;
             }
 
+            $off = $this->ReadPropertyString('Off');
+            $on = $this->ReadPropertyString('On');
+
             // Buffer decodieren und in eine Variable schreiben
             $Payload = json_decode($Buffer->Payload);
             $this->SendDebug('Topic', $Buffer->Topic, 0);
@@ -79,6 +88,46 @@ class TasmotaFingerprint extends TasmotaService
                 $this->SendDebug('Result', $Buffer->Payload, 0);
                 $this->BufferResponse = $Buffer->Payload;
             }
+
+            if (fnmatch('*PowerOnState*', $Buffer->Payload)) {
+                $this->SendDebug('PowerOnState Topic', $Buffer->Topic, 0);
+                $this->SendDebug('PowerOnState Payload', $Buffer->Payload, 0);
+                $Payload = json_decode($Buffer->Payload);
+                if (is_object($Payload)) {
+                    if (property_exists($Payload, 'PowerOnState')) {
+                        $this->setPowerOnStateInForm($Payload->PowerOnState);
+                    }
+                }
+            }
+                
+              //Power Vairablen checken
+            if (property_exists($Buffer, 'Topic')) {
+                if (fnmatch('*POWER*', $Buffer->Topic)) {
+                    $this->SendDebug('Power Topic', $Buffer->Topic, 0);
+                    $this->SendDebug('Power', $Buffer->Payload, 0);
+                    $power = explode('/', $Buffer->Topic);
+                    end($power);
+                    $lastKey = key($power);
+                    $tmpPower = 'POWER1';
+                    if ($this->ReadPropertyBoolean('Power1Deactivate') == true) {
+                        $tmpPower = 'POWER';
+                    }
+                    if ($power[$lastKey] != $tmpPower) {
+                        $this->RegisterVariableBoolean('Tasmota_' . $power[$lastKey], $power[$lastKey], '~Switch');
+                        $this->EnableAction('Tasmota_' . $power[$lastKey]);
+                        switch ($Buffer->Payload) {
+                case $off:
+                    $this->SetValue('Tasmota_' . $power[$lastKey], 0);
+                  break;
+                case $on:
+                    $this->SetValue('Tasmota_' . $power[$lastKey], 1);
+                break;
+                        }
+                    }
+                }
+            }      
+            
+            
             switch ($Buffer->Topic) {
             case 'stat/' . $this->ReadPropertyString('Topic') . '/RESULT':
                 if (property_exists($Payload, 'PowerOnState')) {
@@ -141,6 +190,22 @@ class TasmotaFingerprint extends TasmotaService
         $command = 'FpCount';
         $this->MQTTCommand($command, '');
     }
+
+
+        public function RequestAction($Ident, $Value)
+    {
+        $this->SendDebug(__FUNCTION__ . ' Ident', $Ident, 0);
+        $this->SendDebug(__FUNCTION__ . ' Value', $Value, 0);
+
+        if (strlen($Ident) != 13) {
+            $power = substr($Ident, 13);
+        } else {
+            $power = 0;
+        }
+        $result = $this->setPower(intval($power), $Value);
+    }
+
+
 
     private function createVariabenProfiles()
     {

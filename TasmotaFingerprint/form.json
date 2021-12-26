@@ -3,6 +3,8 @@
     [
       { "type": "ValidationTextBox", "name": "Topic", "caption": "Tasmota MQTT Topic" },
       { "type": "Label", "label": "Parameter Settings" },
+      { "type": "ValidationTextBox", "name": "On", "caption": "Power On" },
+      { "type": "ValidationTextBox", "name": "Off", "caption": "Power Off" },
       { "type": "ValidationTextBox", "name": "FullTopic", "caption": "Full Topic" },
 
     { "type": "Label", "label": "Settings" },
