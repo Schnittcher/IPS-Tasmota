@@ -269,23 +269,21 @@ class TasmotaService extends IPSModule
 
                         switch ($DataKey) {
                             case 'Temperature':
-                                $variablenID = $this->RegisterVariableFloat($Sensor['Id'], $Sensor['Id'] . ' Temperatur', '~Temperature');
+                                if (substr($SensorKey, 0, -2) == 'DS18B20') {
+                                    $variablenID = $this->RegisterVariableFloat($Sensor['Id'], $Sensor['Id'] . ' Temperatur', '~Temperature');
+                                    $this->SetValue($Sensor['Id'], $SensorData);
+                                }
                                 $variablenID = $this->RegisterVariableFloat('Tasmota_' . $SensorKey . '_' . $DataKey, $SensorKey . ' Temperatur', '~Temperature');
                                 $this->SetValue('Tasmota_' . $SensorKey . '_' . $DataKey, $SensorData);
-                                $this->SetValue($Sensor['Id'], $SensorData);
                                 break;
                             case 'Humidity':
                                 $variablenID = $this->RegisterVariableFloat('Tasmota_' . $SensorKey . '_' . $DataKey, $SensorKey . ' Feuchte', '~Humidity.F');
-                                $variablenID = $this->RegisterVariableFloat($Sensor['Id'], $Sensor['Id'] . ' Feuchte', '~Humidity.F');
                                 $this->SetValue('Tasmota_' . $SensorKey . '_' . $DataKey, $SensorData);
-                                $this->SetValue($Sensor['Id'], $SensorData);
                                 break;
                             default:
                                 if (($SensorKey != 'ENERGY') || ($SensorKey != 'IBEACON')) {
                                     $variablenID = $this->RegisterVariableFloat('Tasmota_' . $SensorKey . '_' . $DataKey, $SensorKey . ' ' . $DataKey);
-                                    $variablenID = $this->RegisterVariableFloat($Sensor['Id'], $Sensor['Id'] . ' ' . $SensorKey . ' ' . $DataKey);
                                     $this->SetValue('Tasmota_' . $SensorKey . '_' . $DataKey, $SensorData);
-                                    $this->SetValue($Sensor['Id'], $SensorData);
                                 }
                         }
 
@@ -293,7 +291,6 @@ class TasmotaService extends IPSModule
                             $variablenID = $this->RegisterVariableString('Tasmota_' . $SensorKey . '_' . $DataKey, $SensorKey . '_' . $DataKey, '');
                             $variablenID = $this->RegisterVariableString($Sensor['Id'], $Sensor['Id'] . ' ' . $SensorKey . '_' . $DataKey, '');
                             $this->SetValue('Tasmota_' . $SensorKey . '_' . $DataKey, $SensorData);
-                            $this->SetValue($Sensor['Id'], $SensorData);
                         }
                         if ($SensorKey == 'MCP230XX') {
                             if (@$this->GetIDForIdent('Tasmota_MCP230XX_INT_' . $DataKey) != false) {
