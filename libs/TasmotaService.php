@@ -306,9 +306,7 @@ class TasmotaService extends IPSModule
                         }
                         if ($SensorKey == 'RC522') {
                             $variablenID = $this->RegisterVariableString('Tasmota' . $SensorKey . '_' . $DataKey, $SensorKey . '' . $DataKey, '');
-                            $variablenID = $this->RegisterVariableString($Sensor['Id'], $SensorKey . '_' . $DataKey, '');
                             $this->SetValue('Tasmota' . $SensorKey . '_' . $DataKey, $SensorData);
-                            $this->SetValue($Sensor['Id'], $SensorData);
                         }
                     }
                 }
