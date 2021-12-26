@@ -269,7 +269,7 @@ class TasmotaService extends IPSModule
 
                         switch ($DataKey) {
                             case 'Temperature':
-                                $variablenID = $this->RegisterVariableFloat($Sensor['Id'], $Sensor['Id'] . '('. $SensorKey. ') ' . ' Temperatur', '~Temperature');
+                                $variablenID = $this->RegisterVariableFloat($Sensor['Id'], $Sensor['Id'] . '(' . $SensorKey . ') ' . ' Temperatur', '~Temperature');
                                 $variablenID = $this->RegisterVariableFloat('Tasmota_' . $SensorKey . '_' . $DataKey, $SensorKey . ' Temperatur', '~Temperature');
                                 $this->SetValue('Tasmota_' . $SensorKey . '_' . $DataKey, $SensorData);
                                 $this->SetValue($Sensor['Id'], $SensorData);
