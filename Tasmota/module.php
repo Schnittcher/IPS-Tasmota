@@ -172,7 +172,7 @@ class Tasmota extends TasmotaService
                             if (property_exists($Payload, 'POWER' . $i)) {
                                 $this->RegisterVariableBoolean('Tasmota_POWER' . $i, $this->Translate('POWER') . $i, '~Switch');
                                 $this->EnableAction('Tasmota_POWER' . $i);
-                                switch ($Buffer->Payload->POWER[$i]) {
+                                switch ($Buffer->Payload->{'POWER' . $i}) {
                                     case $off:
                                         $this->SetValue('Tasmota_POWER' . $i, 0);
                                     break;
