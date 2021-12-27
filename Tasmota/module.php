@@ -174,10 +174,10 @@ class Tasmota extends TasmotaService
                                 $this->EnableAction('Tasmota_POWER' . $i);
                                 switch ($Buffer->Payload->POWER[$i]) {
                                     case $off:
-                                        $this->SetValue('Tasmota_' . $power[$lastKey], 0);
+                                        $this->SetValue('Tasmota_POWER' . $i, 0);
                                     break;
                                     case $on:
-                                        $this->SetValue('Tasmota_' . $power[$lastKey], 1);
+                                        $this->SetValue('Tasmota_POWER' . $i, 1);
                                     break;
                                 }
                             }
