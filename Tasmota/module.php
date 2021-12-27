@@ -108,13 +108,13 @@ class Tasmota extends TasmotaService
                         $this->RegisterVariableBoolean('Tasmota_' . $power[$lastKey], $power[$lastKey], '~Switch');
                         $this->EnableAction('Tasmota_' . $power[$lastKey]);
                         switch ($Buffer->Payload) {
-                case $off:
-                    $this->SetValue('Tasmota_' . $power[$lastKey], 0);
-                  break;
-                case $on:
-                    $this->SetValue('Tasmota_' . $power[$lastKey], 1);
-                break;
-              }
+                            case $off:
+                                $this->SetValue('Tasmota_' . $power[$lastKey], 0);
+                            break;
+                            case $on:
+                                $this->SetValue('Tasmota_' . $power[$lastKey], 1);
+                            break;
+                        }
                     }
                 }
                 //State checken
@@ -162,6 +162,24 @@ class Tasmota extends TasmotaService
                                 $this->RegisterVariableInteger('Tasmota_Channel' . $i, 'Channel ' . $i, '~Intensity.100', 0);
                                 $this->EnableAction('Tasmota_Channel' . $i);
                                 $this->SetValue('Tasmota_Channel' . $i, $Payload->{'Channel' . $i});
+                            }
+                        }
+                    }
+                    if (fnmatch('*POWER*', $Buffer->Payload)) {
+                        $this->SendDebug('Result Power Payload', $Buffer->Payload, 0);
+                        $this->SendDebug('Result Topic', $Buffer->Topic, 0);
+                        for ($i = 1; $i <= 5; $i++) {
+                            if (property_exists($Payload, 'POWER' . $i)) {
+                                $this->RegisterVariableBoolean('Tasmota_POWER' . $i, $this->Translate('POWER') . $i, '~Switch');
+                                $this->EnableAction('Tasmota_POWER' . $i);
+                                switch ($Buffer->Payload->POWER[$i]) {
+                                    case $off:
+                                        $this->SetValue('Tasmota_' . $power[$lastKey], 0);
+                                    break;
+                                    case $on:
+                                        $this->SetValue('Tasmota_' . $power[$lastKey], 1);
+                                    break;
+                                }
                             }
                         }
                     }
