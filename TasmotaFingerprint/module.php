@@ -99,8 +99,8 @@ class TasmotaFingerprint extends TasmotaService
                     }
                 }
             }
-                
-              //Power Vairablen checken
+
+            //Power Vairablen checken
             if (property_exists($Buffer, 'Topic')) {
                 if (fnmatch('*POWER*', $Buffer->Topic)) {
                     $this->SendDebug('Power Topic', $Buffer->Topic, 0);
@@ -125,9 +125,8 @@ class TasmotaFingerprint extends TasmotaService
                         }
                     }
                 }
-            }      
-            
-            
+            }
+
             switch ($Buffer->Topic) {
             case 'stat/' . $this->ReadPropertyString('Topic') . '/RESULT':
                 if (property_exists($Payload, 'PowerOnState')) {
@@ -191,8 +190,7 @@ class TasmotaFingerprint extends TasmotaService
         $this->MQTTCommand($command, '');
     }
 
-
-        public function RequestAction($Ident, $Value)
+    public function RequestAction($Ident, $Value)
     {
         $this->SendDebug(__FUNCTION__ . ' Ident', $Ident, 0);
         $this->SendDebug(__FUNCTION__ . ' Value', $Value, 0);
@@ -204,8 +202,6 @@ class TasmotaFingerprint extends TasmotaService
         }
         $result = $this->setPower(intval($power), $Value);
     }
-
-
 
     private function createVariabenProfiles()
     {
