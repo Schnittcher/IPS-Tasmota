@@ -1,24 +1,24 @@
 {
-  "translations": {
-    "de": {
-      "Parameter Settings": "Parameter Einstellungen",
-      "Settings": "Einstellungen",
-      "System Variables": "System Variablen",
-      "Power on State": "Einschaltzustand",
-      "Off": "Aus",
-      "On": "An",
-      "Toggle": "Umschalten (Toggle)",
-      "default": "Standard",
-      "Turn relay(s) on, disable further relay control": "Relais einschalten, weitere Relaissteuerung deaktivieren",
-      "Restart Tasmota Device": "Tasmota Gerät neustarten",
-      "Fingerprint": "Fingerabdruck",
-      "Confidence": "Vertrauen",
-      "ID": "ID",
-      "Add":"Hinzufügen",
-      "Delete":"Entfernen",
-      "Count": "Anzahl",
-      "Number of fingers": "Anzahl Finger",
-      "Update": "Aktualisieren"
+    "translations": {
+        "de": {
+            "Parameter Settings": "Parameter Einstellungen",
+            "Settings": "Einstellungen",
+            "System Variables": "System Variablen",
+            "Power on State": "Einschaltzustand",
+            "Off": "Aus",
+            "On": "An",
+            "Toggle": "Umschalten (Toggle)",
+            "default": "Standard",
+            "Turn relay(s) on, disable further relay control": "Relais einschalten, weitere Relaissteuerung deaktivieren",
+            "Restart Tasmota Device": "Tasmota Gerät neustarten",
+            "Fingerprint": "Fingerabdruck",
+            "Confidence": "Vertrauen",
+            "ID": "ID",
+            "Add": "Hinzufügen",
+            "Delete": "Entfernen",
+            "Count": "Anzahl",
+            "Number of fingers": "Anzahl Finger",
+            "Update": "Aktualisieren"
+        }
     }
-  }
 }

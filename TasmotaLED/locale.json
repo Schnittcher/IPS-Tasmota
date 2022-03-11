@@ -1,31 +1,31 @@
 {
-  "translations": {
-    "de": {
-      "Parameter Settings": "Parameter Einstellungen",
-      "Settings": "Einstellungen",
-      "System Variables": "System Variablen",
-      "Info 2 Variables": "Info 2 Variablen",
-      "IP-Adresse": "IP-Adresse",
-      "Hostname": "Hostname",
-      "Multi Switch (Several power variables)": "Multischalter (Mehrere Power Variablen)",
-      "Power on State": "Einschaltzustand",
-      "Off": "Aus",
-      "On": "An",
-      "Toggle": "Umschalten (Toggle)",
-      "default": "Standard",
-      "Turn relay(s) on, disable further relay control": "Relais einschalten, weitere Relaissteuerung deaktivieren",
-      "Restart Tasmota Device": "Tasmota Gerät neustarten",
-      "Color": "Farbe",
-      "Speed": "Geschwindigkeit",
-      "Pixels": "Pixel",
-      "Scheme": "Schema",
-      "Fade": "Fade",
-      "Dimmer": "Dimmer",
-      "White": "Weiß",
-      "Color Temperature": "Farbtemperatur",
-      "Variable for white": "Variable für weiß",
-      "Variable for color temperature": "Variable für Farbtemperatur",
-      "Use HSBColor": "Benutze HSB Farben"
+    "translations": {
+        "de": {
+            "Parameter Settings": "Parameter Einstellungen",
+            "Settings": "Einstellungen",
+            "System Variables": "System Variablen",
+            "Info 2 Variables": "Info 2 Variablen",
+            "IP-Adresse": "IP-Adresse",
+            "Hostname": "Hostname",
+            "Multi Switch (Several power variables)": "Multischalter (Mehrere Power Variablen)",
+            "Power on State": "Einschaltzustand",
+            "Off": "Aus",
+            "On": "An",
+            "Toggle": "Umschalten (Toggle)",
+            "default": "Standard",
+            "Turn relay(s) on, disable further relay control": "Relais einschalten, weitere Relaissteuerung deaktivieren",
+            "Restart Tasmota Device": "Tasmota Gerät neustarten",
+            "Color": "Farbe",
+            "Speed": "Geschwindigkeit",
+            "Pixels": "Pixel",
+            "Scheme": "Schema",
+            "Fade": "Fade",
+            "Dimmer": "Dimmer",
+            "White": "Weiß",
+            "Color Temperature": "Farbtemperatur",
+            "Variable for white": "Variable für weiß",
+            "Variable for color temperature": "Variable für Farbtemperatur",
+            "Use HSBColor": "Benutze HSB Farben"
+        }
     }
-  }
 }

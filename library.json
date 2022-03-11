@@ -1,9 +1,9 @@
 {
-	"id": "{71E2F46E-9B95-4802-B318-97E1FEF75A3C}",
-	"author": "Kai Schnittcher",
-	"name": "Tasmota",
-	"url": "https://github.com/Schnittcher/IPS-Tasmota",
-	"version": "4.4.1",
-	"build": 0,
-	"date": 0
+    "id": "{71E2F46E-9B95-4802-B318-97E1FEF75A3C}",
+    "author": "Kai Schnittcher",
+    "name": "Tasmota",
+    "url": "https://github.com/Schnittcher/IPS-Tasmota",
+    "version": "4.4.1",
+    "build": 0,
+    "date": 0
 }

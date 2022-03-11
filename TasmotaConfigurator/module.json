@@ -1,11 +1,17 @@
 {
-  "id": "{992E933B-C91F-4582-963B-043D96C86F88}",
-  "name": "TasmotaConfigurator",
-  "type": 4,
-  "vendor": "",
-  "aliases": ["Tasmota Configurator"],
-  "parentRequirements": ["{043EA491-0325-4ADD-8FC2-A30C8EEB4D3F}"],
-  "childRequirements": [],
-  "implemented": ["{7F7632D9-FA40-4F38-8DEA-C83CD4325A32}"],
-  "prefix": "TasmotaConfig"
+    "id": "{992E933B-C91F-4582-963B-043D96C86F88}",
+    "name": "TasmotaConfigurator",
+    "type": 4,
+    "vendor": "",
+    "aliases": [
+        "Tasmota Configurator"
+    ],
+    "parentRequirements": [
+        "{043EA491-0325-4ADD-8FC2-A30C8EEB4D3F}"
+    ],
+    "childRequirements": [],
+    "implemented": [
+        "{7F7632D9-FA40-4F38-8DEA-C83CD4325A32}"
+    ],
+    "prefix": "TasmotaConfig"
 }
