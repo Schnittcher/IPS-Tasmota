@@ -269,7 +269,7 @@ class TasmotaService extends IPSModule
 
                         switch ($DataKey) {
                             case 'Temperature':
-                                if (substr($SensorKey, 0, -2) == 'DS18B20' OR $SensorKey == 'DS18B20') {
+                                if (substr($SensorKey, 0, -2) == 'DS18B20' || $SensorKey == 'DS18B20') {
                                     $variablenID = $this->RegisterVariableFloat($Sensor['Id'], $Sensor['Id'] . ' Temperatur', '~Temperature');
                                     $this->SetValue($Sensor['Id'], $SensorData);
                                 }
