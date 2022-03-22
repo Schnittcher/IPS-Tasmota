@@ -172,6 +172,7 @@ class TasmotaConfigurator extends TasmotaService
         curl_setopt($ch, CURLOPT_HEADER, false);
 
         $apiResultJSON = curl_exec($ch);
+        $this->SendDebug('apiResultJSON', $apiResultJSON, true);
         $headerInfo = curl_getinfo($ch);
         $result = json_decode($apiResultJSON, true);
         curl_close($ch);
