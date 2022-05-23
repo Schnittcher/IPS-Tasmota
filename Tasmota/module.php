@@ -240,6 +240,20 @@ class Tasmota extends TasmotaService
                                 if (property_exists($Payload->{'Switch' . $i}, 'Action')) {
                                     $this->RegisterVariableString('Tasmota_Switch' . $i, 'Switch' . $i, '', 0);
                                     $this->SetValue('Tasmota_Switch' . $i, $Payload->{'Switch' . $i}->{'Action'});
+                                    continue;
+                                }
+                                if (($Payload->{'Switch' . $i} == 'ON') || ($Payload->{'Switch' . $i} == 'OFF')) {
+                                    $this->RegisterVariableString('Tasmota_Switch' . $i, 'Switch' . $i, '', 0);
+                                    switch ($Payload->{'Switch' . $i}) {
+                                        case 'ON':
+                                            $value = true;
+                                            break;
+                                        case 'OFF':
+                                            $value = false;
+                                            break;
+                                    }
+                                    $this->SetValue('Tasmota_Switch' . $i, $value);
+                                    continue;
                                 }
                             }
                         }
