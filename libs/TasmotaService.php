@@ -259,9 +259,11 @@ class TasmotaService extends IPSModule
         foreach ($Array as $key=> $Sensor) {
             if (is_array($Sensor)) {
                 $SensorKey = $key;
+                if ($SensorKey == 'ENERGY') {
+                    continue;
+                }
                 foreach ($Sensor as $DataKey=> $SensorData) {
                     if ((is_int($SensorData) || is_float($SensorData)) && ($SensorKey != 'MCP230XX') && ($SensorKey != 'PCA9685')) {
-
                         //Ident darf nur Buchstaben und Zahlen enthalten
                         $SensorKey = str_replace('-', '_', $SensorKey);
                         $DataKey = str_replace('-', '_', $DataKey);

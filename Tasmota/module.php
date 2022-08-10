@@ -443,7 +443,6 @@ class Tasmota extends TasmotaService
                                 $this->SetValue('Tasmota_COUNTER_C2', $myBuffer->COUNTER->C2);
                             }
                         }
-                        return;
                     }
                 }
                 //Sensor Variablen checken
@@ -494,7 +493,6 @@ class Tasmota extends TasmotaService
                             return;
                         }
                         $this->getSensorData($myBuffer);
-                        //$this->traverseArray($myBuffer, $myBuffer);
                     }
                 }
             }
