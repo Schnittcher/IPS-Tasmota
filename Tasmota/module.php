@@ -167,6 +167,17 @@ class Tasmota extends TasmotaService
                             }
                         }
                     }
+                    if (fnmatch('*ShutterLock*', $Buffer->Payload)) {
+                        $this->SendDebug('ShutterLock Payload', $Buffer->Payload, 0);
+                        $this->SendDebug('Result Topic', $Buffer->Topic, 0);
+                        for ($i = 1; $i <= 5; $i++) {
+                            if (property_exists($Payload, 'ShutterLock' . $i)) {
+                                $this->RegisterVariableBoolean('Tasmota_ShutterLock' . $i, 'Tasmota_ShutterLock ' . $i, '~Lock', 0);
+                                $this->EnableAction('Tasmota_ShutterLock' . $i);
+                                $this->SetValue('Tasmota_ShutterLock' . $i, $Payload->{'ShutterLock' . $i});
+                            }
+                        }
+                    }
                     if (fnmatch('*POWER*', $Buffer->Payload)) {
                         $this->SendDebug('Result Power Payload', $Buffer->Payload, 0);
                         $this->SendDebug('Result Topic', $Buffer->Topic, 0);
@@ -539,6 +550,14 @@ class Tasmota extends TasmotaService
         if (fnmatch('Tasmota_Channel*', $Ident)) {
             $id = substr($Ident, 15);
             $command = 'Channel' . $id;
+            $msg = strval($Value);
+            $this->MQTTCommand($command, $msg);
+            return true;
+        }
+
+        if (fnmatch('Tasmota_ShutterLock*', $Ident)) {
+            $id = substr($Ident, 19);
+            $command = 'ShutterLock' . $id;
             $msg = strval($Value);
             $this->MQTTCommand($command, $msg);
             return true;
