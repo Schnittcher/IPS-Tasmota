@@ -550,7 +550,7 @@ class Tasmota extends TasmotaService
         if (fnmatch('Tasmota_Channel*', $Ident)) {
             $id = substr($Ident, 15);
             $command = 'Channel' . $id;
-            $msg = strval($Value);
+            $msg = $Value;
             $this->MQTTCommand($command, $msg);
             return true;
         }
