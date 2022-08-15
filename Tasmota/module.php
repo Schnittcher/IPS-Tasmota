@@ -211,6 +211,12 @@ class Tasmota extends TasmotaService
                             }
                         }
                     }
+                    if (fnmatch('*PCF8574-1*', $Buffer->Payload)) {
+                        $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
+                        $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
+                        $myBuffer = json_decode($Buffer->Payload, true);
+                        $this->getSensorData($myBuffer);
+                    }
                     if (fnmatch('*S29cmnd_D*', $Buffer->Payload)) {
                         $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
                         $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
@@ -501,6 +507,9 @@ class Tasmota extends TasmotaService
                                 $this->RegisterVariableInteger('Tasmota' . $Wiegand->Size, 'Wiegand Size', '', 0);
                                 $this->SetValue('Tasmota_' . $Wiegand->Size, $Wiegand->Size);
                             }
+                            return;
+                        }                       
+                        if (property_exists($Payload, 'PCF8574-1')) {
                             return;
                         }
                         $this->getSensorData($myBuffer);
