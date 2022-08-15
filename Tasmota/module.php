@@ -183,7 +183,7 @@ class Tasmota extends TasmotaService
                         $this->SendDebug('Result Topic', $Buffer->Topic, 0);
                         for ($i = 1; $i <= 5; $i++) {
                             if (property_exists($Payload, 'ShutterTarget' . $i)) {
-                                $this->RegisterVariableBoolean('Tasmota_ShutterTarget' . $i, 'Tasmota_ShutterTarget ' . $i, '~Lock', 0);
+                                $this->RegisterVariableInteger('Tasmota_ShutterTarget' . $i, 'Tasmota_ShutterTarget ' . $i, '~Intensity.100', 0);
                                 $this->EnableAction('Tasmota_ShutterTarget' . $i);
                                 $this->SetValue('Tasmota_ShutterTarget' . $i, $Payload->{'ShutterTarget' . $i});
                             }
