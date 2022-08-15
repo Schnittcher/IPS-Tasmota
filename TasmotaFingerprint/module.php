@@ -22,11 +22,12 @@ class TasmotaFingerprint extends TasmotaService
         $this->RegisterPropertyString('On', 'ON');
         $this->RegisterPropertyString('Off', 'OFF');
         $this->RegisterPropertyBoolean('MessageRetain', false);
-        $this->RegisterPropertyInteger('PowerOnState', 3);
         $this->RegisterPropertyBoolean('SystemVariables', false);
         $this->RegisterPropertyBoolean('Power1Deactivate', false);
 
         $this->createVariabenProfiles();
+        $this->RegisterVariableInteger('Tasmota_PowerOnState', $this->Translate('PowerOnState'), 'Tasmota.PowerOnState', 0);
+        $this->EnableAction('Tasmota_PowerOnState');
         $this->RegisterVariableInteger('ID', $this->Translate('ID'), '', 1);
         $this->RegisterVariableInteger('Confidence', $this->Translate('Confidence'), '', 2);
         $this->RegisterVariableBoolean('DeviceStatus', 'Status', 'Tasmota.DeviceStatus', 3);
@@ -40,10 +41,6 @@ class TasmotaFingerprint extends TasmotaService
         parent::ApplyChanges();
         $this->BufferResponse = '';
         $this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
-        //Setze Filter für ReceiveData
-        if (IPS_GetKernelRunlevel() == KR_READY) {
-            $this->setPowerOnState($this->ReadPropertyInteger('PowerOnState'));
-        }
 
         $this->SendDebug(__FUNCTION__ . ' FullTopic', $this->ReadPropertyString('FullTopic'), 0);
         $topic = $this->FilterFullTopicReceiveData();
@@ -95,7 +92,7 @@ class TasmotaFingerprint extends TasmotaService
                 $Payload = json_decode($Buffer->Payload);
                 if (is_object($Payload)) {
                     if (property_exists($Payload, 'PowerOnState')) {
-                        $this->setPowerOnStateInForm($Payload->PowerOnState);
+                        $this->SetValue('Tasmota_PowerOnState', $Payload->PowerOnState);
                     }
                 }
             }
@@ -131,7 +128,7 @@ class TasmotaFingerprint extends TasmotaService
             case 'stat/' . $this->ReadPropertyString('Topic') . '/RESULT':
                 if (property_exists($Payload, 'PowerOnState')) {
                     $this->SendDebug('Receive Result: PowerOnState', $Payload->PowerOnState, 0);
-                    $this->setPowerOnStateInForm($Payload->PowerOnState);
+                    $this->SetValue('Tasmota_PowerOnState', $Payload->PowerOnState);
                 }
                 if (property_exists($Payload, 'FPrint')) {
                     $this->SendDebug('Receive Result: FPrint', json_encode($Payload->FPrint), 0);
@@ -195,6 +192,11 @@ class TasmotaFingerprint extends TasmotaService
         $this->SendDebug(__FUNCTION__ . ' Ident', $Ident, 0);
         $this->SendDebug(__FUNCTION__ . ' Value', $Value, 0);
 
+        if ($Ident == 'Tasmota_PowerOnState') {
+            $this->setPowerOnState($Value);
+            return true;
+        }
+
         if (strlen($Ident) != 13) {
             $power = substr($Ident, 13);
         } else {
@@ -205,6 +207,13 @@ class TasmotaFingerprint extends TasmotaService
 
     private function createVariabenProfiles()
     {
+        $this->RegisterProfileIntegerEx('Tasmota.PowerOnState', 'Power', '', '', [
+            [0, $this->Translate('Off'),  '', 0x08f26e],
+            [1, $this->Translate('On'),  '', 0x07da63],
+            [2, $this->Translate('Toggle'),  '', 0x06c258],
+            [3, $this->Translate('Default'),  '', 0x06a94d],
+            [4, $this->Translate('Turn relay(s) on, disable further relay control'),  '', 0x06a94d]
+        ]);
         //Online / Offline Profile
         $this->RegisterProfileBooleanEx('Tasmota.DeviceStatus', 'Network', '', '', [
             [false, 'Offline',  '', 0xFF0000],

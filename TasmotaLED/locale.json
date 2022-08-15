@@ -12,7 +12,7 @@
             "Off": "Aus",
             "On": "An",
             "Toggle": "Umschalten (Toggle)",
-            "default": "Standard",
+            "Default": "Standard",
             "Turn relay(s) on, disable further relay control": "Relais einschalten, weitere Relaissteuerung deaktivieren",
             "Restart Tasmota Device": "Tasmota Gerät neustarten",
             "Color": "Farbe",

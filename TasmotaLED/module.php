@@ -19,7 +19,6 @@ class TasmotaLED extends TasmotaService
         $this->RegisterPropertyString('Off', 'OFF');
         $this->RegisterPropertyString('FullTopic', '%prefix%/%topic%');
         $this->RegisterPropertyBoolean('MessageRetain', false);
-        $this->RegisterPropertyInteger('PowerOnState', 3);
         $this->RegisterPropertyBoolean('SystemVariables', false);
         $this->RegisterPropertyBoolean('Info2', false);
         $this->RegisterPropertyBoolean('Power1Deactivate', false);
@@ -29,6 +28,8 @@ class TasmotaLED extends TasmotaService
         $this->RegisterPropertyBoolean('Sensoren', true);
 
         $this->createVariabenProfiles();
+        $this->RegisterVariableInteger('Tasmota_PowerOnState', $this->Translate('PowerOnState'), 'Tasmota.PowerOnState', 0);
+        $this->EnableAction('Tasmota_PowerOnState');
         $this->RegisterVariableBoolean('TasmotaLED_Fade', $this->Translate('Fade'), 'Switch', 1);
         $this->RegisterVariableInteger('TasmotaLED_Color', $this->Translate('Color'), 'HexColor', 2);
         $this->RegisterVariableInteger('TasmotaLED_Dimmer', $this->Translate('Dimmer'), 'Intensity.100', 3);
@@ -51,10 +52,6 @@ class TasmotaLED extends TasmotaService
         parent::ApplyChanges();
         $this->BufferResponse = '';
         $this->ConnectParent('{C6D2AEB3-6E1F-4B2E-8E69-3A1A00246850}');
-        //Setze Filter für ReceiveData
-        if (IPS_GetKernelRunlevel() == KR_READY) {
-            $this->setPowerOnState($this->ReadPropertyInteger('PowerOnState'));
-        }
 
         $this->MaintainVariable('TasmotaLED_White', $this->Translate('White'), 1, '~Intensity.100', 0, $this->ReadPropertyBoolean('White') == true);
         if ($this->ReadPropertyBoolean('White')) {
@@ -152,7 +149,7 @@ class TasmotaLED extends TasmotaService
 
                 if (property_exists($Payload, 'PowerOnState')) {
                     $this->SendDebug('Receive Result: PowerOnState', $Payload->PowerOnState, 0);
-                    $this->setPowerOnStateInForm($Payload->PowerOnState);
+                    $this->SetValue('Tasmota_PowerOnState', $Payload->PowerOnState);
                 }
                 if (property_exists($Payload, 'Pixels')) {
                     $this->SendDebug('Receive Result: Pixels', $Payload->Pixels, 0);
@@ -309,6 +306,9 @@ class TasmotaLED extends TasmotaService
             $this->setPower(intval($power), $Value);
         }
         switch ($Ident) {
+      case 'Tasmota_PowerOnState':
+        $this->setPowerOnState($Value);
+        break;
       case 'TasmotaLED_Speed':
         $this->setSpeed($Value);
         break;
@@ -342,6 +342,13 @@ class TasmotaLED extends TasmotaService
 
     private function createVariabenProfiles()
     {
+        $this->RegisterProfileIntegerEx('Tasmota.PowerOnState', 'Power', '', '', [
+            [0, $this->Translate('Off'),  '', 0x08f26e],
+            [1, $this->Translate('On'),  '', 0x07da63],
+            [2, $this->Translate('Toggle'),  '', 0x06c258],
+            [3, $this->Translate('Default'),  '', 0x06a94d],
+            [4, $this->Translate('Turn relay(s) on, disable further relay control'),  '', 0x06a94d]
+        ]);
         //Speed Profile
         $this->RegisterProfileInteger('TasmotaLED.Speed', 'Speedo', '', '', 1, 20, 1);
         $this->RegisterProfileInteger('TasmotaLED.RSSI', 'Intensity', '', '', 1, 100, 1);

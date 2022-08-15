@@ -22,7 +22,6 @@ class Tasmota extends TasmotaService
         $this->RegisterPropertyString('On', 'ON');
         $this->RegisterPropertyString('Off', 'OFF');
         $this->RegisterPropertyString('FullTopic', '%prefix%/%topic%');
-        $this->RegisterPropertyInteger('PowerOnState', 3);
         $this->RegisterPropertyInteger('GatewayMode', 0);
         $this->RegisterPropertyBoolean('MessageRetain', false);
         $this->RegisterVariableFloat('Tasmota_RSSI', 'RSSI');
@@ -43,16 +42,21 @@ class Tasmota extends TasmotaService
         parent::ApplyChanges();
         $this->BufferResponse = '';
 
-        //Setze Filter fÃ¼r ReceiveData
-        if (IPS_GetKernelRunlevel() == KR_READY) {
-            $this->setPowerOnState($this->ReadPropertyInteger('PowerOnState'));
-        }
-
         if ($this->ReadPropertyBoolean('Fan')) {
             $this->RegisterProfileInteger('Tasmota.FanSpeed', 'Speedo', '', '', 0, 3, 1);
             $this->RegisterVariableInteger('Tasmota_FanSpeed', $this->Translate('Speed'), 'Tasmota.FanSpeed', 0);
             $this->EnableAction('Tasmota_FanSpeed');
         }
+
+        $this->RegisterProfileIntegerEx('Tasmota.PowerOnState', 'Power', '', '', [
+            [0, $this->Translate('Off'),  '', 0x08f26e],
+            [1, $this->Translate('On'),  '', 0x07da63],
+            [2, $this->Translate('Toggle'),  '', 0x06c258],
+            [3, $this->Translate('Default'),  '', 0x06a94d],
+            [4, $this->Translate('Turn relay(s) on, disable further relay control'),  '', 0x06a94d]
+        ]);
+        $this->RegisterVariableInteger('Tasmota_PowerOnState', $this->Translate('PowerOnState'), 'Tasmota.PowerOnState', 0);
+        $this->EnableAction('Tasmota_PowerOnState');
 
         $this->SendDebug(__FUNCTION__ . ' FullTopic', $this->ReadPropertyString('FullTopic'), 0);
         $topic = $this->FilterFullTopicReceiveData();
@@ -88,7 +92,7 @@ class Tasmota extends TasmotaService
                 $Payload = json_decode($Buffer->Payload);
                 if (is_object($Payload)) {
                     if (property_exists($Payload, 'PowerOnState')) {
-                        $this->setPowerOnStateInForm($Payload->PowerOnState);
+                        $this->SetValue('Tasmota_PowerOnState', $Payload->PowerOnState);
                     }
                 }
             }
@@ -593,6 +597,10 @@ class Tasmota extends TasmotaService
         $this->SendDebug(__FUNCTION__ . ' Value', $Value, 0);
         if ($Ident == 'Tasmota_FanSpeed') {
             $result = $this->setFanSpeed($Value);
+            return true;
+        }
+        if ($Ident == 'Tasmota_PowerOnState') {
+            $this->setPowerOnState($Value);
             return true;
         }
         if ($Ident == 'Tasmota_TuyaEnum2') {
