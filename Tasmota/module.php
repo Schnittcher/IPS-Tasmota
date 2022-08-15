@@ -578,14 +578,14 @@ class Tasmota extends TasmotaService
         if (fnmatch('Tasmota_ShutterLock*', $Ident)) {
             $id = substr($Ident, 19);
             $command = 'ShutterLock' . $id;
-            $msg = strval($Value);
+            $msg = intval($Value);
             $this->MQTTCommand($command, $msg);
             return true;
         }
         if (fnmatch('Tasmota_ShutterTarget*', $Ident)) {
             $id = substr($Ident, 21);
             $command = 'ShutterTarget' . $id;
-            $msg = strval($Value);
+            $msg = intval($Value);
             $this->MQTTCommand($command, $msg);
             return true;
         }
