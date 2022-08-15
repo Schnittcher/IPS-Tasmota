@@ -167,6 +167,14 @@ class Tasmota extends TasmotaService
                             }
                         }
                     }
+
+                    if (fnmatch('*TuyaEnum2*', $Buffer->Payload)) {
+                        $this->SendDebug('TuyaEnum2 Payload', $Buffer->Payload, 0);
+                        $this->SendDebug('Result Topic', $Buffer->Topic, 0);
+                        $this->RegisterVariableInteger('Tasmota_TuyaEnum2', 'TuyaEnum2', '', 0);
+                        $this->EnableAction('Tasmota_TuyaEnum2');
+                        $this->SetValue('Tasmota_TuyaEnum2' . $Payload->TuyaEnum2);
+                    }
                     if (fnmatch('*ShutterLock*', $Buffer->Payload)) {
                         $this->SendDebug('ShutterLock Payload', $Buffer->Payload, 0);
                         $this->SendDebug('Result Topic', $Buffer->Topic, 0);
@@ -565,6 +573,12 @@ class Tasmota extends TasmotaService
         $this->SendDebug(__FUNCTION__ . ' Value', $Value, 0);
         if ($Ident == 'Tasmota_FanSpeed') {
             $result = $this->setFanSpeed($Value);
+            return true;
+        }
+        if ($Ident == 'Tasmota_TuyaEnum2') {
+            $command = 'TuyaEnum2';
+            $msg = $Value;
+            $this->MQTTCommand($command, $msg);
             return true;
         }
         if (fnmatch('Tasmota_Channel*', $Ident)) {
