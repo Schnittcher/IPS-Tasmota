@@ -508,7 +508,7 @@ class Tasmota extends TasmotaService
                                 $this->SetValue('Tasmota_' . $Wiegand->Size, $Wiegand->Size);
                             }
                             return;
-                        }                       
+                        }
                         if (property_exists($Payload, 'PCF8574-1')) {
                             return;
                         }
