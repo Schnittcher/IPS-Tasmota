@@ -339,254 +339,254 @@ class Tasmota extends TasmotaService
                             }
                         }
                     }
+                    return;
                 }
-                return;
-            }
-            if (fnmatch('*Button*', $Buffer->Payload)) {
-                $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
-                $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
-                $Payload = json_decode($Buffer->Payload);
-                if (is_object($Payload)) {
-                    for ($i = 0; $i <= 15; $i++) {
-                        if (property_exists($Payload, 'Button' . $i)) {
-                            if (property_exists($Payload->{'Button' . $i}, 'Action')) {
-                                $this->RegisterVariableString('Tasmota_Button' . $i, 'Button' . $i, '', 0);
-                                $this->SetValue('Tasmota_Button' . $i, $Payload->{'Button' . $i}->{'Action'});
-                            }
-                        }
-                    }
-                }
-            }
-            if (fnmatch('*LWT', $Buffer->Topic)) {
-                $this->SendDebug('LWT Payload', $Buffer->Payload, 0);
-                if (strtolower($Buffer->Payload) == 'online') {
-                    $this->SetValue('Tasmota_DeviceStatus', true);
-                } else {
-                    $this->SetValue('Tasmota_DeviceStatus', false);
-                }
-            }
-            //POW Variablen
-            if (fnmatch('*ENERGY*', $Buffer->Payload)) {
-                $myBuffer = json_decode($Buffer->Payload);
-                if (is_object($myBuffer)) {
-                    if (property_exists($myBuffer, 'ENERGY')) {
-                        $this->SendDebug('Energy Payload', $Buffer->Payload, 0);
-                        $this->SendDebug('Energy Topic', $Buffer->Topic, 0);
-
-                        if (property_exists($myBuffer->ENERGY, 'Power')) {
-                            if (!is_array($myBuffer->ENERGY->Power)) {
-                                $this->RegisterVariableFloat('Tasmota_POWPower', $this->Translate('Power'), '~Watt.3680');
-                                $this->SetValue('Tasmota_POWPower', $myBuffer->ENERGY->Power);
-                            } else {
-                                foreach ($myBuffer->ENERGY->Power as $key=> $value) {
-                                    $this->RegisterVariableFloat('Tasmota_POWPower' . $key, $this->Translate('Power') . ' ' . strval(intval($key) + 1), '~Watt.3680');
-                                    $this->SetValue('Tasmota_POWPower' . $key, $value);
-                                }
-                            }
-                        }
-
-                        if (property_exists($myBuffer->ENERGY, 'Total')) {
-                            if (!is_array($myBuffer->ENERGY->Total)) {
-                                $this->RegisterVariableFloat('Tasmota_POWTotal', $this->Translate('Total'), '~Electricity');
-                                $this->SetValue('Tasmota_POWTotal', $myBuffer->ENERGY->Total);
-                            } else {
-                                foreach ($myBuffer->ENERGY->Total as $key=> $value) {
-                                    $this->RegisterVariableFloat('Tasmota_POWTotal' . $key, $this->Translate('Total') . ' ' . strval(intval($key) + 1), '~Electricity');
-                                    $this->SetValue('Tasmota_POWTotal' . $key, $value);
-                                }
-                            }
-                        }
-
-                        if (property_exists($myBuffer->ENERGY, 'Today')) {
-                            $this->RegisterVariableFloat('Tasmota_POWToday', $this->Translate('Today'), '~Electricity');
-                            $this->SetValue('Tasmota_POWToday', $myBuffer->ENERGY->Today);
-                        }
-
-                        if (property_exists($myBuffer->ENERGY, 'Yesterday')) {
-                            $this->RegisterVariableFloat('Tasmota_POWYesterday', $this->Translate('Yesterday'), '~Electricity');
-                            $this->SetValue('Tasmota_POWYesterday', $myBuffer->ENERGY->Yesterday);
-                        }
-
-                        if (property_exists($myBuffer->ENERGY, 'Current')) {
-                            if (!is_array($myBuffer->ENERGY->Current)) {
-                                $this->RegisterVariableFloat('Tasmota_POWCurrent', $this->Translate('Current'), '');
-                                $this->SetValue('Tasmota_POWCurrent', $myBuffer->ENERGY->Current);
-                            } else {
-                                foreach ($myBuffer->ENERGY->Current as $key=> $value) {
-                                    $this->RegisterVariableFloat('Tasmota_POWCurrent' . $key, $this->Translate('Current') . ' ' . strval(intval($key) + 1), '~Ampere');
-                                    $this->SetValue('Tasmota_POWCurrent' . $key, $value);
-                                }
-                            }
-                        }
-
-                        if (property_exists($myBuffer->ENERGY, 'Voltage')) {
-                            $this->RegisterVariableFloat('Tasmota_POWVoltage', $this->Translate('Voltage'), '~Volt');
-                            $this->SetValue('Tasmota_POWVoltage', $myBuffer->ENERGY->Voltage);
-                        }
-
-                        if (property_exists($myBuffer->ENERGY, 'Factor')) {
-                            if (!is_array($myBuffer->ENERGY->Factor)) {
-                                $this->RegisterVariableFloat('Tasmota_POWFactor', $this->Translate('Factor'));
-                                $this->SetValue('Tasmota_POWFactor', $myBuffer->ENERGY->Factor);
-                            } else {
-                                foreach ($myBuffer->ENERGY->Factor as $key=> $value) {
-                                    $this->RegisterVariableFloat('Tasmota_POWFactor' . $key, $this->Translate('Factor') . ' ' . strval(intval($key) + 1), '');
-                                    $this->SetValue('Tasmota_POWFactor' . $key, $value);
-                                }
-                            }
-                        }
-
-                        if (property_exists($myBuffer->ENERGY, 'ApparentPower')) {
-                            if (!is_array($myBuffer->ENERGY->ApparentPower)) {
-                                $this->RegisterVariableFloat('Tasmota_POWApparentPower', $this->Translate('ApparentPower'), 'Tasmota.ApparentPower');
-                                $this->SetValue('Tasmota_POWApparentPower', $myBuffer->ENERGY->ApparentPower);
-                            } else {
-                                foreach ($myBuffer->ENERGY->ApparentPower as $key=> $value) {
-                                    $this->RegisterVariableFloat('Tasmota_POWApparentPower' . $key, $this->Translate('ApparentPower') . ' ' . strval(intval($key) + 1), 'Tasmota.ApparentPower');
-                                    $this->SetValue('Tasmota_POWApparentPower' . $key, $value);
-                                }
-                            }
-                        }
-
-                        if (property_exists($myBuffer->ENERGY, 'ReactivePower')) {
-                            if (!is_array($myBuffer->ENERGY->ReactivePower)) {
-                                $this->RegisterVariableFloat('Tasmota_POWReactivePower', $this->Translate('ReactivePower'), 'Tasmota.ReactivePower');
-                                $this->SetValue('Tasmota_POWReactivePower', $myBuffer->ENERGY->ReactivePower);
-                            } else {
-                                foreach ($myBuffer->ENERGY->ReactivePower as $key=> $value) {
-                                    $this->RegisterVariableFloat('Tasmota_POWReactivePower' . $key, $this->Translate('ReactivePower') . ' ' . strval(intval($key) + 1), 'Tasmota.ReactivePower');
-                                    $this->SetValue('Tasmota_POWReactivePower' . $key, $value);
-                                }
-                            }
-                        }
-
-                        if (property_exists($myBuffer->ENERGY, 'PhaseAngle')) {
-                            $this->RegisterVariableFloat('Tasmota_PhaseAngle', $this->Translate('PhaseAngle'));
-                            $this->SetValue('Tasmota_PhaseAngle', $myBuffer->ENERGY->PhaseAngle);
-                        }
-
-                        if (property_exists($myBuffer->ENERGY, 'ImportActivePower')) {
-                            $this->RegisterVariableFloat('Tasmota_ImportActivePower', $this->Translate('ImportActivePower'), '~Electricity');
-                            $this->SetValue('Tasmota_ImportActivePower', $myBuffer->ENERGY->ImportActivePower);
-                        }
-
-                        if (property_exists($myBuffer->ENERGY, 'ExportActivePower')) {
-                            $this->RegisterVariableFloat('Tasmota_ExportActivePower', $this->Translate('ExportActivePower'), '~Electricity');
-                            $this->SetValue('Tasmota_ExportActivePower', $myBuffer->ENERGY->ExportActivePower);
-                        }
-
-                        if (property_exists($myBuffer->ENERGY, 'ImportReactivePower')) {
-                            $this->RegisterVariableFloat('Tasmota_ImportReactivePower', $this->Translate('ImportReactivePower'), 'Tasmota.ReactivePower_kvarh');
-                            $this->SetValue('Tasmota_ImportReactivePower', $myBuffer->ENERGY->ImportReactivePower);
-                        }
-
-                        if (property_exists($myBuffer->ENERGY, 'ExportReactivePower')) {
-                            $this->RegisterVariableFloat('Tasmota_ExportReactivePower', $this->Translate('ExportReactivePower'), 'Tasmota.ReactivePower_kvarh');
-                            $this->SetValue('Tasmota_ExportReactivePower', $myBuffer->ENERGY->ExportReactivePower);
-                        }
-
-                        if (property_exists($myBuffer->ENERGY, 'TotalReactivePower')) {
-                            $this->RegisterVariableFloat('Tasmota_TotalReactivePower', $this->Translate('TotalReactivePower'), 'Tasmota.ReactivePower_kvarh');
-                            $this->SetValue('Tasmota_TotalReactivePower', $myBuffer->ENERGY->TotalReactivePower);
-                        }
-                        if (property_exists($myBuffer->ENERGY, 'Frequency')) {
-                            $this->RegisterVariableFloat('Tasmota_Frequency', $this->Translate('Frequency'), '~Hertz');
-                            $this->SetValue('Tasmota_Frequency', $myBuffer->ENERGY->Frequency);
-                        }
-                    }
-                    if (property_exists($myBuffer, 'COUNTER')) {
-                        if (property_exists($myBuffer->COUNTER, 'C1')) {
-                            $this->RegisterVariableFloat('Tasmota_COUNTER_C1', $this->Translate('Counter C1'), '');
-                            $this->SetValue('Tasmota_COUNTER_C1', $myBuffer->COUNTER->C1);
-                        }
-                        if (property_exists($myBuffer->COUNTER, 'C2')) {
-                            $this->RegisterVariableFloat('Tasmota_COUNTER_C2', $this->Translate('Counter C2'), '');
-                            $this->SetValue('Tasmota_COUNTER_C2', $myBuffer->COUNTER->C2);
-                        }
-                    }
-                }
-            }
-            //Sensor Variablen checken
-            if ($this->ReadPropertyBoolean('AutomatedSensorValues')) {
-                if (fnmatch('*SENSOR', $Buffer->Topic)) {
+                if (fnmatch('*Button*', $Buffer->Payload)) {
                     $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
                     $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
-                    $myBuffer = json_decode($Buffer->Payload, true);
-
                     $Payload = json_decode($Buffer->Payload);
-                    if (property_exists($Payload, 'IBEACON')) {
-                        $iBeacon = $Payload->IBEACON;
-                        if (!property_exists($iBeacon, 'NAME')) {
-                            if (property_exists($iBeacon, 'MAC')) {
-                                $iBeaconName = $iBeacon->MAC;
+                    if (is_object($Payload)) {
+                        for ($i = 0; $i <= 15; $i++) {
+                            if (property_exists($Payload, 'Button' . $i)) {
+                                if (property_exists($Payload->{'Button' . $i}, 'Action')) {
+                                    $this->RegisterVariableString('Tasmota_Button' . $i, 'Button' . $i, '', 0);
+                                    $this->SetValue('Tasmota_Button' . $i, $Payload->{'Button' . $i}->{'Action'});
+                                }
                             }
-                        } else {
-                            $iBeaconName = $iBeacon->NAME;
                         }
-                        if (property_exists($iBeacon, 'MAC')) {
-                            $this->RegisterVariableString('Tasmota_iBeaconMac_' . $iBeacon->MAC, 'iBeacon ' . $iBeaconName . ' MAC', '', 0);
-                            $this->SetValue('Tasmota_iBeaconMac_' . $iBeacon->MAC, $iBeacon->MAC);
-                        }
-                        if (property_exists($iBeacon, 'RSSI')) {
-                            $this->RegisterVariableInteger('Tasmota_iBeaconRSSI_' . $iBeacon->MAC, 'iBeacon ' . $iBeaconName . ' RSSI', '', 0);
-                            $this->SetValue('Tasmota_iBeaconRSSI_' . $iBeacon->MAC, $iBeacon->RSSI);
-                        }
-                        if (property_exists($iBeacon, 'STATE')) {
-                            $this->RegisterVariableString('Tasmota_iBeaconState_' . $iBeacon->MAC, 'iBeacon ' . $iBeaconName . ' ' . $this->Translate('State'), '', 0);
-                            $this->SetValue('Tasmota_iBeaconState_' . $iBeacon->MAC, $iBeacon->STATE);
-                        }
-                        if (property_exists($iBeacon, 'PERSEC')) {
-                            $this->RegisterVariableInteger('Tasmota_iBeaconPersec_' . $iBeacon->MAC, 'iBeacon ' . $iBeaconName . ' PERSEC', '', 0);
-                            $this->SetValue('Tasmota_iBeaconPersec_' . $iBeacon->MAC, $iBeacon->PERSEC);
-                        }
-                        return;
                     }
-                    if (property_exists($Payload, 'Wiegand')) {
-                        $Wiegand = $Payload->Wiegand;
-                        if (propertyexists($Wiegand, 'UID')) {
-                            $this->RegisterVariableString('Tasmota' . $Wiegand->UID, 'Wiegand UID', '', 0);
-                            $this->SetValue('Tasmota_' . $Wiegand->UID, $Wiegand->UID);
-                        }
-                        if (propertyexists($Wiegand, 'Size')) {
-                            $this->RegisterVariableInteger('Tasmota' . $Wiegand->Size, 'Wiegand Size', '', 0);
-                            $this->SetValue('Tasmota_' . $Wiegand->Size, $Wiegand->Size);
-                        }
-                        return;
+                }
+                if (fnmatch('*LWT', $Buffer->Topic)) {
+                    $this->SendDebug('LWT Payload', $Buffer->Payload, 0);
+                    if (strtolower($Buffer->Payload) == 'online') {
+                        $this->SetValue('Tasmota_DeviceStatus', true);
+                    } else {
+                        $this->SetValue('Tasmota_DeviceStatus', false);
                     }
-                    if (property_exists($Payload, 'PCF8574-1')) {
-                        return;
+                }
+                //POW Variablen
+                if (fnmatch('*ENERGY*', $Buffer->Payload)) {
+                    $myBuffer = json_decode($Buffer->Payload);
+                    if (is_object($myBuffer)) {
+                        if (property_exists($myBuffer, 'ENERGY')) {
+                            $this->SendDebug('Energy Payload', $Buffer->Payload, 0);
+                            $this->SendDebug('Energy Topic', $Buffer->Topic, 0);
+
+                            if (property_exists($myBuffer->ENERGY, 'Power')) {
+                                if (!is_array($myBuffer->ENERGY->Power)) {
+                                    $this->RegisterVariableFloat('Tasmota_POWPower', $this->Translate('Power'), '~Watt.3680');
+                                    $this->SetValue('Tasmota_POWPower', $myBuffer->ENERGY->Power);
+                                } else {
+                                    foreach ($myBuffer->ENERGY->Power as $key=> $value) {
+                                        $this->RegisterVariableFloat('Tasmota_POWPower' . $key, $this->Translate('Power') . ' ' . strval(intval($key) + 1), '~Watt.3680');
+                                        $this->SetValue('Tasmota_POWPower' . $key, $value);
+                                    }
+                                }
+                            }
+
+                            if (property_exists($myBuffer->ENERGY, 'Total')) {
+                                if (!is_array($myBuffer->ENERGY->Total)) {
+                                    $this->RegisterVariableFloat('Tasmota_POWTotal', $this->Translate('Total'), '~Electricity');
+                                    $this->SetValue('Tasmota_POWTotal', $myBuffer->ENERGY->Total);
+                                } else {
+                                    foreach ($myBuffer->ENERGY->Total as $key=> $value) {
+                                        $this->RegisterVariableFloat('Tasmota_POWTotal' . $key, $this->Translate('Total') . ' ' . strval(intval($key) + 1), '~Electricity');
+                                        $this->SetValue('Tasmota_POWTotal' . $key, $value);
+                                    }
+                                }
+                            }
+
+                            if (property_exists($myBuffer->ENERGY, 'Today')) {
+                                $this->RegisterVariableFloat('Tasmota_POWToday', $this->Translate('Today'), '~Electricity');
+                                $this->SetValue('Tasmota_POWToday', $myBuffer->ENERGY->Today);
+                            }
+
+                            if (property_exists($myBuffer->ENERGY, 'Yesterday')) {
+                                $this->RegisterVariableFloat('Tasmota_POWYesterday', $this->Translate('Yesterday'), '~Electricity');
+                                $this->SetValue('Tasmota_POWYesterday', $myBuffer->ENERGY->Yesterday);
+                            }
+
+                            if (property_exists($myBuffer->ENERGY, 'Current')) {
+                                if (!is_array($myBuffer->ENERGY->Current)) {
+                                    $this->RegisterVariableFloat('Tasmota_POWCurrent', $this->Translate('Current'), '');
+                                    $this->SetValue('Tasmota_POWCurrent', $myBuffer->ENERGY->Current);
+                                } else {
+                                    foreach ($myBuffer->ENERGY->Current as $key=> $value) {
+                                        $this->RegisterVariableFloat('Tasmota_POWCurrent' . $key, $this->Translate('Current') . ' ' . strval(intval($key) + 1), '~Ampere');
+                                        $this->SetValue('Tasmota_POWCurrent' . $key, $value);
+                                    }
+                                }
+                            }
+
+                            if (property_exists($myBuffer->ENERGY, 'Voltage')) {
+                                $this->RegisterVariableFloat('Tasmota_POWVoltage', $this->Translate('Voltage'), '~Volt');
+                                $this->SetValue('Tasmota_POWVoltage', $myBuffer->ENERGY->Voltage);
+                            }
+
+                            if (property_exists($myBuffer->ENERGY, 'Factor')) {
+                                if (!is_array($myBuffer->ENERGY->Factor)) {
+                                    $this->RegisterVariableFloat('Tasmota_POWFactor', $this->Translate('Factor'));
+                                    $this->SetValue('Tasmota_POWFactor', $myBuffer->ENERGY->Factor);
+                                } else {
+                                    foreach ($myBuffer->ENERGY->Factor as $key=> $value) {
+                                        $this->RegisterVariableFloat('Tasmota_POWFactor' . $key, $this->Translate('Factor') . ' ' . strval(intval($key) + 1), '');
+                                        $this->SetValue('Tasmota_POWFactor' . $key, $value);
+                                    }
+                                }
+                            }
+
+                            if (property_exists($myBuffer->ENERGY, 'ApparentPower')) {
+                                if (!is_array($myBuffer->ENERGY->ApparentPower)) {
+                                    $this->RegisterVariableFloat('Tasmota_POWApparentPower', $this->Translate('ApparentPower'), 'Tasmota.ApparentPower');
+                                    $this->SetValue('Tasmota_POWApparentPower', $myBuffer->ENERGY->ApparentPower);
+                                } else {
+                                    foreach ($myBuffer->ENERGY->ApparentPower as $key=> $value) {
+                                        $this->RegisterVariableFloat('Tasmota_POWApparentPower' . $key, $this->Translate('ApparentPower') . ' ' . strval(intval($key) + 1), 'Tasmota.ApparentPower');
+                                        $this->SetValue('Tasmota_POWApparentPower' . $key, $value);
+                                    }
+                                }
+                            }
+
+                            if (property_exists($myBuffer->ENERGY, 'ReactivePower')) {
+                                if (!is_array($myBuffer->ENERGY->ReactivePower)) {
+                                    $this->RegisterVariableFloat('Tasmota_POWReactivePower', $this->Translate('ReactivePower'), 'Tasmota.ReactivePower');
+                                    $this->SetValue('Tasmota_POWReactivePower', $myBuffer->ENERGY->ReactivePower);
+                                } else {
+                                    foreach ($myBuffer->ENERGY->ReactivePower as $key=> $value) {
+                                        $this->RegisterVariableFloat('Tasmota_POWReactivePower' . $key, $this->Translate('ReactivePower') . ' ' . strval(intval($key) + 1), 'Tasmota.ReactivePower');
+                                        $this->SetValue('Tasmota_POWReactivePower' . $key, $value);
+                                    }
+                                }
+                            }
+
+                            if (property_exists($myBuffer->ENERGY, 'PhaseAngle')) {
+                                $this->RegisterVariableFloat('Tasmota_PhaseAngle', $this->Translate('PhaseAngle'));
+                                $this->SetValue('Tasmota_PhaseAngle', $myBuffer->ENERGY->PhaseAngle);
+                            }
+
+                            if (property_exists($myBuffer->ENERGY, 'ImportActivePower')) {
+                                $this->RegisterVariableFloat('Tasmota_ImportActivePower', $this->Translate('ImportActivePower'), '~Electricity');
+                                $this->SetValue('Tasmota_ImportActivePower', $myBuffer->ENERGY->ImportActivePower);
+                            }
+
+                            if (property_exists($myBuffer->ENERGY, 'ExportActivePower')) {
+                                $this->RegisterVariableFloat('Tasmota_ExportActivePower', $this->Translate('ExportActivePower'), '~Electricity');
+                                $this->SetValue('Tasmota_ExportActivePower', $myBuffer->ENERGY->ExportActivePower);
+                            }
+
+                            if (property_exists($myBuffer->ENERGY, 'ImportReactivePower')) {
+                                $this->RegisterVariableFloat('Tasmota_ImportReactivePower', $this->Translate('ImportReactivePower'), 'Tasmota.ReactivePower_kvarh');
+                                $this->SetValue('Tasmota_ImportReactivePower', $myBuffer->ENERGY->ImportReactivePower);
+                            }
+
+                            if (property_exists($myBuffer->ENERGY, 'ExportReactivePower')) {
+                                $this->RegisterVariableFloat('Tasmota_ExportReactivePower', $this->Translate('ExportReactivePower'), 'Tasmota.ReactivePower_kvarh');
+                                $this->SetValue('Tasmota_ExportReactivePower', $myBuffer->ENERGY->ExportReactivePower);
+                            }
+
+                            if (property_exists($myBuffer->ENERGY, 'TotalReactivePower')) {
+                                $this->RegisterVariableFloat('Tasmota_TotalReactivePower', $this->Translate('TotalReactivePower'), 'Tasmota.ReactivePower_kvarh');
+                                $this->SetValue('Tasmota_TotalReactivePower', $myBuffer->ENERGY->TotalReactivePower);
+                            }
+                            if (property_exists($myBuffer->ENERGY, 'Frequency')) {
+                                $this->RegisterVariableFloat('Tasmota_Frequency', $this->Translate('Frequency'), '~Hertz');
+                                $this->SetValue('Tasmota_Frequency', $myBuffer->ENERGY->Frequency);
+                            }
+                        }
+                        if (property_exists($myBuffer, 'COUNTER')) {
+                            if (property_exists($myBuffer->COUNTER, 'C1')) {
+                                $this->RegisterVariableFloat('Tasmota_COUNTER_C1', $this->Translate('Counter C1'), '');
+                                $this->SetValue('Tasmota_COUNTER_C1', $myBuffer->COUNTER->C1);
+                            }
+                            if (property_exists($myBuffer->COUNTER, 'C2')) {
+                                $this->RegisterVariableFloat('Tasmota_COUNTER_C2', $this->Translate('Counter C2'), '');
+                                $this->SetValue('Tasmota_COUNTER_C2', $myBuffer->COUNTER->C2);
+                            }
+                        }
                     }
-                    $this->getSensorData($myBuffer);
+                }
+                //Sensor Variablen checken
+                if ($this->ReadPropertyBoolean('AutomatedSensorValues')) {
+                    if (fnmatch('*SENSOR', $Buffer->Topic)) {
+                        $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
+                        $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
+                        $myBuffer = json_decode($Buffer->Payload, true);
+
+                        $Payload = json_decode($Buffer->Payload);
+                        if (property_exists($Payload, 'IBEACON')) {
+                            $iBeacon = $Payload->IBEACON;
+                            if (!property_exists($iBeacon, 'NAME')) {
+                                if (property_exists($iBeacon, 'MAC')) {
+                                    $iBeaconName = $iBeacon->MAC;
+                                }
+                            } else {
+                                $iBeaconName = $iBeacon->NAME;
+                            }
+                            if (property_exists($iBeacon, 'MAC')) {
+                                $this->RegisterVariableString('Tasmota_iBeaconMac_' . $iBeacon->MAC, 'iBeacon ' . $iBeaconName . ' MAC', '', 0);
+                                $this->SetValue('Tasmota_iBeaconMac_' . $iBeacon->MAC, $iBeacon->MAC);
+                            }
+                            if (property_exists($iBeacon, 'RSSI')) {
+                                $this->RegisterVariableInteger('Tasmota_iBeaconRSSI_' . $iBeacon->MAC, 'iBeacon ' . $iBeaconName . ' RSSI', '', 0);
+                                $this->SetValue('Tasmota_iBeaconRSSI_' . $iBeacon->MAC, $iBeacon->RSSI);
+                            }
+                            if (property_exists($iBeacon, 'STATE')) {
+                                $this->RegisterVariableString('Tasmota_iBeaconState_' . $iBeacon->MAC, 'iBeacon ' . $iBeaconName . ' ' . $this->Translate('State'), '', 0);
+                                $this->SetValue('Tasmota_iBeaconState_' . $iBeacon->MAC, $iBeacon->STATE);
+                            }
+                            if (property_exists($iBeacon, 'PERSEC')) {
+                                $this->RegisterVariableInteger('Tasmota_iBeaconPersec_' . $iBeacon->MAC, 'iBeacon ' . $iBeaconName . ' PERSEC', '', 0);
+                                $this->SetValue('Tasmota_iBeaconPersec_' . $iBeacon->MAC, $iBeacon->PERSEC);
+                            }
+                            return;
+                        }
+                        if (property_exists($Payload, 'Wiegand')) {
+                            $Wiegand = $Payload->Wiegand;
+                            if (propertyexists($Wiegand, 'UID')) {
+                                $this->RegisterVariableString('Tasmota' . $Wiegand->UID, 'Wiegand UID', '', 0);
+                                $this->SetValue('Tasmota_' . $Wiegand->UID, $Wiegand->UID);
+                            }
+                            if (propertyexists($Wiegand, 'Size')) {
+                                $this->RegisterVariableInteger('Tasmota' . $Wiegand->Size, 'Wiegand Size', '', 0);
+                                $this->SetValue('Tasmota_' . $Wiegand->Size, $Wiegand->Size);
+                            }
+                            return;
+                        }
+                        if (property_exists($Payload, 'PCF8574-1')) {
+                            return;
+                        }
+                        $this->getSensorData($myBuffer);
+                    }
                 }
             }
-        }
-        //FanSpeed
-        if (fnmatch('*FanSpeed*', $Buffer->Payload)) {
-            $myBuffer = json_decode($Buffer->Payload);
-            if (property_exists($myBuffer, 'FanSpeed')) {
-                $this->SendDebug('FanSpeed Payload', $Buffer->Payload, 0);
-                $this->SetValue('Tasmota_FanSpeed', $myBuffer->FanSpeed);
+            //FanSpeed
+            if (fnmatch('*FanSpeed*', $Buffer->Payload)) {
+                $myBuffer = json_decode($Buffer->Payload);
+                if (property_exists($myBuffer, 'FanSpeed')) {
+                    $this->SendDebug('FanSpeed Payload', $Buffer->Payload, 0);
+                    $this->SetValue('Tasmota_FanSpeed', $myBuffer->FanSpeed);
+                }
             }
-        }
-        //IrReceived
-        if (fnmatch('*IrReceived*', $Buffer->Payload)) {
-            $myBuffer = json_decode($Buffer->Payload);
-            $this->SendDebug('IrReceived Payload', $Buffer->Payload, 0);
-            if (property_exists($myBuffer->IrReceived, 'Protocol')) {
-                $this->RegisterVariableString('Tasmota_IRProtocol', $this->Translate('IR Protocol'), '', 0);
-                $this->SetValue('Tasmota_IRProtocol', $myBuffer->IrReceived->Protocol);
-            }
-            if (property_exists($myBuffer->IrReceived, 'Bits')) {
-                $this->RegisterVariableString('Tasmota_IRBits', $this->Translate('IR Bits'), '', 0);
-                $this->SetValue('Tasmota_IRBits', $myBuffer->IrReceived->Bits);
-            }
-            if (property_exists($myBuffer->IrReceived, 'Data')) {
-                $this->RegisterVariableString('Tasmota_IRData', $this->Translate('IR Data'), '', 0);
-                $this->SetValue('Tasmota_IRData', $myBuffer->IrReceived->Data);
-            }
-            if (property_exists($myBuffer->IrReceived, 'Hash')) {
-                $this->RegisterVariableString('Tasmota_IRHash', $this->Translate('IR Hash'), '', 0);
-                $this->SetValue('Tasmota_IRHash', $myBuffer->IrReceived->Hash);
+            //IrReceived
+            if (fnmatch('*IrReceived*', $Buffer->Payload)) {
+                $myBuffer = json_decode($Buffer->Payload);
+                $this->SendDebug('IrReceived Payload', $Buffer->Payload, 0);
+                if (property_exists($myBuffer->IrReceived, 'Protocol')) {
+                    $this->RegisterVariableString('Tasmota_IRProtocol', $this->Translate('IR Protocol'), '', 0);
+                    $this->SetValue('Tasmota_IRProtocol', $myBuffer->IrReceived->Protocol);
+                }
+                if (property_exists($myBuffer->IrReceived, 'Bits')) {
+                    $this->RegisterVariableString('Tasmota_IRBits', $this->Translate('IR Bits'), '', 0);
+                    $this->SetValue('Tasmota_IRBits', $myBuffer->IrReceived->Bits);
+                }
+                if (property_exists($myBuffer->IrReceived, 'Data')) {
+                    $this->RegisterVariableString('Tasmota_IRData', $this->Translate('IR Data'), '', 0);
+                    $this->SetValue('Tasmota_IRData', $myBuffer->IrReceived->Data);
+                }
+                if (property_exists($myBuffer->IrReceived, 'Hash')) {
+                    $this->RegisterVariableString('Tasmota_IRHash', $this->Translate('IR Hash'), '', 0);
+                    $this->SetValue('Tasmota_IRHash', $myBuffer->IrReceived->Hash);
+                }
             }
         }
     }
