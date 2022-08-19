@@ -129,12 +129,13 @@ class Tasmota extends TasmotaService
                     if ($this->ReadPropertyBoolean('SystemVariables')) {
                         $this->getSystemVariables($myBuffer);
                     }
-
-                    if (property_exists($myBuffer->Wifi, 'RSSI')) {
-                        $this->SetValue('Tasmota_RSSI', $myBuffer->Wifi->RSSI);
-                    }
-                    if (property_exists($myBuffer->Wifi, 'Signal')) {
-                        $this->SetValue('Tasmota_Signal', $myBuffer->Wifi->Signal);
+                    if (property_exists($myBuffer, 'Wifi')) {
+                        if (property_exists($myBuffer->Wifi, 'RSSI')) {
+                            $this->SetValue('Tasmota_RSSI', $myBuffer->Wifi->RSSI);
+                        }
+                        if (property_exists($myBuffer->Wifi, 'Signal')) {
+                            $this->SetValue('Tasmota_Signal', $myBuffer->Wifi->Signal);
+                        }
                     }
                 }
                 //Info1
