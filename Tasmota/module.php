@@ -53,7 +53,9 @@ class Tasmota extends TasmotaService
             [1, $this->Translate('On'),  '', 0x07da63],
             [2, $this->Translate('Toggle'),  '', 0x06c258],
             [3, $this->Translate('Default'),  '', 0x06a94d],
-            [4, $this->Translate('Turn relay(s) on, disable further relay control'),  '', 0x06a94d]
+            [4, $this->Translate('Turn relay(s) on, disable further relay control'),  '', 0x06a94d],
+            [5, $this->Translate('After a PulseTime period turn relay(s) ON (acts as inverted PulseTime mode)'),  '', 0x06a94d]
+            
         ]);
         $this->RegisterVariableInteger('Tasmota_PowerOnState', $this->Translate('PowerOnState'), 'Tasmota.PowerOnState', 0);
         $this->EnableAction('Tasmota_PowerOnState');

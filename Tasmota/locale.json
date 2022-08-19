@@ -16,6 +16,7 @@
             "Toggle": "Umschalten (Toggle)",
             "Default": "Standard",
             "Turn relay(s) on, disable further relay control": "Relais einschalten, weitere Relaissteuerung deaktivieren",
+            "After a PulseTime period turn relay(s) ON (acts as inverted PulseTime mode)": "Schalten Sie nach einer PulseTime-Periode Relais ein (wirkt als invertierter PulseTime-Modus)",
             "Restart Tasmota Device": "Tasmota Gerät neustarten",
             "ApparentPower": "Scheinleistung",
             "Current": "Strom (Current)",
