@@ -160,6 +160,29 @@ class Tasmota extends TasmotaService
                     $this->BufferResponse = $Buffer->Payload;
                     $Payload = json_decode($Buffer->Payload);
 
+                    if (fnmatch('*MaxPowerHold*', $Buffer->Payload)) {
+                        $this->SendDebug('Result MaxPowerHold Payload', $Buffer->Payload, 0);
+                        $this->SendDebug('Result Topic', $Buffer->Topic, 0);
+                        $this->RegisterVariableInteger('Tasmota_MaxPowerHold', $this->Translate('MaxPowerHold'), '');
+                        $this->EnableAction('Tasmota_MaxPowerHold');
+                        $this->SetValue('Tasmota_MaxPowerHold', $Payload->MaxPowerHold);
+                    }
+
+                    if (fnmatch('*MaxPowerWindow*', $Buffer->Payload)) {
+                        $this->SendDebug('Result MaxPowerWindow Payload', $Buffer->Payload, 0);
+                        $this->SendDebug('Result Topic', $Buffer->Topic, 0);
+                        $this->RegisterVariableInteger('Tasmota_MaxPowerWindow', $this->Translate('MaxPowerWindow'), '');
+                        $this->EnableAction('Tasmota_MaxPowerWindow');
+                        $this->SetValue('Tasmota_MaxPowerWindow', $Payload->MaxPowerWindow);
+                    }
+                    if (fnmatch('*MaxPower"*', $Buffer->Payload)) {
+                        $this->SendDebug('Result MaxPower Payload', $Buffer->Payload, 0);
+                        $this->SendDebug('Result Topic', $Buffer->Topic, 0);
+                        $this->RegisterVariableFloat('Tasmota_MaxPower', $this->Translate('MaxPower'), '~Watt.3680');
+                        $this->EnableAction('Tasmota_MaxPower');
+                        $this->SetValue('Tasmota_MaxPower', $Payload->MaxPower);
+                    }
+
                     if (fnmatch('*Channel*', $Buffer->Payload)) {
                         $this->SendDebug('Channel Payload', $Buffer->Payload, 0);
                         $this->SendDebug('Result Topic', $Buffer->Topic, 0);
@@ -599,6 +622,18 @@ class Tasmota extends TasmotaService
             $result = $this->setFanSpeed($Value);
             return true;
         }
+        if ($Ident == 'Tasmota_MaxPower') {
+            $result = $this->setMaxPower($Value);
+            return true;
+        }
+        if ($Ident == 'Tasmota_MaxPowerWindow') {
+            $result = $this->setMaxPowerWindow($Value);
+            return true;
+        }
+        if ($Ident == 'Tasmota_MaxPowerHold') {
+            $result = $this->setMaxPowerHold($Value);
+            return true;
+        }
         if ($Ident == 'Tasmota_PowerOnState') {
             $this->setPowerOnState($Value);
             return true;
@@ -667,6 +702,26 @@ class Tasmota extends TasmotaService
     public function setFanSpeed(int $value)
     {
         $command = 'FanSpeed';
+        $msg = strval($value);
+        $this->MQTTCommand($command, $msg);
+    }
+
+    public function setMaxPower(int $value)
+    {
+        $command = 'MaxPower';
+        $msg = strval($value);
+        $this->MQTTCommand($command, $msg);
+    }
+
+    public function setMaxPowerWindow(int $value)
+    {
+        $command = 'MaxPowerWindow';
+        $msg = strval($value);
+        $this->MQTTCommand($command, $msg);
+    }
+    public function setMaxPowerHold(int $value)
+    {
+        $command = 'MaxPowerHold';
         $msg = strval($value);
         $this->MQTTCommand($command, $msg);
     }
