@@ -55,7 +55,7 @@ class Tasmota extends TasmotaService
             [3, $this->Translate('Default'),  '', 0x06a94d],
             [4, $this->Translate('Turn relay(s) on, disable further relay control'),  '', 0x06a94d],
             [5, $this->Translate('After a PulseTime period turn relay(s) ON (acts as inverted PulseTime mode)'),  '', 0x06a94d]
-            
+
         ]);
         $this->RegisterVariableInteger('Tasmota_PowerOnState', $this->Translate('PowerOnState'), 'Tasmota.PowerOnState', 0);
         $this->EnableAction('Tasmota_PowerOnState');
@@ -203,7 +203,7 @@ class Tasmota extends TasmotaService
                         $this->SendDebug('Result Topic', $Buffer->Topic, 0);
                         $this->RegisterVariableInteger('Tasmota_TuyaEnum2', 'TuyaEnum2', '', 0);
                         $this->EnableAction('Tasmota_TuyaEnum2');
-                        $this->SetValue('Tasmota_TuyaEnum2' . $Payload->TuyaEnum2);
+                        $this->SetValue('Tasmota_TuyaEnum2', $Payload->TuyaEnum2);
                     }
                     if (fnmatch('*ShutterTarget*', $Buffer->Payload)) {
                         $this->SendDebug('ShutterTarget Payload', $Buffer->Payload, 0);
