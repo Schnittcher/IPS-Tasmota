@@ -300,6 +300,10 @@ class TasmotaService extends IPSModule
                             $variablenID = $this->RegisterVariableString('Tasmota' . $SensorKey . '_' . $DataKey, $SensorKey . '' . $DataKey, '');
                             $this->SetValue('Tasmota' . $SensorKey . '_' . $DataKey, $SensorData);
                         }
+                        if ($SensorKey == 'RDM6300') {
+                            $variablenID = $this->RegisterVariableString('Tasmota' . $SensorKey . '_' . $DataKey, $SensorKey . '' . $DataKey, '');
+                            $this->SetValue('Tasmota' . $SensorKey . '_' . $DataKey, $SensorData);
+                        }
                     }
                 }
             }
