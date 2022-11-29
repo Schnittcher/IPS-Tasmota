@@ -350,6 +350,11 @@ class Tasmota extends TasmotaService
                                 $this->EnableAction('Tasmota_ShutterTarget' . $i);
                                 $this->SetValue('Tasmota_ShutterTarget' . $i, $Payload->{'Shutter' . $i}->{'Target'});
                             }
+                            if (property_exists($Payload->{'Shutter' . $i}, 'Tilt')) {
+                                $this->RegisterVariableInteger('Tasmota_ShutterTilt' . $i, 'Shutter' . $i . ' Tilt', '~Intensity.100', 0);
+                                $this->EnableAction('Tasmota_ShutterTilt' . $i);
+                                $this->SetValue('Tasmota_ShutterTilt' . $i, $Payload->{'Shutter' . $i}->{'Tilt'});
+                            }
                             if (property_exists($Payload, 'ShutterLock' . $i)) {
                                 $this->RegisterVariableBoolean('Tasmota_ShutterLock' . $i, 'Shutter' . $i . ' Lock', '~Lock', 0);
                                 $this->EnableAction('Tasmota_ShutterLock' . $i);
@@ -668,7 +673,14 @@ class Tasmota extends TasmotaService
             $this->MQTTCommand($command, $msg);
             return true;
         }
-
+        if (fnmatch('Tasmota_ShutterTilt*', $Ident)) {
+            $id = substr($Ident, 19);
+            $command = 'ShutterTilt' . $id;
+            $msg = strval(intval($Value));
+    
+            $this->MQTTCommand($command, $msg);
+            return true;
+        }
         if (fnmatch('Tasmota_PCA9685_PWM*', $Ident)) {
             $pin = substr($Ident, 19);
             $command = 'driver15';
