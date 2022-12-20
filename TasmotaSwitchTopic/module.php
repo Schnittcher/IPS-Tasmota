@@ -30,18 +30,11 @@ class TasmotaSwitchTopic extends TasmotaService
     {
         if (!empty($this->ReadPropertyString('SwitchTopicPräfix'))) {
             $this->SendDebug('ReceiveData JSON', $JSONString, 0);
-            $data = json_decode($JSONString);
+            $Buffer = json_decode($JSONString);
 
-            switch ($data->DataID) {
-                case '{7F7632D9-FA40-4F38-8DEA-C83CD4325A32}': // MQTT Server
-                    $Buffer = $data;
-                    break;
-                case '{DBDA9DF7-5D04-F49D-370A-2B9153D00D9B}': //MQTT Client
-                    $Buffer = json_decode($data->Buffer);
-                    break;
-                default:
-                    $this->LogMessage('Invalid Parent', KL_ERROR);
-                    return;
+            //Für MQTT Fix in IPS Version 6.3
+            if (IPS_GetKernelDate() > 1670886000) {
+                $Buffer->Payload = utf8_decode($Buffer->Payload);
             }
 
             $this->SendDebug('Topic', $Buffer->Topic, 0);
