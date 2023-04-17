@@ -656,7 +656,7 @@ class Tasmota extends TasmotaService
         }
         if ($Ident == 'Tasmota_Dimmer') {
             $command = 'Dimmer';
-            $msg = strval($value);
+            $msg = strval($Value);
             $this->MQTTCommand($command, $msg);
             return true;
         }
