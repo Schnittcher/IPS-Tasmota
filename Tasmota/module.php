@@ -163,7 +163,7 @@ class Tasmota extends TasmotaService
                         $this->SendDebug('Receive Result: Dimmer', $Payload->Dimmer, 0);
                         $this->RegisterVariableInteger('Tasmota_Dimmer', $this->Translate('Dimmer'), 'Intensity.100', 3);
                         $this->EnableAction('Tasmota_Dimmer');
-                        $this->SetValue('TasmotaL_Dimmer', $Payload->Dimmer);
+                        $this->SetValue('Tasmota_Dimmer', $Payload->Dimmer);
                     }
 
                     if (fnmatch('*MaxPowerHold*', $Buffer->Payload)) {
