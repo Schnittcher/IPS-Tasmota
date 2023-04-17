@@ -159,6 +159,13 @@ class Tasmota extends TasmotaService
                     $this->BufferResponse = $Buffer->Payload;
                     $Payload = json_decode($Buffer->Payload);
 
+                    if (property_exists($Payload, 'Dimmer')) {
+                        $this->SendDebug('Receive Result: Dimmer', $Payload->Dimmer, 0);
+                        $this->RegisterVariableInteger('Tasmota_Dimmer', $this->Translate('Dimmer'), 'Intensity.100', 3);
+                        $this->EnableAction('Tasmota_Dimmer');
+                        $this->SetValue('TasmotaL_Dimmer', $Payload->Dimmer);
+                    }
+
                     if (fnmatch('*MaxPowerHold*', $Buffer->Payload)) {
                         $this->SendDebug('Result MaxPowerHold Payload', $Buffer->Payload, 0);
                         $this->SendDebug('Result Topic', $Buffer->Topic, 0);
@@ -644,6 +651,12 @@ class Tasmota extends TasmotaService
         if ($Ident == 'Tasmota_TuyaEnum2') {
             $command = 'TuyaEnum2';
             $msg = $Value;
+            $this->MQTTCommand($command, $msg);
+            return true;
+        }
+        if ($Ident == 'Tasmota_Dimmer') {
+            $command = 'Dimmer';
+            $msg = strval($value);
             $this->MQTTCommand($command, $msg);
             return true;
         }
