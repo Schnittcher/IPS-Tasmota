@@ -112,7 +112,7 @@ class TasmotaService extends IPSModule
         $ServerJSON = json_encode($Server, JSON_UNESCAPED_SLASHES);
         $this->SendDebug(__FUNCTION__ . 'MQTT Server', $ServerJSON, 0);
         $resultServer = @$this->SendDataToParent($ServerJSON);
-        
+
         if ($resultServer === false) {
             $last_error = error_get_last();
             echo $last_error['message'];
@@ -303,7 +303,7 @@ class TasmotaService extends IPSModule
             if (is_array($value)) {
                 $this->traverseArray($value, $GesamtArray);
             } else {
-                $ParentKey = $this->find_parent($GesamtArray, $value);
+                $ParentKey = strval($this->find_parent($GesamtArray, $value));
                 $this->SendDebug('Rekursion Tasmota ' . $ParentKey . '_' . $key, "$key = $value", 0);
                 $ParentKey = str_replace('-', '_', $ParentKey);
                 if ((is_int($value) || is_float($value)) && ($ParentKey != 'MCP230XX') && ($ParentKey != 'PCA9685')) {
