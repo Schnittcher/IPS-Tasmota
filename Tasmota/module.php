@@ -586,7 +586,7 @@ class Tasmota extends TasmotaService
                             return;
                         }
                         if (property_exists($Payload, 'PCF8574-1')) {
-                            return;
+                            //return;
                         }
                         $this->getSensorData($myBuffer);
                     }
