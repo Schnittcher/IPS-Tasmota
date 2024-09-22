@@ -373,14 +373,16 @@ class TasmotaService extends IPSModule
             $this->RegisterVariableInteger('Tasmota_LoadAvg', 'LoadAvg');
             $this->SetValue('Tasmota_LoadAvg', $myBuffer->LoadAvg);
 
-            $this->RegisterVariableString('Tasmota_Wifi_SSId', 'SSId');
-            $this->SetValue('Tasmota_Wifi_SSId', $myBuffer->Wifi->SSId);
+            if (property_exists($myBuffer, 'Wifi')) {
+                $this->RegisterVariableString('Tasmota_Wifi_SSId', 'SSId');
+                $this->SetValue('Tasmota_Wifi_SSId', $myBuffer->Wifi->SSId);
 
-            $this->RegisterVariableString('Tasmota_Wifi_BSSId', 'BSSId');
-            $this->SetValue('Tasmota_Wifi_BSSId', $myBuffer->Wifi->BSSId);
+                $this->RegisterVariableString('Tasmota_Wifi_BSSId', 'BSSId');
+                $this->SetValue('Tasmota_Wifi_BSSId', $myBuffer->Wifi->BSSId);
 
-            $this->RegisterVariableInteger('Tasmota_Wifi_Channel', 'Channel');
-            $this->SetValue('Tasmota_Wifi_Channel', $myBuffer->Wifi->Channel);
+                $this->RegisterVariableInteger('Tasmota_Wifi_Channel', 'Channel');
+                $this->SetValue('Tasmota_Wifi_Channel', $myBuffer->Wifi->Channel);
+            }
         }
     }
 
