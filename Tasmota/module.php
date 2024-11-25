@@ -453,7 +453,7 @@ class Tasmota extends TasmotaService
 
                             if (property_exists($myBuffer->ENERGY, 'Voltage')) {
                                 $this->RegisterVariableFloat('Tasmota_POWVoltage', $this->Translate('Voltage'), '~Volt');
-                                $this->SetValue('Tasmota_POWVoltage', $myBuffer->ENERGY->Voltage);
+                                @$this->SetValue('Tasmota_POWVoltage', $myBuffer->ENERGY->Voltage);
                             }
 
                             if (property_exists($myBuffer->ENERGY, 'Factor')) {
@@ -523,7 +523,7 @@ class Tasmota extends TasmotaService
                             }
                             if (property_exists($myBuffer->ENERGY, 'Frequency')) {
                                 $this->RegisterVariableFloat('Tasmota_Frequency', $this->Translate('Frequency'), '~Hertz');
-                                $this->SetValue('Tasmota_Frequency', $myBuffer->ENERGY->Frequency);
+                                @$this->SetValue('Tasmota_Frequency', $myBuffer->ENERGY->Frequency);
                             }
                         }
                         if (property_exists($myBuffer, 'COUNTER')) {
