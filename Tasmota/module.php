@@ -275,6 +275,12 @@ class Tasmota extends TasmotaService
                         $myBuffer = json_decode($Buffer->Payload, true);
                         $this->getSensorData($myBuffer);
                     }
+                    if (fnmatch('*PCF8574-2*', $Buffer->Payload)) {
+                        $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
+                        $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
+                        $myBuffer = json_decode($Buffer->Payload, true);
+                        $this->getSensorData($myBuffer);
+                    }
                     if (fnmatch('*S29cmnd_D*', $Buffer->Payload)) {
                         $this->SendDebug('Sensor Payload', $Buffer->Payload, 0);
                         $this->SendDebug('Sensor Topic', $Buffer->Topic, 0);
