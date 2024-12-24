@@ -138,7 +138,7 @@ class TasmotaService extends IPSModule
         $SetCommandArr[$TopicIndex] = $this->ReadPropertyString('Topic');
         $topic = implode('\/', $SetCommandArr);
 
-        return $topic;
+        return $topic . '/';
     }
 
     protected function RegisterProfileInteger($Name, $Icon, $Prefix, $Suffix, $MinValue, $MaxValue, $StepSize)
